@@ -1,0 +1,53 @@
+---
+title: "11. Feliz Navidad"
+body-classes: lyrics
+---
+
+## Verse 1
+
+Feliz Navidad  
+Feliz Navidad  
+Feliz Navidad  
+Próspero año y felicidad  
+
+## Verse 1
+
+Feliz Navidad  
+Feliz Navidad  
+Feliz Navidad  
+Próspero año y felicidad  
+
+## Chorus
+
+*I wanna wish you a Merry Christmas*  
+*I wanna wish you a Merry Christmas*  
+*I wanna wish you a Merry Christmas*  
+*From the bottom of my heart.*  
+
+## Interlude
+
+## Verse 1
+
+Feliz Navidad  
+Feliz Navidad  
+Feliz Navidad  
+Próspero año y felicidad  
+
+## Verse 1
+
+Feliz Navidad  
+Feliz Navidad  
+Feliz Navidad  
+Próspero año y felicidad  
+
+## Chorus
+
+*I wanna wish you a Merry Christmas*  
+*I wanna wish you a Merry Christmas*  
+*I wanna wish you a Merry Christmas*  
+*From the bottom of my heart.*  
+
+::: {.songnav}
+[&larr; Twelve Days of Christmas](twelve-days-of-christmas.qmd){.nav-prev}
+[We Wish You a Merry Christmas &rarr;](we-wish-you-a-merry-christmas.qmd){.nav-next}
+:::

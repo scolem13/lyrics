@@ -1,0 +1,27 @@
+---
+title: "Carols"
+toc: false
+---
+
+Song lyrics for class. Open a song, then:
+
+| Key | Does |
+|-----|------|
+| `j` / `k` | jump to the next / previous section |
+| `←` / `→` | previous / next song |
+| `b` | toggle bigger text |
+
+::: {.programme}
+1. [Deck The Halls](songs/deck-the-halls.qmd)
+2. [Winter Wonderland](songs/winter-wonderland.qmd)
+3. [Santa Claus is Coming to Town](songs/santa-claus-is-coming-to-town.qmd)
+4. [Frosty the Snowman](songs/frosty-the-snowman.qmd)
+5. [O Hanukkah](songs/o-hanukkah.qmd)
+6. [Jingle Bell Rock](songs/jingle-bell-rock.qmd)
+7. [La Navidad](songs/la-navidad.qmd)
+8. [Merry Christmas Bells](songs/merry-christmas-bells.qmd)
+9. [O Tannenbaum (O Christmas Tree )](songs/o-tannenbaum-o-christmas-tree.qmd)
+10. [Twelve Days of Christmas](songs/twelve-days-of-christmas.qmd)
+11. [Feliz Navidad](songs/feliz-navidad.qmd)
+12. [We Wish You a Merry Christmas](songs/we-wish-you-a-merry-christmas.qmd)
+:::

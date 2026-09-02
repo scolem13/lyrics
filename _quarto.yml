@@ -1,0 +1,43 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Carols"
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    left:
+      - href: index.qmd
+        text: Programme
+  sidebar:
+    style: docked
+    contents:
+      - href: index.qmd
+        text: Programme
+      - section: "Songs"
+        contents:
+          - songs/deck-the-halls.qmd
+          - songs/winter-wonderland.qmd
+          - songs/santa-claus-is-coming-to-town.qmd
+          - songs/frosty-the-snowman.qmd
+          - songs/o-hanukkah.qmd
+          - songs/jingle-bell-rock.qmd
+          - songs/la-navidad.qmd
+          - songs/merry-christmas-bells.qmd
+          - songs/o-tannenbaum-o-christmas-tree.qmd
+          - songs/twelve-days-of-christmas.qmd
+          - songs/feliz-navidad.qmd
+          - songs/we-wish-you-a-merry-christmas.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-location: right
+    toc-title: "Sections"
+    toc-depth: 2
+    anchor-sections: true
+    include-after-body: keys.html

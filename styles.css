@@ -1,0 +1,80 @@
+:root { --lyric-size: 2.1rem; }
+
+body { font-size: 1.15rem; }
+
+/* Programme list */
+.programme { font-size: 1.5rem; line-height: 2.1; }
+.programme a { text-decoration: none; }
+.programme a:hover { text-decoration: underline; }
+
+/* Song pages: big, high-contrast, centred for projection.
+   `lyrics` is a body class, so scope the type to the article itself. */
+body.lyrics main.content {
+  font-size: var(--lyric-size);
+  line-height: 1.45;
+  max-width: none;
+  margin: 0;
+  padding: 0 .25rem;
+}
+
+/* Quarto caps the body column near 800px and pads it with wide gutters, which
+   wraps long lyrics well before the space runs out. On song pages, let the
+   column take everything between the two sidebars. */
+body.lyrics #quarto-content.page-columns {
+  grid-template-columns:
+    [screen-start] 0.4rem
+    [screen-start-inset page-start] minmax(50px, 100px)
+    [page-start-inset] 50px
+    [body-start-outset] 50px
+    [body-start] 0.4rem
+    [body-content-start] minmax(0, 1fr)
+    [body-content-end] 0.4rem
+    [body-end] 0.25rem
+    [body-end-outset] minmax(110px, 170px)
+    [page-end-inset] 0.25rem
+    [page-end screen-end-inset] 0.4rem [screen-end];
+}
+body.lyrics h1.title { font-size: 1.25em; }
+body.lyrics main.content p { margin-bottom: 1.5rem; }
+/* Chorus lines come through italicised from the source. They are lyrics to be
+   sung, so they read at full size -- only the labels are small and grey. */
+body.lyrics main.content em { color: inherit; font-size: inherit; }
+
+/* Section headings within a song */
+body.lyrics main.content h2 {
+  font-size: 0.42em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #6c757d;
+  border: 0;
+  margin: 2.5rem 0 .5rem;
+  scroll-margin-top: 5.5rem;
+}
+body.lyrics main.content section:first-of-type h2 { margin-top: 0; }
+body.lyrics main.content h2.current { color: #0d6efd; }
+
+/* Bigger-text mode, toggled with B */
+body.big { --lyric-size: 3.2rem; }
+
+/* Section list (right-hand TOC) */
+#TOC a.current { font-weight: 600; color: #0d6efd; }
+
+/* Prev/next navigation */
+.songnav {
+  display: flex; justify-content: space-between; gap: 1rem;
+  border-top: 1px solid #dee2e6; padding-top: 1rem; margin-top: 3rem;
+  font-size: 1.05rem;
+}
+.songnav a { text-decoration: none; }
+.songnav .nav-next { margin-left: auto; text-align: right; }
+
+@media print {
+  body.lyrics main.content { font-size: 1.4rem; }
+  .songnav, #quarto-sidebar, #TOC, .navbar { display: none; }
+}
+
+/* Twelve Days: one verse, revealed a day at a time */
+body.day-reveal .day-verse { margin-top: 1rem; }
+body.day-reveal .gift.unsung { visibility: hidden; }
+/* The day headings are jump targets only -- the verse above them is the page. */
+body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }

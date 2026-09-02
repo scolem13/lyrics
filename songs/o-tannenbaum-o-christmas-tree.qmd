@@ -1,0 +1,39 @@
+---
+title: "9. O Tannenbaum (O Christmas Tree )"
+body-classes: lyrics
+---
+
+## Verse 1
+
+O Tannenbaum, o Tannenbaum  
+Wie treu sind deine Blätter  
+O Tannenbaum, o Tannenbaum  
+Wie treu sind deine Blätter  
+
+## Verse 2
+
+Du grünst nicht nur zur Sommerzeit  
+Nein auch im Winter, wenn es schneit  
+O Tannenbaum, o Tannenbaum  
+Wie treu sind deine Blätter  
+
+## Interlude
+
+## Verse 3
+
+O Christmas tree, O Christmas tree  
+You stand in splendid beauty  
+O Christmas tree, O Christmas tree  
+You stand in splendid beauty  
+
+## Verse 4
+
+Your branches green in summer’s glow  
+And evergreen in winter’s snow  
+O Christmas tree, O Christmas tree  
+You stand in splendid beauty  
+
+::: {.songnav}
+[&larr; Merry Christmas Bells](merry-christmas-bells.qmd){.nav-prev}
+[Twelve Days of Christmas &rarr;](twelve-days-of-christmas.qmd){.nav-next}
+:::

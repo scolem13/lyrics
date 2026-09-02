@@ -1,0 +1,47 @@
+---
+title: "3. Santa Claus is Coming to Town"
+body-classes: lyrics
+---
+
+## Chorus
+
+Oh, you better watch out  
+You better not cry  
+You better not pout I'm telling you why  
+Santa Claus is coming to town  
+
+## Verse 1
+
+He's making a list  
+And he's checking it twice  
+He's gonna find out who's naughty or nice  
+Santa Claus is coming to town  
+
+## Verse 2
+
+He sees you when you're sleeping  
+He knows when you're awake  
+He knows if you've been bad or good  
+So be good for goodness sake  
+
+## Chorus
+
+Oh, you better watch out  
+You better not cry  
+You better not pout I'm telling you why  
+Santa Claus is coming to town  
+
+## Interlude
+
+## D.C. al Fine
+
+## Coda
+
+Santa Claus is coming to town\!  
+Santa Claus is coming to town\!  
+Santa Claus is coming to town\!  
+
+::: {.songnav}
+[&larr; Winter Wonderland](winter-wonderland.qmd){.nav-prev}
+[Frosty the Snowman &rarr;](frosty-the-snowman.qmd){.nav-next}
+:::

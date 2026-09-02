@@ -1,0 +1,49 @@
+---
+title: "10. Twelve Days of Christmas"
+body-classes: lyrics day-reveal
+---
+
+::: {#verse .day-verse}
+[On the first day of Christmas, my true love sent to me]{#day-opening}  
+[Twelve drummers drumming]{.gift day="12"}  
+[Eleven pipers piping]{.gift day="11"}  
+[Ten lords a-leaping]{.gift day="10"}  
+[Nine ladies dancing]{.gift day="9"}  
+[Eight maids a-milking]{.gift day="8"}  
+[Seven swans a-swimming]{.gift day="7"}  
+[Six geese a-laying]{.gift day="6"}  
+[Five golden rings]{.gift day="5"}  
+[Four calling birds]{.gift day="4"}  
+[Three French hens]{.gift day="3"}  
+[Two turtle doves and]{.gift day="2"}  
+[A partridge in a pear tree]{.gift day="1"}
+:::
+
+## First Day
+
+## Second Day
+
+## Third Day
+
+## Fourth Day
+
+## Fifth Day
+
+## Sixth Day
+
+## Seventh Day
+
+## Eighth Day
+
+## Ninth Day
+
+## Tenth Day
+
+## Eleventh Day
+
+## Twelfth Day
+
+::: {.songnav}
+[&larr; O Tannenbaum (O Christmas Tree )](o-tannenbaum-o-christmas-tree.qmd){.nav-prev}
+[Feliz Navidad &rarr;](feliz-navidad.qmd){.nav-next}
+:::

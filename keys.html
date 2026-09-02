@@ -1,0 +1,125 @@
+<script>
+(function () {
+  // Quarto puts the anchor id on the wrapping <section>, not the heading.
+  var heads = Array.prototype.slice
+    .call(document.querySelectorAll('main.content section.level2'))
+    .map(function (s) {
+      var h = s.querySelector('h2');
+      return {
+        section: s,
+        heading: h,
+        // A da capo sends you back to the top -- once. On the second pass
+        // through it, j stops rather than looping the song forever.
+        dacapo: !!h && /^d\.?\s*[cs]\b/i.test(h.textContent.trim()),
+        // Played once on the way down, an interlude is skipped on the repeat.
+        interlude: !!h && /^interlude$/i.test(h.textContent.trim()),
+        taken: false
+      };
+    })
+    .filter(function (h) { return h.heading; });
+  var at = -1;
+
+  // The Twelve Days page holds one fixed verse and reveals it a day at a time
+  // instead of scrolling between twelve near-identical ones.
+  var reveal = document.body.classList.contains('day-reveal');
+  var gifts = Array.prototype.slice.call(document.querySelectorAll('.gift'));
+  var opening = document.getElementById('day-opening');
+  var ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth',
+                  'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
+
+  function showDay(day) {
+    gifts.forEach(function (g) {
+      // Hidden, not removed: the lines already sung hold their place.
+      g.classList.toggle('unsung', +g.getAttribute('data-day') > day);
+    });
+    if (opening) {
+      opening.textContent = opening.textContent.replace(
+        /\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth)\b/,
+        ORDINALS[day - 1]);
+    }
+  }
+
+  function focus(i) {
+    at = Math.max(0, Math.min(heads.length - 1, i));
+    heads.forEach(function (h, n) { h.heading.classList.toggle('current', n === at); });
+    if (reveal) {
+      showDay(at + 1);
+    } else if (at === 0) {
+      // Going back to the first section means the top of the song: scroll the
+      // page itself so the title is on screen, not just the opening verse.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      heads[at].section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    var id = heads[at].section.getAttribute('id');
+    var link = id && document.querySelector('#TOC a[href="#' + id + '"]');
+    document.querySelectorAll('#TOC a.current').forEach(function (a) {
+      a.classList.remove('current');
+    });
+    if (link) link.classList.add('current');
+  }
+
+  function nearest() {
+    // Which heading is at, or just above, the top of the viewport.
+    var i = 0;
+    heads.forEach(function (h, n) {
+      if (h.section.getBoundingClientRect().top < 80) i = n;
+    });
+    return i;
+  }
+
+  if (reveal && heads.length) {
+    focus(0);
+    document.querySelectorAll('#TOC a').forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        var id = (a.getAttribute('href') || '').slice(1);
+        heads.forEach(function (h, n) {
+          if (h.section.getAttribute('id') === id) { ev.preventDefault(); focus(n); }
+        });
+      });
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.matches('input, textarea, [contenteditable]')) return;
+    var k = e.key;
+
+    if (k === 'b' || k === 'B') {
+      document.body.classList.toggle('big');
+      if (!reveal && at === 0) window.scrollTo({ top: 0 });
+      else if (!reveal && at > 0) heads[at].section.scrollIntoView({ block: 'start' });
+      e.preventDefault();
+      return;
+    }
+    if ((k === 'j' || k === 'k') && heads.length) {
+      var base = at < 0 ? nearest() : at;
+      e.preventDefault();
+      if (k === 'k') { focus(base - 1); return; }
+
+      var repeating = heads.some(function (h) { return h.taken; });
+      var next = at < 0 ? base : base + 1;
+
+      // On the repeat the band plays through: skip the interlude, and at the
+      // da capo carry on to whatever follows it (a coda or second ending),
+      // stopping only if the song ends there.
+      while (repeating && heads[next] && heads[next].interlude) next++;
+
+      var dc = heads[next];
+      if (dc && dc.dacapo) {
+        if (!dc.taken) { dc.taken = true; focus(0); return; }
+        next++;
+        while (heads[next] && (heads[next].interlude || heads[next].dacapo)) next++;
+        if (!heads[next]) return;   // nothing after the da capo: hold here
+      }
+      focus(next);
+      return;
+    }
+    var sel = k === 'ArrowRight' ? '.songnav .nav-next'
+            : k === 'ArrowLeft' ? '.songnav .nav-prev' : null;
+    if (!sel) return;
+    var a = document.querySelector(sel);
+    if (a) { window.location.href = a.getAttribute('href'); e.preventDefault(); }
+  });
+})();
+</script>

@@ -1,0 +1,37 @@
+---
+title: "5. O Hanukkah"
+body-classes: lyrics
+---
+
+## Verse 1
+
+Hanukkah, Oh Hanukkah  
+Come light the menorah  
+Let’s have a party  
+We’ll all dance the hora  
+Gather round the table,  
+We’ll give you a treat.  
+Dreidels to play with and latkes to eat  
+
+## Verse 2
+
+And while we are playing,  
+The candles are burning low.  
+One for each night, they shed a sweet light  
+To remind us of days long ago.  
+One for each night, they shed a sweet light  
+To remind us of days long ago.  
+
+## Chorus
+
+*O Hanukkah\! Hanukkah*  
+*O Hanukkah\! Hanukkah*  
+
+## Interlude
+
+## D.C. al Fine
+
+::: {.songnav}
+[&larr; Frosty the Snowman](frosty-the-snowman.qmd){.nav-prev}
+[Jingle Bell Rock &rarr;](jingle-bell-rock.qmd){.nav-next}
+:::

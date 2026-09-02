@@ -1,0 +1,68 @@
+---
+title: "12. We Wish You a Merry Christmas"
+body-classes: lyrics
+---
+
+## Verse 1
+
+We wish you a Merry Christmas  
+We wish you a Merry Christmas  
+We wish you a Merry Christmas  
+And a Happy New Year\!  
+
+## Chorus
+
+Good tidings we bring to you and your kin.  
+We wish you a merry Christmas  
+And a Happy New Year\!  
+
+## Verse 2
+
+Oh, bring us some figgy pudding  
+Oh, bring us some figgy pudding  
+Oh, bring us some figgy pudding  
+ And bring it right here\!  
+
+## Chorus
+
+Good tidings we bring to you and your kin.  
+We wish you a merry Christmas  
+And a Happy New Year\!  
+
+## Verse 3
+
+We won’t go until we get some  
+We won’t go until we get some  
+We won’t go until we get some  
+So bring it right here\!  
+
+## Chorus
+
+Good tidings we bring to you and your kin.  
+We wish you a merry Christmas  
+ And a Happy New Year\!  
+
+## Verse 4
+
+We all like our figgy pudding  
+We all like our figgy pudding  
+We all like our figgy pudding  
+With all its good cheer\!  
+
+## Chorus
+
+Good tidings we bring to you and your kin  
+We wish you a merry Christmas  
+And a Happy New Year\!  
+
+## Verse 1
+
+We wish you a Merry Christmas  
+We wish you a Merry Christmas  
+We wish you a Merry Christmas  
+And a Happy New Year\!  
+
+::: {.songnav}
+[&larr; Feliz Navidad](feliz-navidad.qmd){.nav-prev}
+[Programme &rarr;](../index.qmd){.nav-next}
+:::

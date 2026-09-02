@@ -1,0 +1,42 @@
+---
+title: "8. Merry Christmas Bells"
+body-classes: lyrics
+---
+
+## Verse 1
+
+Oh, the bells are ringing out today  
+In a joyous Christmas kind of way.  
+They’re ringing, ringing\!  
+Ding dong ding dong\!  
+Merry Christmas Bells\!  
+
+## Verse 2
+
+Oh, the sound they make is sweet today,  
+And I hope that you can hear them play.  
+They're ringing, ringing\!  
+Ding dong ding dong\!  
+Merry Christmas Bells\!  
+
+## Chorus
+
+*They ring, they sing, they jingle*  
+*They ding dong ding*  
+*They ring, they sing, they jingle, jingle*  
+*Ding Dong*  
+*Ding Dong*  
+
+## D.C. al Fine
+
+## Coda
+
+They’re ringing, ringing\!  
+Ding dong ding dong\!  
+Me….rry Christmas Bells…\!  
+Ding Dong\!  
+
+::: {.songnav}
+[&larr; La Navidad](la-navidad.qmd){.nav-prev}
+[O Tannenbaum (O Christmas Tree ) &rarr;](o-tannenbaum-o-christmas-tree.qmd){.nav-next}
+:::

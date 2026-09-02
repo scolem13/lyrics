@@ -1,0 +1,34 @@
+---
+title: "7. La Navidad"
+body-classes: lyrics
+---
+
+## Verse 1
+
+La Navidad.  
+Todos celebramos\!  
+La Navidad.  
+Let us celebrate\!  
+
+## Verse 1
+
+La Navidad.  
+Todos celebramos\!  
+La Navidad.  
+Let us celebrate\!  
+
+## Chorus
+
+*Bringing peace.*  
+*Trayendo paz*  
+*Singing joy to the world*  
+*Todo el mundo\!*  
+
+## Interlude
+
+## D.C. al Fine
+
+::: {.songnav}
+[&larr; Jingle Bell Rock](jingle-bell-rock.qmd){.nav-prev}
+[Merry Christmas Bells &rarr;](merry-christmas-bells.qmd){.nav-next}
+:::
