@@ -402,11 +402,59 @@ And a Happy New Year!</p>
     });
   }
 
+  function step(dir) {
+    var base = at < 0 ? nearest() : at;
+    if (dir < 0) { focus(base - 1); return; }
+
+    var repeating = heads.some(function (h) { return h.taken; });
+    var next = at < 0 ? base : base + 1;
+    while (repeating && heads[next] && heads[next].interlude) next++;
+    var dc = heads[next];
+    if (dc && dc.dacapo) {
+      if (!dc.taken) { dc.taken = true; focus(0); return; }
+      next++;
+      while (heads[next] && (heads[next].interlude || heads[next].dacapo)) next++;
+      if (!heads[next]) return;
+    }
+    focus(next);
+  }
+
+  function toBeginning() {
+    // Back to the top of the song, ready to run the da capo again.
+    heads.forEach(function (h) { h.taken = false; });
+    focus(0);
+  }
+
+  // Buttons under the section list, for clicking or tapping a whiteboard.
+  if (heads.length) {
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (sidebar) {
+      var panel = document.createElement('div');
+      panel.className = 'section-buttons';
+      panel.innerHTML = '<div class="section-buttons-title">Section Navigation</div>';
+      [['Previous', 'k', function () { step(-1); }],
+       ['Next', 'j', function () { step(1); }],
+       ['Beginning', 'g', toBeginning]].forEach(function (spec) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.innerHTML = spec[0] + ' <span class="key">' + spec[1] + '</span>';
+        b.addEventListener('click', function () { spec[2](); b.blur(); });
+        panel.appendChild(b);
+      });
+      sidebar.appendChild(panel);
+    }
+  }
+
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.target.matches('input, textarea, [contenteditable]')) return;
     var k = e.key;
 
+    if (k === 'g' || k === 'G') {
+      toBeginning();
+      e.preventDefault();
+      return;
+    }
     if (k === 'b' || k === 'B') {
       document.body.classList.toggle('big');
       if (!reveal && at === 0) window.scrollTo({ top: 0 });
@@ -415,26 +463,8 @@ And a Happy New Year!</p>
       return;
     }
     if ((k === 'j' || k === 'k') && heads.length) {
-      var base = at < 0 ? nearest() : at;
+      step(k === 'j' ? 1 : -1);
       e.preventDefault();
-      if (k === 'k') { focus(base - 1); return; }
-
-      var repeating = heads.some(function (h) { return h.taken; });
-      var next = at < 0 ? base : base + 1;
-
-      // On the repeat the band plays through: skip the interlude, and at the
-      // da capo carry on to whatever follows it (a coda or second ending),
-      // stopping only if the song ends there.
-      while (repeating && heads[next] && heads[next].interlude) next++;
-
-      var dc = heads[next];
-      if (dc && dc.dacapo) {
-        if (!dc.taken) { dc.taken = true; focus(0); return; }
-        next++;
-        while (heads[next] && (heads[next].interlude || heads[next].dacapo)) next++;
-        if (!heads[next]) return;   // nothing after the da capo: hold here
-      }
-      focus(next);
       return;
     }
     var sel = k === 'ArrowRight' ? '.songnav .nav-next'

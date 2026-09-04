@@ -9,6 +9,7 @@ Song lyrics for class. Open a song, then:
 |-----|------|
 | `j` / `k` | jump to the next / previous section |
 | `←` / `→` | previous / next song |
+| `g` | back to the beginning of the song |
 | `b` | toggle bigger text |
 
 ::: {.programme}
