@@ -1,22 +1,23 @@
 ---
 title: "10. Twelve Days of Christmas"
-body-classes: lyrics day-reveal
+body-classes: lyrics day-reveal has-chords
 ---
 
 ::: {#verse .day-verse}
-[On the first day of Christmas, my true love sent to me]{#day-opening}  
-[Twelve drummers drumming]{.gift day="12"}  
-[Eleven pipers piping]{.gift day="11"}  
-[Ten lords a-leaping]{.gift day="10"}  
-[Nine ladies dancing]{.gift day="9"}  
-[Eight maids a-milking]{.gift day="8"}  
-[Seven swans a-swimming]{.gift day="7"}  
-[Six geese a-laying]{.gift day="6"}  
-[Five golden rings]{.gift day="5"}  
-[Four calling birds]{.gift day="4"}  
-[Three French hens]{.gift day="3"}  
-[Two turtle doves and]{.gift day="2"}  
-[A partridge in a pear tree]{.gift day="1"}
+[<span class="cw">On the </span><span class="cw"><span class="ch">D</span><span id="day-ordinal">first</span> day of </span><span class="cw"><span class="ch">Bm</span>Christmas,</span>]{#day-opening}
+[<span class="cw">My </span><span class="cw"><span class="ch">Em</span>true love </span><span class="cw"><span class="ch">A</span>sent to </span><span class="cw"><span class="ch">D</span>me</span>]{.ln}
+[<span class="cw"><span class="ch">A</span>Twelve drummers drumming,</span>]{.gift day="12"}
+[<span class="cw"><span class="ch">A</span>Eleven pipers piping,</span>]{.gift day="11"}
+[<span class="cw"><span class="ch">A</span>Ten lords a-leaping,</span>]{.gift day="10"}
+[<span class="cw"><span class="ch">A</span>Nine ladies dancing,</span>]{.gift day="9"}
+[<span class="cw"><span class="ch">A</span>Eight maids a-milking,</span>]{.gift day="8"}
+[<span class="cw"><span class="ch">A</span>Seven swans a-swimming,</span>]{.gift day="7"}
+[<span class="cw"><span class="ch">A</span>Six geese a-laying,</span>]{.gift day="6"}
+[<span class="cw"><span class="ch">D</span>Five </span><span class="cw"><span class="ch">E</span>golden </span><span class="cw"><span class="ch">A</span>rings,</span>]{.gift day="5"}
+[<span class="cw"><span class="ch">D</span>Four calling birds,</span>]{.gift day="4"}
+[<span class="cw"><span class="ch">Bm</span>Three French hens,</span>]{.gift day="3"}
+[<span class="cw"><span class="ch">E</span>Two turtle </span><span class="cw"><span class="ch">A</span>doves,</span>]{.gift day="2"}
+[<span class="cw">And a </span><span class="nb"><span class="cw"><span class="ch">D/F#</span>partr</span><span class="cw"><span class="ch">G</span>idge </span></span><span class="cw"><span class="ch">D/A</span>in a </span><span class="cw"><span class="ch">A</span>pear </span><span class="cw"><span class="ch">D</span>tree!</span>]{.gift day="1"}
 :::
 
 ## First Day

@@ -1,4 +1,16 @@
-:root { --lyric-size: 2.1rem; }
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400&family=JetBrains+Mono:wght@400&family=Lexend:wght@300;400&display=swap');
+
+:root {
+  --lyric-size: 2.1rem;
+  /* Lexend comes from Google Fonts. CommitMono is not served there, so it is
+     named for a copy installed on the machine, with a fallback behind it. */
+  --lyric-font: "Lexend", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lyric-weight: 300;
+  --chord-font: "CommitMono", ui-monospace, "SF Mono", Menlo, monospace;
+  --chord-weight: 400;
+  --chord-size: 1em;
+  --chord-colour: #0d6efd;
+}
 
 body { font-size: 1.15rem; }
 
@@ -10,8 +22,10 @@ body { font-size: 1.15rem; }
 /* Song pages: big, high-contrast, centred for projection.
    `lyrics` is a body class, so scope the type to the article itself. */
 body.lyrics main.content {
+  font-family: var(--lyric-font);
+  font-weight: var(--lyric-weight);
   font-size: var(--lyric-size);
-  line-height: 1.45;
+  line-height: 1.32;
   max-width: none;
   margin: 0;
   padding: 0 .25rem;
@@ -34,11 +48,17 @@ body.lyrics #quarto-content.page-columns {
     [page-end-inset] 0.25rem
     [page-end screen-end-inset] 0.4rem [screen-end];
 }
-body.lyrics h1.title { font-size: 1.25em; }
-body.lyrics main.content p { margin-bottom: 1.5rem; }
+/* Two lines of space: the first section's label has no margin above it to
+   grow into, and it doubles in size when it becomes the current one. */
+body.lyrics h1.title { font-size: 1.25em; margin-bottom: 2.5em; }
+body.lyrics main.content p { margin-bottom: .9rem; }
 /* Chorus lines come through italicised from the source. They are lyrics to be
    sung, so they read at full size -- only the labels are small and grey. */
-body.lyrics main.content em { color: inherit; font-size: inherit; }
+body.lyrics main.content em {
+  color: inherit;
+  font-size: inherit;
+  font-style: normal;
+}
 
 /* Section headings within a song */
 body.lyrics main.content h2 {
@@ -47,17 +67,102 @@ body.lyrics main.content h2 {
   text-transform: uppercase;
   color: #6c757d;
   border: 0;
-  margin: 2.5rem 0 .5rem;
-  scroll-margin-top: 5.5rem;
+  margin: 3.2rem 0 .5rem;
+  scroll-margin-top: 9rem;
 }
 body.lyrics main.content section:first-of-type h2 { margin-top: 0; }
-body.lyrics main.content h2.current { color: #0d6efd; }
+/* j and k scroll the section, so the section is what needs to clear the
+   navbar -- and the label above it, which grows when it becomes current. */
+body.lyrics main.content section.level2 { scroll-margin-top: 9rem; }
+/* The section you are on grows. A transform paints outside the layout, so
+   nothing below it moves; the bottom-left origin keeps the label's baseline
+   and left edge where they were, and it grows up into the margin above. */
+/* A direction -- D.C. al Fine, Fine -- tells you what to do rather than
+   giving you something to sing, so it is set apart: italic, indented, and
+   in the section list not a thing you can click. */
+body.lyrics main.content h2.direction {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  padding-left: 4ch;
+}
+.check {
+  margin-left: .6em;
+  padding: .05em .4em;
+  border: 1px solid #b4531f;
+  border-radius: .2rem;
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: .62em;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .06em;
+  vertical-align: .12em;
+  color: #b4531f;
+  background: rgba(180, 83, 31, .07);
+}
+.song-sections .direction {
+  display: block;
+  padding: .22rem .5rem .22rem calc(.5rem + 4ch);
+  border-left: 2px solid transparent;
+  font-size: .95rem;
+  line-height: 1.3;
+  font-style: italic;
+  color: #6c757d;
+}
+
+body.lyrics main.content h2.current {
+  color: #0d6efd;
+  transform: scale(2);
+  transform-origin: left bottom;
+}
+body.lyrics main.content h2 {
+  transform-origin: left bottom;
+  transition: transform .12s ease-out, color .12s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.lyrics main.content h2 { transition: none; }
+}
 
 /* Bigger-text mode, toggled with B */
 body.big { --lyric-size: 3.2rem; }
 
-/* Section list (right-hand TOC) */
-#TOC a.current { font-weight: 600; color: #0d6efd; }
+/* Section list. Quarto's own table of contents is hidden on song pages --
+   it follows the scroll rather than the song -- and the list built in
+   keys.html takes its place, where a click does what j and k do. */
+body.lyrics #TOC { display: none; }
+
+.song-sections { margin: 1.25rem 0 0; }
+.song-sections ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.song-sections button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: .95rem;
+  line-height: 1.3;
+  padding: .22rem .5rem;
+  border: 0;
+  border-left: 2px solid #dee2e6;
+  border-radius: 0 .2rem .2rem 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.song-sections button:hover { background: #e9ecef; }
+.song-sections button.is-current {
+  font-weight: 700;
+  color: #2761e3;
+  border-left-color: #2761e3;
+  background: rgba(39, 97, 227, .08);
+}
+@media print { .song-sections { display: none; } }
 
 /* Prev/next navigation */
 .songnav {
@@ -123,4 +228,106 @@ body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }
   border: 1px solid #dee2e6;
   border-radius: .2rem;
 }
+/* The window link: on by default, and it says so quietly. When this window
+   is taking a move from the other one, it lights up for a moment. */
+.section-buttons .link-button[aria-pressed="false"] { color: #6c757d; }
+.section-buttons .link-button[aria-pressed="true"] .key { color: #0d6efd; }
+.section-buttons .link-button.following {
+  border-color: #0d6efd;
+  background: rgba(13, 110, 253, .08);
+}
 @media print { .section-buttons { display: none; } }
+
+/* Type pickers, under the section controls. */
+.type-panel {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin: 1.25rem 0 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+.type-panel label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  font-size: .8rem;
+  color: #6c757d;
+}
+.type-panel select {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: .8rem;
+  padding: .2rem .25rem;
+  color: #212529;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+@media print { .type-panel { display: none; } }
+
+/* Chord sheets: chords ride above the words they belong to, and are hidden
+   until asked for, so the page reads like every other song by default. */
+/* Pandoc ends every line with both a <br> and a newline, and under pre-wrap
+   that newline breaks a second time -- a blank line between every lyric line.
+   The spacing that matters lives inside .cw, which keeps its own whitespace. */
+body.lyrics .cline { white-space: normal; }
+.cw { display: inline; }
+.nb { white-space: nowrap; }
+.ch { display: none; }
+
+body.chords .cline { line-height: 1.12; }
+body.chords .cw {
+  display: inline-block;
+  vertical-align: bottom;
+  white-space: pre;
+}
+body.chords .ch {
+  display: block;
+  font-family: var(--chord-font);
+  font-size: var(--chord-size);
+  font-weight: var(--chord-weight);
+  line-height: 1.15;
+  color: var(--chord-colour);
+}
+/* A chord with no words of its own -- one ending a line, or one written a
+   space apart from the next -- needs the empty lyric row beneath it, or it
+   drops onto the words; and it keeps a gap, so two chords never touch. */
+body.chords .cw.bare::after {
+  content: "\00a0";
+  display: block;
+}
+body.chords .cw.bare > .ch { padding-right: .6em; }
+
+/* A lyric line that runs past the width of the page hangs its continuation,
+   so you can see at a glance that it is the same line still. */
+.cline .ln, #day-opening, .day-verse .ln, .day-verse .gift {
+  display: block;
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+/* The hanging indent belongs to the line and stops there. text-indent is
+   inherited, and with chords showing every .cw is a block container of its
+   own -- left to inherit it, each one would hang its own first line and pull
+   the chord off the word beneath it. */
+.cw, .nb, .ch, .ibar { text-indent: 0; }
+/* Words without a chord still need the same headroom, or the line sits high. */
+body.chords .cw:not(:has(> .ch))::before {
+  content: "\00a0";
+  display: block;
+  font-family: var(--chord-font);
+  font-size: var(--chord-size);
+  line-height: 1.15;
+}
+
+/* An instrumental bar is chords only, so it appears with them and is spaced
+   by the run rather than by words it does not have. */
+.ibar { display: none; }
+body.chords .ibar { display: block; }
+body.chords .ibar .ch {
+  display: inline-block;
+  margin-right: 1em;
+  line-height: 1.15;
+}

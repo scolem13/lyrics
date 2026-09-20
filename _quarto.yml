@@ -30,6 +30,7 @@ website:
           - songs/twelve-days-of-christmas.qmd
           - songs/feliz-navidad.qmd
           - songs/we-wish-you-a-merry-christmas.qmd
+          - songs/silent-night.qmd
 
 format:
   html:
@@ -40,4 +41,5 @@ format:
     toc-title: "Sections"
     toc-depth: 2
     anchor-sections: true
+    include-in-header: fonts.html
     include-after-body: keys.html

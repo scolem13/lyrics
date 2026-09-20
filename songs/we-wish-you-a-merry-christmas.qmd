@@ -1,68 +1,86 @@
 ---
 title: "12. We Wish You a Merry Christmas"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-We wish you a Merry Christmas  
-We wish you a Merry Christmas  
-We wish you a Merry Christmas  
-And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a Merry </span><span class="cw"><span class="ch">Ab</span>Christmas</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">F</span>wish you a Merry </span><span class="cw"><span class="ch">Bb</span>Christmas</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">G7</span>wish you a Merry </span><span class="cw"><span class="ch">Cm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ## Chorus
 
-Good tidings we bring to you and your kin.  
-We wish you a merry Christmas  
-And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">Good </span><span class="cw"><span class="ch">Eb</span>tidings we </span><span class="cw"><span class="ch">Bb</span>bring to </span><span class="cw"><span class="ch">Cm</span>you and your </span><span class="cw"><span class="ch">Bb</span>kin.</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a merry </span><span class="cw"><span class="ch">Gm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ## Verse 2
 
-Oh, bring us some figgy pudding  
-Oh, bring us some figgy pudding  
-Oh, bring us some figgy pudding  
- And bring it right here\!  
+::: {.cline}
+<span class="ln"><span class="cw">Oh, </span><span class="cw"><span class="ch">Eb</span>bring us some figgy </span><span class="cw"><span class="ch">Ab</span>pudding</span></span>
+<span class="ln"><span class="cw">Oh, </span><span class="cw"><span class="ch">F</span>bring us some figgy </span><span class="cw"><span class="ch">Bb</span>pudding</span></span>
+<span class="ln"><span class="cw">Oh, </span><span class="cw"><span class="ch">G7</span>bring us some figgy </span><span class="cw"><span class="ch">Cm</span>pudding</span></span>
+<span class="ln"><span class="cw">And </span><span class="cw"><span class="ch">Ab</span>bring it </span><span class="cw"><span class="ch">Bb</span>right </span><span class="cw"><span class="ch">Eb</span>here!</span></span>
+:::
 
 ## Chorus
 
-Good tidings we bring to you and your kin.  
-We wish you a merry Christmas  
-And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">Good </span><span class="cw"><span class="ch">Eb</span>tidings we </span><span class="cw"><span class="ch">Bb</span>bring to </span><span class="cw"><span class="ch">Cm</span>you and your </span><span class="cw"><span class="ch">Bb</span>kin.</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a merry </span><span class="cw"><span class="ch">Gm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ## Verse 3
 
-We won’t go until we get some  
-We won’t go until we get some  
-We won’t go until we get some  
-So bring it right here\!  
+::: {.cline}
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>won’t go until we </span><span class="cw"><span class="ch">Ab</span>get some</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">F</span>won’t go until we </span><span class="cw"><span class="ch">Bb</span>get some</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">G7</span>won’t go until we </span><span class="cw"><span class="ch">Cm</span>get some</span></span>
+<span class="ln"><span class="cw">So </span><span class="cw"><span class="ch">Ab</span>bring it </span><span class="cw"><span class="ch">Bb</span>right </span><span class="cw"><span class="ch">Eb</span>here!</span></span>
+:::
 
 ## Chorus
 
-Good tidings we bring to you and your kin.  
-We wish you a merry Christmas  
- And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">Good </span><span class="cw"><span class="ch">Eb</span>tidings we </span><span class="cw"><span class="ch">Bb</span>bring to </span><span class="cw"><span class="ch">Cm</span>you and your </span><span class="cw"><span class="ch">Bb</span>kin.</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a merry </span><span class="cw"><span class="ch">Gm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ## Verse 4
 
-We all like our figgy pudding  
-We all like our figgy pudding  
-We all like our figgy pudding  
-With all its good cheer\!  
+::: {.cline}
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>all like our figgy </span><span class="cw"><span class="ch">Ab</span>pudding</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">F</span>all like our figgy </span><span class="cw"><span class="ch">Bb</span>pudding</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">G7</span>all like our figgy </span><span class="cw"><span class="ch">Cm</span>pudding</span></span>
+<span class="ln"><span class="cw">With </span><span class="cw"><span class="ch">Ab</span>all its </span><span class="cw"><span class="ch">Bb</span>good </span><span class="cw"><span class="ch">Eb</span>cheer!</span></span>
+:::
 
 ## Chorus
 
-Good tidings we bring to you and your kin  
-We wish you a merry Christmas  
-And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">Good </span><span class="cw"><span class="ch">Eb</span>tidings we </span><span class="cw"><span class="ch">Bb</span>bring to </span><span class="cw"><span class="ch">Cm</span>you and your </span><span class="cw"><span class="ch">Bb</span>kin</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a merry </span><span class="cw"><span class="ch">Gm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ## Verse 1
 
-We wish you a Merry Christmas  
-We wish you a Merry Christmas  
-We wish you a Merry Christmas  
-And a Happy New Year\!  
+::: {.cline}
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">Eb</span>wish you a Merry </span><span class="cw"><span class="ch">Ab</span>Christmas</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">F</span>wish you a Merry </span><span class="cw"><span class="ch">Bb</span>Christmas</span></span>
+<span class="ln"><span class="cw">We </span><span class="cw"><span class="ch">G7</span>wish you a Merry </span><span class="cw"><span class="ch">Cm</span>Christmas</span></span>
+<span class="ln"><span class="cw">And a </span><span class="cw"><span class="ch">Ab</span>Happy </span><span class="cw"><span class="ch">Bb</span>New </span><span class="cw"><span class="ch">Eb</span>Year!</span></span>
+:::
 
 ::: {.songnav}
 [&larr; Feliz Navidad](feliz-navidad.qmd){.nav-prev}
-[Programme &rarr;](../index.qmd){.nav-next}
+[Silent Night &rarr;](silent-night.qmd){.nav-next}
 :::

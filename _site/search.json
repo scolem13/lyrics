@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Carols",
     "section": "",
-    "text": "Song lyrics for class. Open a song, then:\n\n\n\nKey\nDoes\n\n\n\n\nj / k\njump to the next / previous section\n\n\n← / →\nprevious / next song\n\n\ng\nback to the beginning of the song\n\n\nb\ntoggle bigger text\n\n\n\n\n\nDeck The Halls\nWinter Wonderland\nSanta Claus is Coming to Town\nFrosty the Snowman\nO Hanukkah\nJingle Bell Rock\nLa Navidad\nMerry Christmas Bells\nO Tannenbaum (O Christmas Tree )\nTwelve Days of Christmas\nFeliz Navidad\nWe Wish You a Merry Christmas",
+    "text": "Song lyrics for class. Open a song, then:\n\n\n\nKey\nDoes\n\n\n\n\nj / k\njump to the next / previous section\n\n\n← / →\nprevious / next song\n\n\ng\nback to the beginning of the song\n\n\nb\ntoggle bigger text\n\n\n\n\n\nDeck The Halls\nWinter Wonderland\nSanta Claus is Coming to Town\nFrosty the Snowman\nO Hanukkah\nJingle Bell Rock\nLa Navidad\nMerry Christmas Bells\nO Tannenbaum (O Christmas Tree )\nTwelve Days of Christmas\nFeliz Navidad\nWe Wish You a Merry Christmas\nSilent Night",
     "crumbs": [
       "Programme"
     ]
@@ -14,7 +14,7 @@
     "href": "songs/jingle-bell-rock.html",
     "title": "6. Jingle Bell Rock",
     "section": "",
-    "text": "Jingle bell, jingle bell, jingle bell rock\nJingle bells swing and jingle bells ring\nSnowin’ and blowin’ up bushels of fun\nNow the jingle hop has begun",
+    "text": "GJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmSnowin’ and D7blowin’ up Ambushels of D7fun DNow the jingle hop Amhas beD7gun",
     "crumbs": [
       "Programme",
       "Songs",
@@ -26,7 +26,7 @@
     "href": "songs/jingle-bell-rock.html#verse-1",
     "title": "6. Jingle Bell Rock",
     "section": "",
-    "text": "Jingle bell, jingle bell, jingle bell rock\nJingle bells swing and jingle bells ring\nSnowin’ and blowin’ up bushels of fun\nNow the jingle hop has begun",
+    "text": "GJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmSnowin’ and D7blowin’ up Ambushels of D7fun DNow the jingle hop Amhas beD7gun",
     "crumbs": [
       "Programme",
       "Songs",
@@ -38,7 +38,7 @@
     "href": "songs/jingle-bell-rock.html#verse-2",
     "title": "6. Jingle Bell Rock",
     "section": "Verse 2",
-    "text": "Verse 2\nJingle bell, jingle bell, jingle bell rock\nJingle bells chime in jingle bell time\nDancin’ and prancin’ in Jingle Bell Square\nIn the frosty air",
+    "text": "Verse 2\n\nGJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmDancin’ and D7prancin’ in AmJingle Bell D7Square AmIn the Dfrosty air GG7",
     "crumbs": [
       "Programme",
       "Songs",
@@ -50,7 +50,7 @@
     "href": "songs/jingle-bell-rock.html#chorus",
     "title": "6. Jingle Bell Rock",
     "section": "Chorus",
-    "text": "Chorus\nWhat a bright time, it’s the right time\nTo rock the night away\nJingle bell time is a swell time\nTo go glidin’ in a one-horse sleigh",
+    "text": "Chorus\n\nWhat a Cbright time, it’s the Cm right time To Grock the night aG7way Jingle Abell time is a A7 swell time DTo go D7glidin’ in a Done-horse D7sleigh",
     "crumbs": [
       "Programme",
       "Songs",
@@ -62,7 +62,7 @@
     "href": "songs/jingle-bell-rock.html#verse-3",
     "title": "6. Jingle Bell Rock",
     "section": "Verse 3",
-    "text": "Verse 3\nGiddy-up, jingle horse, pick up your feet\nJingle around the clock\nMix and mingle in a jinglin’ beat\nThat’s the jingle bell rock!",
+    "text": "Verse 3\n\nGGiddy-up, Gmaj7jingle horse, G6pick up your Gfeet Jingle around the E7clock CMix and Cmmingle in a A7jinglin’ Cmbeat AmThat’s the D7jingle bell Grock!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -74,7 +74,7 @@
     "href": "songs/jingle-bell-rock.html#verse-2-1",
     "title": "6. Jingle Bell Rock",
     "section": "Verse 2",
-    "text": "Verse 2\nJingle bell, jingle bell, jingle bell rock\nJingle bells chime in jingle bell time\nDancin’ and prancin’ in Jingle Bell Square\nIn the frosty air",
+    "text": "Verse 2\n\nGJingle Gmaj7bell, jingle G6bell, Gjingle bell rock G6Jingle Gbells chime Amin D7jingle bell time AmDancin’ and D7prancin’ in AmJingle Bell D7Square AmIn the Dfrosty air GG7",
     "crumbs": [
       "Programme",
       "Songs",
@@ -86,7 +86,7 @@
     "href": "songs/jingle-bell-rock.html#chorus-1",
     "title": "6. Jingle Bell Rock",
     "section": "Chorus",
-    "text": "Chorus\nWhat a bright time, it’s the right time\nTo rock the night away\nJingle bell time is a swell time\nTo go glidin’ in a one-horse sleigh",
+    "text": "Chorus\n\nWhat Ca bright time, Cmit’s the right time To Grock the G7night away Jingle Abell time is a A7 swell time DTo go D7glidin’ in a Done-horse D7sleigh",
     "crumbs": [
       "Programme",
       "Songs",
@@ -98,7 +98,7 @@
     "href": "songs/jingle-bell-rock.html#first-ending",
     "title": "6. Jingle Bell Rock",
     "section": "First Ending",
-    "text": "First Ending\nGiddy-up, jingle horse, pick up your feet\nJingle around the clock\nMix and mingle in a jinglin’ beat\nThat’s the jingle bell rock.",
+    "text": "First Ending\n\nGGiddy-up, Gmaj7jingle G6horse, pick Gup your feet Jingle around the E7clock CMix and Cmmingle in a A7jinglin’ Cmbeat AmThat’s the D7jingle bell Grock!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -122,7 +122,7 @@
     "href": "songs/jingle-bell-rock.html#second-ending",
     "title": "6. Jingle Bell Rock",
     "section": "Second Ending",
-    "text": "Second Ending\nGiddy-up, jingle horse, pick up your feet\nJingle around the clock\nMix and mingle in a jinglin’ beat\nThat’s the jingle bell, that’s the jingle bell\nThat’s the jingle bell rock!\n\n← O Hanukkah La Navidad →",
+    "text": "Second Ending\n\nGGiddy-up, Gmaj7jingle horse, G6pick up your Gfeet Jingle around E7the clock CMix and Cmmingle in a A7jinglin’ Cmbeat AmThat’s the jingle bell, D7that’s the jingle bell AmThat’s the D7jingle bell Grock!\n\n\n← O Hanukkah La Navidad →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -134,7 +134,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html",
     "title": "12. We Wish You a Merry Christmas",
     "section": "",
-    "text": "We wish you a Merry Christmas\nWe wish you a Merry Christmas\nWe wish you a Merry Christmas\nAnd a Happy New Year!",
+    "text": "We Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -146,7 +146,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-1",
     "title": "12. We Wish You a Merry Christmas",
     "section": "",
-    "text": "We wish you a Merry Christmas\nWe wish you a Merry Christmas\nWe wish you a Merry Christmas\nAnd a Happy New Year!",
+    "text": "We Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -158,7 +158,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#chorus",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Chorus",
-    "text": "Chorus\nGood tidings we bring to you and your kin.\nWe wish you a merry Christmas\nAnd a Happy New Year!",
+    "text": "Chorus\n\nGood Ebtidings we Bbbring to Cmyou and your Bbkin. We Ebwish you a merry GmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -170,7 +170,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-2",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Verse 2",
-    "text": "Verse 2\nOh, bring us some figgy pudding\nOh, bring us some figgy pudding\nOh, bring us some figgy pudding\nAnd bring it right here!",
+    "text": "Verse 2\n\nOh, Ebbring us some figgy Abpudding Oh, Fbring us some figgy Bbpudding Oh, G7bring us some figgy Cmpudding And Abbring it Bbright Ebhere!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -182,7 +182,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#chorus-1",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Chorus",
-    "text": "Chorus\nGood tidings we bring to you and your kin.\nWe wish you a merry Christmas\nAnd a Happy New Year!",
+    "text": "Chorus\n\nGood Ebtidings we Bbbring to Cmyou and your Bbkin. We Ebwish you a merry GmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -194,7 +194,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-3",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Verse 3",
-    "text": "Verse 3\nWe won’t go until we get some\nWe won’t go until we get some\nWe won’t go until we get some\nSo bring it right here!",
+    "text": "Verse 3\n\nWe Ebwon’t go until we Abget some We Fwon’t go until we Bbget some We G7won’t go until we Cmget some So Abbring it Bbright Ebhere!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -206,7 +206,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#chorus-2",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Chorus",
-    "text": "Chorus\nGood tidings we bring to you and your kin.\nWe wish you a merry Christmas\nAnd a Happy New Year!",
+    "text": "Chorus\n\nGood Ebtidings we Bbbring to Cmyou and your Bbkin. We Ebwish you a merry GmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -218,7 +218,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-4",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Verse 4",
-    "text": "Verse 4\nWe all like our figgy pudding\nWe all like our figgy pudding\nWe all like our figgy pudding\nWith all its good cheer!",
+    "text": "Verse 4\n\nWe Eball like our figgy Abpudding We Fall like our figgy Bbpudding We G7all like our figgy Cmpudding With Aball its Bbgood Ebcheer!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -230,7 +230,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#chorus-3",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Chorus",
-    "text": "Chorus\nGood tidings we bring to you and your kin\nWe wish you a merry Christmas\nAnd a Happy New Year!",
+    "text": "Chorus\n\nGood Ebtidings we Bbbring to Cmyou and your Bbkin We Ebwish you a merry GmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -242,7 +242,7 @@
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-1-1",
     "title": "12. We Wish You a Merry Christmas",
     "section": "Verse 1",
-    "text": "Verse 1\nWe wish you a Merry Christmas\nWe wish you a Merry Christmas\nWe wish you a Merry Christmas\nAnd a Happy New Year!\n\n← Feliz Navidad Programme →",
+    "text": "Verse 1\n\nWe Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!\n\n\n← Feliz Navidad Silent Night →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -358,83 +358,226 @@
     ]
   },
   {
-    "objectID": "songs/la-navidad.html",
-    "href": "songs/la-navidad.html",
-    "title": "7. La Navidad",
+    "objectID": "songs/winter-wonderland.html",
+    "href": "songs/winter-wonderland.html",
+    "title": "2. Winter Wonderland",
     "section": "",
-    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
+    "text": "Sleigh bells Ebring, are you Gmlistening?Cm In the Fmlane, snow is Bbglistening A Gmbeautiful sD9ight, we’re Gm7happy toC9#5night F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#verse-1",
-    "href": "songs/la-navidad.html#verse-1",
-    "title": "7. La Navidad",
+    "objectID": "songs/winter-wonderland.html#verse-1",
+    "href": "songs/winter-wonderland.html#verse-1",
+    "title": "2. Winter Wonderland",
     "section": "",
-    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
+    "text": "Sleigh bells Ebring, are you Gmlistening?Cm In the Fmlane, snow is Bbglistening A Gmbeautiful sD9ight, we’re Gm7happy toC9#5night F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#verse-1-1",
-    "href": "songs/la-navidad.html#verse-1-1",
-    "title": "7. La Navidad",
-    "section": "Verse 1",
-    "text": "Verse 1\nLa Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
+    "objectID": "songs/winter-wonderland.html#verse-2",
+    "href": "songs/winter-wonderland.html#verse-2",
+    "title": "2. Winter Wonderland",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nGone aEbway, is the GmbluebirdCm Here to Fmstay, is a Bbnew bird He Gmsings a love D9song, as Gm7we go aC9#5long F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#chorus",
-    "href": "songs/la-navidad.html#chorus",
-    "title": "7. La Navidad",
-    "section": "Chorus",
-    "text": "Chorus\nBringing peace.\nTrayendo paz\nSinging joy to the world\nTodo el mundo!",
+    "objectID": "songs/winter-wonderland.html#bridge",
+    "href": "songs/winter-wonderland.html#bridge",
+    "title": "2. Winter Wonderland",
+    "section": "Bridge",
+    "text": "Bridge\n\nGM7In the meadow AM7/Dwe can build a GM7snowman GThen pretend that AM7/Dhe is Parson GM7Brown BbHe’ll say, “Are you Cm7/Fmarried?” We’ll say, Bb“No man, but C7you can do theF7 job while you’re in Bbtown”",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#interlude",
-    "href": "songs/la-navidad.html#interlude",
-    "title": "7. La Navidad",
+    "objectID": "songs/winter-wonderland.html#verse-3",
+    "href": "songs/winter-wonderland.html#verse-3",
+    "title": "2. Winter Wonderland",
+    "section": "Verse 3",
+    "text": "Verse 3\n\nLater Ebon, we’ll GmconspireCm As we Fmdream, by the Bbfire To Gmface unaD9fraid, the Gm7plans that we C9#5made F9Walking in a Bb7winter wonderlEband",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "2. Winter Wonderland"
+    ]
+  },
+  {
+    "objectID": "songs/winter-wonderland.html#interlude",
+    "href": "songs/winter-wonderland.html#interlude",
+    "title": "2. Winter Wonderland",
     "section": "Interlude",
     "text": "Interlude",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#d.c.-al-fine",
-    "href": "songs/la-navidad.html#d.c.-al-fine",
-    "title": "7. La Navidad",
+    "objectID": "songs/winter-wonderland.html#d.c.-al-fine",
+    "href": "songs/winter-wonderland.html#d.c.-al-fine",
+    "title": "2. Winter Wonderland",
     "section": "D.C. al Fine",
-    "text": "D.C. al Fine\n\n← Jingle Bell Rock Merry Christmas Bells →",
+    "text": "D.C. al Fine",
     "crumbs": [
       "Programme",
       "Songs",
-      "7. La Navidad"
+      "2. Winter Wonderland"
     ]
+  },
+  {
+    "objectID": "songs/winter-wonderland.html#coda",
+    "href": "songs/winter-wonderland.html#coda",
+    "title": "2. Winter Wonderland",
+    "section": "Coda",
+    "text": "Coda\n\nF9Walking in a Bb7winter wonderlEband F9Walking in a Bb7winter wonderlEband\n\n\n← Deck The Halls Santa Claus is Coming to Town →",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "2. Winter Wonderland"
+    ]
+  },
+  {
+    "objectID": "songs/count-on-me.html",
+    "href": "songs/count-on-me.html",
+    "title": "Count on Me",
+    "section": "",
+    "text": "CAhahuh…"
+  },
+  {
+    "objectID": "songs/count-on-me.html#intro",
+    "href": "songs/count-on-me.html#intro",
+    "title": "Count on Me",
+    "section": "",
+    "text": "CAhahuh…"
+  },
+  {
+    "objectID": "songs/count-on-me.html#verse-1",
+    "href": "songs/count-on-me.html#verse-1",
+    "title": "Count on Me",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nIf you Cever find yourself stuck in the middle of the Emsea I'll Amsail the world Gto Ffind you If you Cever find yourself lost in the dark and you can't Emsee I'll Ambe the light Gto Fguide you"
+  },
+  {
+    "objectID": "songs/count-on-me.html#pre-chorus",
+    "href": "songs/count-on-me.html#pre-chorus",
+    "title": "Count on Me",
+    "section": "Pre-Chorus",
+    "text": "Pre-Chorus\n\nDmFind out what we're Emmade of When Fwe are called to help our friends in G*need"
+  },
+  {
+    "objectID": "songs/count-on-me.html#chorus",
+    "href": "songs/count-on-me.html#chorus",
+    "title": "Count on Me",
+    "section": "Chorus",
+    "text": "Chorus\n\nYou can Ccount on me like Emone, two, three I'll Ambe there G And FI know when I need it I can Ccount on you like Emfour, three, two And you'll Ambe there G 'cos Fthat's what friends are s'posed to do Oh Cyeah Ooh ooh ooh ooh Emooh… Ooh ooh ooh ooh Amooh.. G FYeah Gyeah"
+  },
+  {
+    "objectID": "songs/count-on-me.html#verse-2",
+    "href": "songs/count-on-me.html#verse-2",
+    "title": "Count on Me",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nCIf you're tossin' and you're turnin' and you just can't fall Emasleep I'll Amsing a song GbesFide you And if you Cever forget how much you really mean to Emme Every Amday I will GremFind you, oh"
+  },
+  {
+    "objectID": "songs/count-on-me.html#pre-chorus-1",
+    "href": "songs/count-on-me.html#pre-chorus-1",
+    "title": "Count on Me",
+    "section": "Pre-Chorus",
+    "text": "Pre-Chorus\n\nDmFind out what we're Emmade of When Fwe are called to help our friends in G*need"
+  },
+  {
+    "objectID": "songs/count-on-me.html#chorus-1",
+    "href": "songs/count-on-me.html#chorus-1",
+    "title": "Count on Me",
+    "section": "Chorus",
+    "text": "Chorus\n\nYou can Ccount on me like Emone, two, three I'll Ambe there G And FI know when I need it I can Ccount on you like Emfour, three, two And you'll Ambe there G 'cos Fthat's what friends are s'posed to do Oh Cyeah Ooh ooh ooh ooh Emooh… Ooh ooh ooh ooh Amooh.. G FYeah Gyeah"
+  },
+  {
+    "objectID": "songs/count-on-me.html#bridge",
+    "href": "songs/count-on-me.html#bridge",
+    "title": "Count on Me",
+    "section": "Bridge",
+    "text": "Bridge\n\nYou'll Dmalways have my Emshoulder when you Amcry G I'll Dmnever let go, Emnever say Fgoodbye, G*you know you can-"
+  },
+  {
+    "objectID": "songs/count-on-me.html#chorus-2",
+    "href": "songs/count-on-me.html#chorus-2",
+    "title": "Count on Me",
+    "section": "Chorus",
+    "text": "Chorus\n\nC-count on me like Emone, two, three I'll Ambe there G And FI know when I need it I can Ccount on you like Emfour, three, two And you'll Ambe there G 'cos Fthat's what friends are s'posed to do Oh Cyeah Ooh ooh ooh ooh Emooh… Ooh ooh ooh ooh Amooh.. G You can Fcount on me 'cos I can count on Cyou!\n\n\n← Programme"
+  },
+  {
+    "objectID": "songs/notion.html#intro",
+    "href": "songs/notion.html#intro",
+    "title": "Notion",
+    "section": "Intro",
+    "text": "Intro\n\nAFaugDmaj7Dm6"
+  },
+  {
+    "objectID": "songs/notion.html#verse-1",
+    "href": "songs/notion.html#verse-1",
+    "title": "Notion",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nSure it’s a Bmcalming notion, perpetuF#mal in motion But I don’t Bmneed the comfort of any F#mlies For I have Bmseen the F#mending and there is no ascAending Faugrise"
+  },
+  {
+    "objectID": "songs/notion.html#verse-2",
+    "href": "songs/notion.html#verse-2",
+    "title": "Notion",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nOh, back Bmwhen I was younger, was F#mtold by other youngsters That my Bmend will be torture beneath the F#mearth ‘Cause I Bmdon’t see what they see when F#mdeath is staring at me I see Bm6a Bm7window, a Bmlimit, to live Bmadd9it, or Faugnot at all"
+  },
+  {
+    "objectID": "songs/notion.html#interlude",
+    "href": "songs/notion.html#interlude",
+    "title": "Notion",
+    "section": "Interlude",
+    "text": "Interlude\n\nDmaj7Fmaj7Amaj7F#m7Bm7C#m7Dmaj7Fmaj7"
+  },
+  {
+    "objectID": "songs/notion.html#verse-3",
+    "href": "songs/notion.html#verse-3",
+    "title": "Notion",
+    "section": "Verse 3",
+    "text": "Verse 3\n\nIf you Bmcould pull the lever to F#mcarry on forever Would your Bmlife even F#mmatter anymore? Sure it’s Bma calming notion, F#mperpetual in motion But Ait’s not what you Faugsigned up for"
+  },
+  {
+    "objectID": "songs/notion.html#bridge",
+    "href": "songs/notion.html#bridge",
+    "title": "Notion",
+    "section": "Bridge",
+    "text": "Bridge\n\nAFaugDmaj7Faug(x2) AI’m sure Faugthere won’t Dmaj7always be Faugsun - shine ABut there’s Faugthis Dmaj7momentary Faugbeam of light You Adon’t have to wait Faugthose salty decades To Dmaj7get through the gate, it’s Faugall in front of your face AI’m sure Faugthere won’t Dmaj7always be Faugsun - shine AI’m sure Faugthere won’t Dmaj7always be Dmsun - shine ABut there’s Faugthis Dmaj7momentary Dmbeam of light"
+  },
+  {
+    "objectID": "songs/notion.html#chorus-3",
+    "href": "songs/notion.html#chorus-3",
+    "title": "Notion",
+    "section": "Chorus 3",
+    "text": "Chorus 3\n\nI could Acould cross the ocean in Bma fit of devotion For Aevery shining second this Bmfragile body beckons You think Ayou’re owed it better Bmbelieving ancient letters Sure it’s Aa calming notion but Bmit’s a lie\n\n\n← Programme"
   },
   {
     "objectID": "songs/deck-the-halls.html",
     "href": "songs/deck-the-halls.html",
     "title": "1. Deck The Halls",
     "section": "",
-    "text": "Deck the halls with boughs of holly\nFa-la-la-la-la, la-la, la, la\n’Tis the season to be jolly\nFa-la-la-la-la, la-la, la, la\nDon we now our gay apparel\nFa-la-la, la-la-la, la, la, la\nTroll the ancient Yule-tide carol\nFa-la-la-la-la, la-la, la, la",
+    "text": "DDeck the halls with Bmboughs of holly A7Fa-la-la-la-Dla, la-Ala, la, Dla D’Tis the season Bmto be jolly A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Don we now our Dgay apparel DFa-la-la, Bmla-la-la, Ala, E7la, Ala DTroll the ancient BmYule-tide carol GFa-la-la-la-Dla, la-A7la, la, Dla",
     "crumbs": [
       "Programme",
       "Songs",
@@ -446,7 +589,7 @@
     "href": "songs/deck-the-halls.html#verse-1",
     "title": "1. Deck The Halls",
     "section": "",
-    "text": "Deck the halls with boughs of holly\nFa-la-la-la-la, la-la, la, la\n’Tis the season to be jolly\nFa-la-la-la-la, la-la, la, la\nDon we now our gay apparel\nFa-la-la, la-la-la, la, la, la\nTroll the ancient Yule-tide carol\nFa-la-la-la-la, la-la, la, la",
+    "text": "DDeck the halls with Bmboughs of holly A7Fa-la-la-la-Dla, la-Ala, la, Dla D’Tis the season Bmto be jolly A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Don we now our Dgay apparel DFa-la-la, Bmla-la-la, Ala, E7la, Ala DTroll the ancient BmYule-tide carol GFa-la-la-la-Dla, la-A7la, la, Dla",
     "crumbs": [
       "Programme",
       "Songs",
@@ -470,7 +613,7 @@
     "href": "songs/deck-the-halls.html#verse-2",
     "title": "1. Deck The Halls",
     "section": "Verse 2",
-    "text": "Verse 2\nSee the blazing Yule before us\nFa-la-la-la-la, la-la, la, la\nStrike the harp and join the chorus\nFa-la-la-la-la, la-la, la, la\nFollow me in merry measure\nFa-la-la-la-la, la-la, la, la\nWhile I tell of Yuletide treasure\nFa-la-la-la-la, la-la, la, la",
+    "text": "Verse 2\n\nDSee the blazing BmYule before us A7Fa-la-la-la-Dla, la-Ala, la, Dla DStrike the harp and Bmjoin the chorus A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Follow me in Dmerry measure DFa-la-la-Bmla-la, la-Ala, E7la, Ala DWhile I tell of BmYuletide treasure GFa-la-la-la-Dla, la-A7la, la, Dla",
     "crumbs": [
       "Programme",
       "Songs",
@@ -494,7 +637,7 @@
     "href": "songs/deck-the-halls.html#verse-3",
     "title": "1. Deck The Halls",
     "section": "Verse 3",
-    "text": "Verse 3\nFast away the old year passes -\nFa-la-la-la-la, la-la, la, la\nHail the new, ye lads and lasses\nFa-la-la-la-la, la-la, la, la\nSing we joyous all together\nFa-la-la-la-la, la-la, la, la\nHeedless of the wind and weather –\n(Fa-la-la-la-la, la-la, la, la - 3 times)\n\n← Programme Winter Wonderland →",
+    "text": "Verse 3\n\nDFast away the Bmold year passes - A7Fa-la-la-la-Dla, la-Ala, la, Dla DHail the new, ye Bmlads and lasses A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Sing we joyous Dall together DFa-la-la-Bmla-la, la-Ala, E7la, Ala DHeedless of the Bmwind and weather – (GFa-la-la-la-Dla, la-A7la, la, Dla - 3 times)\n\n\n← Programme Winter Wonderland →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -506,7 +649,19 @@
     "href": "songs/feliz-navidad.html",
     "title": "11. Feliz Navidad",
     "section": "",
-    "text": "Feliz Navidad\nFeliz Navidad\nFeliz Navidad\nPróspero año y felicidad",
+    "text": "Feliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "11. Feliz Navidad"
+    ]
+  },
+  {
+    "objectID": "songs/feliz-navidad.html#verse",
+    "href": "songs/feliz-navidad.html#verse",
+    "title": "11. Feliz Navidad",
+    "section": "",
+    "text": "Feliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
     "crumbs": [
       "Programme",
       "Songs",
@@ -517,20 +672,8 @@
     "objectID": "songs/feliz-navidad.html#verse-1",
     "href": "songs/feliz-navidad.html#verse-1",
     "title": "11. Feliz Navidad",
-    "section": "",
-    "text": "Feliz Navidad\nFeliz Navidad\nFeliz Navidad\nPróspero año y felicidad",
-    "crumbs": [
-      "Programme",
-      "Songs",
-      "11. Feliz Navidad"
-    ]
-  },
-  {
-    "objectID": "songs/feliz-navidad.html#verse-1-1",
-    "href": "songs/feliz-navidad.html#verse-1-1",
-    "title": "11. Feliz Navidad",
-    "section": "Verse 1",
-    "text": "Verse 1\nFeliz Navidad\nFeliz Navidad\nFeliz Navidad\nPróspero año y felicidad",
+    "section": "Verse",
+    "text": "Verse\n\nFeliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
     "crumbs": [
       "Programme",
       "Songs",
@@ -542,7 +685,7 @@
     "href": "songs/feliz-navidad.html#chorus",
     "title": "11. Feliz Navidad",
     "section": "Chorus",
-    "text": "Chorus\nI wanna wish you a Merry Christmas\nI wanna wish you a Merry Christmas\nI wanna wish you a Merry Christmas\nFrom the bottom of my heart.",
+    "text": "Chorus\n\nI wanna wish you a Em7Merry ChristmasA7 I wanna wish you a DMerry ChristmasBm7 I wanna wish you a Em7Merry Christmas From the A7bottom of my Dheart.",
     "crumbs": [
       "Programme",
       "Songs",
@@ -562,11 +705,11 @@
     ]
   },
   {
-    "objectID": "songs/feliz-navidad.html#verse-1-2",
-    "href": "songs/feliz-navidad.html#verse-1-2",
+    "objectID": "songs/feliz-navidad.html#verse-2",
+    "href": "songs/feliz-navidad.html#verse-2",
     "title": "11. Feliz Navidad",
-    "section": "Verse 1",
-    "text": "Verse 1\nFeliz Navidad\nFeliz Navidad\nFeliz Navidad\nPróspero año y felicidad",
+    "section": "Verse",
+    "text": "Verse\n\nFeliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
     "crumbs": [
       "Programme",
       "Songs",
@@ -574,11 +717,11 @@
     ]
   },
   {
-    "objectID": "songs/feliz-navidad.html#verse-1-3",
-    "href": "songs/feliz-navidad.html#verse-1-3",
+    "objectID": "songs/feliz-navidad.html#verse-3",
+    "href": "songs/feliz-navidad.html#verse-3",
     "title": "11. Feliz Navidad",
-    "section": "Verse 1",
-    "text": "Verse 1\nFeliz Navidad\nFeliz Navidad\nFeliz Navidad\nPróspero año y felicidad",
+    "section": "Verse",
+    "text": "Verse\n\nFeliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
     "crumbs": [
       "Programme",
       "Songs",
@@ -590,7 +733,7 @@
     "href": "songs/feliz-navidad.html#chorus-1",
     "title": "11. Feliz Navidad",
     "section": "Chorus",
-    "text": "Chorus\nI wanna wish you a Merry Christmas\nI wanna wish you a Merry Christmas\nI wanna wish you a Merry Christmas\nFrom the bottom of my heart.\n\n← Twelve Days of Christmas We Wish You a Merry Christmas →",
+    "text": "Chorus\n\nI wanna wish you a Em7Merry ChristmasA7 I wanna wish you a DMerry ChristmasBm7 I wanna wish you a Em7Merry Christmas From the A7bottom of my Dheart.\n\n\n← Twelve Days of Christmas We Wish You a Merry Christmas →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -602,7 +745,7 @@
     "href": "songs/o-hanukkah.html",
     "title": "5. O Hanukkah",
     "section": "",
-    "text": "Hanukkah, Oh Hanukkah\nCome light the menorah\nLet’s have a party\nWe’ll all dance the hora\nGather round the table,\nWe’ll give you a treat.\nDreidels to play with and latkes to eat",
+    "text": "AmHanukkah, Oh Hanukkah Come light the menorah AmLet’s have a party We’Gll all dance the Chora AmGather round the Gtable, We’ll Cgive you a C/Btreat. AmDreidels to play with E7and Amlatkes to eat",
     "crumbs": [
       "Programme",
       "Songs",
@@ -614,7 +757,7 @@
     "href": "songs/o-hanukkah.html#verse-1",
     "title": "5. O Hanukkah",
     "section": "",
-    "text": "Hanukkah, Oh Hanukkah\nCome light the menorah\nLet’s have a party\nWe’ll all dance the hora\nGather round the table,\nWe’ll give you a treat.\nDreidels to play with and latkes to eat",
+    "text": "AmHanukkah, Oh Hanukkah Come light the menorah AmLet’s have a party We’Gll all dance the Chora AmGather round the Gtable, We’ll Cgive you a C/Btreat. AmDreidels to play with E7and Amlatkes to eat",
     "crumbs": [
       "Programme",
       "Songs",
@@ -626,7 +769,7 @@
     "href": "songs/o-hanukkah.html#verse-2",
     "title": "5. O Hanukkah",
     "section": "Verse 2",
-    "text": "Verse 2\nAnd while we are playing,\nThe candles are burning low.\nOne for each night, they shed a sweet light\nTo remind us of days long ago.\nOne for each night, they shed a sweet light\nTo remind us of days long ago.",
+    "text": "Verse 2\n\nAnd Amwhile we are Amplaying, The Ccandles are Gburning Clow. E7 AmOne for each Dmnight, they Amshed a sweet Dmlight To Amremind us of E7days long aAmgo. AmOne for Dmeach night, they Amshed a sweet Dmlight To reAmmind us of E7days long aAmgo.",
     "crumbs": [
       "Programme",
       "Songs",
@@ -638,7 +781,7 @@
     "href": "songs/o-hanukkah.html#chorus",
     "title": "5. O Hanukkah",
     "section": "Chorus",
-    "text": "Chorus\nO Hanukkah! Hanukkah\nO Hanukkah! Hanukkah",
+    "text": "Chorus\n\nAmO Hanukkah! Hanukkah AmO Hanukkah! Hanukkah",
     "crumbs": [
       "Programme",
       "Songs",
@@ -650,7 +793,7 @@
     "href": "songs/o-hanukkah.html#interlude",
     "title": "5. O Hanukkah",
     "section": "Interlude",
-    "text": "Interlude",
+    "text": "Interlude\n\nAmDmAmDmAmE7Amx2",
     "crumbs": [
       "Programme",
       "Songs",
@@ -662,7 +805,7 @@
     "href": "songs/o-hanukkah.html#d.c.-al-fine",
     "title": "5. O Hanukkah",
     "section": "D.C. al Fine",
-    "text": "D.C. al Fine\n\n← Frosty the Snowman Jingle Bell Rock →",
+    "text": "D.C. al Fine\n\n\n\n\n← Frosty the Snowman Jingle Bell Rock →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -674,7 +817,7 @@
     "href": "songs/twelve-days-of-christmas.html",
     "title": "10. Twelve Days of Christmas",
     "section": "",
-    "text": "On the first day of Christmas, my true love sent to me\nTwelve drummers drumming\nEleven pipers piping\nTen lords a-leaping\nNine ladies dancing\nEight maids a-milking\nSeven swans a-swimming\nSix geese a-laying\nFive golden rings\nFour calling birds\nThree French hens\nTwo turtle doves and\nA partridge in a pear tree",
+    "text": "On the Dfirst day of BmChristmas, My Emtrue love Asent to Dme ATwelve drummers drumming, AEleven pipers piping, ATen lords a-leaping, ANine ladies dancing, AEight maids a-milking, ASeven swans a-swimming, ASix geese a-laying, DFive Egolden Arings, DFour calling birds, BmThree French hens, ETwo turtle Adoves, And a D/F#partrGidge D/Ain a Apear Dtree!",
     "crumbs": [
       "Programme",
       "Songs",
@@ -826,99 +969,179 @@
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html",
-    "href": "songs/winter-wonderland.html",
-    "title": "2. Winter Wonderland",
+    "objectID": "songs/la-navidad.html",
+    "href": "songs/la-navidad.html",
+    "title": "7. La Navidad",
     "section": "",
-    "text": "Sleigh bells ring, are you listening?\nIn the lane, snow is glistening\nA beautiful sight, we’re happy tonight\nWalking in a winter wonderland",
+    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#verse-1",
-    "href": "songs/winter-wonderland.html#verse-1",
-    "title": "2. Winter Wonderland",
+    "objectID": "songs/la-navidad.html#verse-1",
+    "href": "songs/la-navidad.html#verse-1",
+    "title": "7. La Navidad",
     "section": "",
-    "text": "Sleigh bells ring, are you listening?\nIn the lane, snow is glistening\nA beautiful sight, we’re happy tonight\nWalking in a winter wonderland",
+    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#verse-2",
-    "href": "songs/winter-wonderland.html#verse-2",
-    "title": "2. Winter Wonderland",
-    "section": "Verse 2",
-    "text": "Verse 2\nGone away, is the bluebird\nHere to stay, is a new bird\nHe sings a love song, as we go along\nWalking in a winter wonderland",
+    "objectID": "songs/la-navidad.html#verse-1-1",
+    "href": "songs/la-navidad.html#verse-1-1",
+    "title": "7. La Navidad",
+    "section": "Verse 1",
+    "text": "Verse 1\nLa Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#verse-3",
-    "href": "songs/winter-wonderland.html#verse-3",
-    "title": "2. Winter Wonderland",
-    "section": "Verse 3",
-    "text": "Verse 3\nIn the meadow we can build a snowman\nThen pretend that he is Parson Brown\nHe’ll say, “Are you married?”\nWe’ll say, “No man, but you can do the job while you’re in town”",
+    "objectID": "songs/la-navidad.html#chorus",
+    "href": "songs/la-navidad.html#chorus",
+    "title": "7. La Navidad",
+    "section": "Chorus",
+    "text": "Chorus\nBringing peace.\nTrayendo paz\nSinging joy to the world\nTodo el mundo!",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#verse-4",
-    "href": "songs/winter-wonderland.html#verse-4",
-    "title": "2. Winter Wonderland",
-    "section": "Verse 4",
-    "text": "Verse 4\nLater on, we’ll conspire\nAs we dream, by the fire\nTo face unafraid, the plans that we made\nWalking in a winter wonderland",
-    "crumbs": [
-      "Programme",
-      "Songs",
-      "2. Winter Wonderland"
-    ]
-  },
-  {
-    "objectID": "songs/winter-wonderland.html#interlude",
-    "href": "songs/winter-wonderland.html#interlude",
-    "title": "2. Winter Wonderland",
+    "objectID": "songs/la-navidad.html#interlude",
+    "href": "songs/la-navidad.html#interlude",
+    "title": "7. La Navidad",
     "section": "Interlude",
     "text": "Interlude",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#d.c.-al-fine",
-    "href": "songs/winter-wonderland.html#d.c.-al-fine",
-    "title": "2. Winter Wonderland",
+    "objectID": "songs/la-navidad.html#d.c.-al-fine",
+    "href": "songs/la-navidad.html#d.c.-al-fine",
+    "title": "7. La Navidad",
     "section": "D.C. al Fine",
-    "text": "D.C. al Fine",
+    "text": "D.C. al Fine\n\n← Jingle Bell Rock Merry Christmas Bells →",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "7. La Navidad"
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#coda",
-    "href": "songs/winter-wonderland.html#coda",
-    "title": "2. Winter Wonderland",
-    "section": "Coda",
-    "text": "Coda\nWalking in a winter wonderland\nWalking in a winter wonderland\n\n← Deck The Halls Santa Claus is Coming to Town →",
+    "objectID": "songs/end-of-beginning.html",
+    "href": "songs/end-of-beginning.html",
+    "title": "End of Beginning",
+    "section": "",
+    "text": "|N.C.|"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#intro",
+    "href": "songs/end-of-beginning.html#intro",
+    "title": "End of Beginning",
+    "section": "",
+    "text": "|N.C.|"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#verse-1",
+    "href": "songs/end-of-beginning.html#verse-1",
+    "title": "End of Beginning",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nDJust one more tear to cry One teardrop from my Bmeye You better Asave it for DThe middle of the night When things aren't black-andBm-white EmEnter, ATroubadour:Em'Remember A24?'"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#chorus",
+    "href": "songs/end-of-beginning.html#chorus",
+    "title": "End of Beginning",
+    "section": "Chorus",
+    "text": "Chorus\n\nGmaj7And when I'm Dback in ChiAcago, I Gmaj7feel it Another Bmversion of Ame, I was in Gmaj7it I wave goodDbye to the Aend of beGginning"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#verse-2",
+    "href": "songs/end-of-beginning.html#verse-2",
+    "title": "End of Beginning",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nDThis song has started now And you're just findingBm out Now isn't Athat a laugh? DA major sacrifice, but clueless at the Bmtime EmEnter, ACaroline: \"Just trust me, you'll be fine\""
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#chorus-1",
+    "href": "songs/end-of-beginning.html#chorus-1",
+    "title": "End of Beginning",
+    "section": "Chorus",
+    "text": "Chorus\n\nGmaj7And when I'm Dback in ChiAcago, I Gmaj7feel it Another Bmversion of Ame, I was in Gmaj7it I wave goodDbye to the Aend of beGginning G(Goodbye, goodbye) G(Goodbye, goodbye)"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#bridge",
+    "href": "songs/end-of-beginning.html#bridge",
+    "title": "End of Beginning",
+    "section": "Bridge",
+    "text": "Bridge\n\nAYou take the man out of the city, not the ciBmty out the man AYou take the man out of the city, not the ciBmty out the man AYou take the man out of the city, not the ciBmty out the man N.C.You take the man out of the"
+  },
+  {
+    "objectID": "songs/end-of-beginning.html#chorus-2",
+    "href": "songs/end-of-beginning.html#chorus-2",
+    "title": "End of Beginning",
+    "section": "Chorus",
+    "text": "Chorus\n\nGAnd when I'm Dback in ChiAcago, I Gfeel it Another Bmversion of Ame, I was F#m7in Git I wave goodDbye to the Aend of beGginning G(Goodbye, goodbye)N.C.\n\n\n← Programme"
+  },
+  {
+    "objectID": "songs/silent-night.html",
+    "href": "songs/silent-night.html",
+    "title": "13. Silent Night",
+    "section": "",
+    "text": "FSilent night, Holy Cnight, C7All is Fcalm all is bright A#Round yon Fvirgin mother and A#child, Holy Finfant so tender and mild CSleep C7in heavFenDmly Fpeace, Csleep in Fheavenly peace.",
     "crumbs": [
       "Programme",
       "Songs",
-      "2. Winter Wonderland"
+      "13. Silent Night"
+    ]
+  },
+  {
+    "objectID": "songs/silent-night.html#verse-1",
+    "href": "songs/silent-night.html#verse-1",
+    "title": "13. Silent Night",
+    "section": "",
+    "text": "FSilent night, Holy Cnight, C7All is Fcalm all is bright A#Round yon Fvirgin mother and A#child, Holy Finfant so tender and mild CSleep C7in heavFenDmly Fpeace, Csleep in Fheavenly peace.",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "13. Silent Night"
+    ]
+  },
+  {
+    "objectID": "songs/silent-night.html#verse-2",
+    "href": "songs/silent-night.html#verse-2",
+    "title": "13. Silent Night",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nFSilent night, Holy Cnight, C7Shepherds Fquake at the sight A#Glories stream Ffrom Heaven A#afar, heavenly Fhosts sing Hallelujah CChrist C7the SavFiour Dmis Fborn, CChrist the FSaviour is born.",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "13. Silent Night"
+    ]
+  },
+  {
+    "objectID": "songs/silent-night.html#verse-3",
+    "href": "songs/silent-night.html#verse-3",
+    "title": "13. Silent Night",
+    "section": "Verse 3",
+    "text": "Verse 3\n\nFSilent night, Holy Cnight, C7Son of FGod love’s pure light A#Radiant beams Ffrom thy holy A#face, With the Fdawn of redeeming grace CJeC7sus Lord Fat Dmthy Fbirth, CJesus FLord at thy birth.\n\n\n← We Wish You a Merry Christmas Programme →",
+    "crumbs": [
+      "Programme",
+      "Songs",
+      "13. Silent Night"
     ]
   },
   {
@@ -926,7 +1149,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "",
-    "text": "O Tannenbaum, o Tannenbaum\nWie treu sind deine Blätter\nO Tannenbaum, o Tannenbaum\nWie treu sind deine Blätter",
+    "text": "O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
     "crumbs": [
       "Programme",
       "Songs",
@@ -938,7 +1161,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-1",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "",
-    "text": "O Tannenbaum, o Tannenbaum\nWie treu sind deine Blätter\nO Tannenbaum, o Tannenbaum\nWie treu sind deine Blätter",
+    "text": "O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
     "crumbs": [
       "Programme",
       "Songs",
@@ -950,7 +1173,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-2",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "Verse 2",
-    "text": "Verse 2\nDu grünst nicht nur zur Sommerzeit\nNein auch im Winter, wenn es schneit\nO Tannenbaum, o Tannenbaum\nWie treu sind deine Blätter",
+    "text": "Verse 2\n\nDDu grünst nicht Gnur zur A7Sommerzeit EmNein auch im A7Winter, Dwenn es schneit O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
     "crumbs": [
       "Programme",
       "Songs",
@@ -974,7 +1197,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-3",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "Verse 3",
-    "text": "Verse 3\nO Christmas tree, O Christmas tree\nYou stand in splendid beauty\nO Christmas tree, O Christmas tree\nYou stand in splendid beauty",
+    "text": "Verse 3\n\nO DChristmas tree, A7O DChristmas tree You Emstand in A7splendid AbeauDty O DChristmas tree, A7O DChristmas tree You Emstand in A7splendid AbeauDty",
     "crumbs": [
       "Programme",
       "Songs",
@@ -986,7 +1209,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-4",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "Verse 4",
-    "text": "Verse 4\nYour branches green in summer’s glow\nAnd evergreen in winter’s snow\nO Christmas tree, O Christmas tree\nYou stand in splendid beauty\n\n← Merry Christmas Bells Twelve Days of Christmas →",
+    "text": "Verse 4\n\nDYour branches Ggreen in A7summer’s glow EmAnd everA7green in Dwinter’s snow O DChristmas tree, A7O DChristmas tree You Emstand in A7splendid AbeauDty\n\n\n← Merry Christmas Bells Twelve Days of Christmas →",
     "crumbs": [
       "Programme",
       "Songs",
@@ -998,7 +1221,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html",
     "title": "3. Santa Claus is Coming to Town",
     "section": "",
-    "text": "Oh, you better watch out\nYou better not cry\nYou better not pout I’m telling you why\nSanta Claus is coming to town",
+    "text": "Oh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Songs",
@@ -1010,7 +1233,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html#chorus",
     "title": "3. Santa Claus is Coming to Town",
     "section": "",
-    "text": "Oh, you better watch out\nYou better not cry\nYou better not pout I’m telling you why\nSanta Claus is coming to town",
+    "text": "Oh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Songs",
@@ -1018,11 +1241,11 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#verse-1",
-    "href": "songs/santa-claus-is-coming-to-town.html#verse-1",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#verse",
+    "href": "songs/santa-claus-is-coming-to-town.html#verse",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "Verse 1",
-    "text": "Verse 1\nHe’s making a list\nAnd he’s checking it twice\nHe’s gonna find out who’s naughty or nice\nSanta Claus is coming to town",
+    "section": "Verse",
+    "text": "Verse\n\nHe's Amaking a list And he's Dchecking it twice He's Agonna find out who's Dnaughty or nice ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Songs",
@@ -1030,11 +1253,11 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#verse-2",
-    "href": "songs/santa-claus-is-coming-to-town.html#verse-2",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#bridge",
+    "href": "songs/santa-claus-is-coming-to-town.html#bridge",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "Verse 2",
-    "text": "Verse 2\nHe sees you when you’re sleeping\nHe knows when you’re awake\nHe knows if you’ve been bad or good\nSo be good for goodness sake",
+    "section": "Bridge",
+    "text": "Bridge\n\nHe A7sees you when you're Dsleeping He A7knows when you're aDwake He B7knows if you've been Ebad or good So be B7good for goodness Esake E7",
     "crumbs": [
       "Programme",
       "Songs",
@@ -1046,7 +1269,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html#chorus-1",
     "title": "3. Santa Claus is Coming to Town",
     "section": "Chorus",
-    "text": "Chorus\nOh, you better watch out\nYou better not cry\nYou better not pout I’m telling you why\nSanta Claus is coming to town",
+    "text": "Chorus\n\nOh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Songs",
@@ -1082,7 +1305,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html#coda",
     "title": "3. Santa Claus is Coming to Town",
     "section": "Coda",
-    "text": "Coda\nSanta Claus is coming to town!\nSanta Claus is coming to town!\nSanta Claus is coming to town!\n\n← Winter Wonderland Frosty the Snowman →",
+    "text": "Coda\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n← Winter Wonderland Frosty the Snowman →",
     "crumbs": [
       "Programme",
       "Songs",

@@ -72,12 +72,103 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+// How a song page is set is a matter of taste and of the room you are in, so
+// it is chosen from the sidebar rather than settled in the stylesheet. This
+// runs in the head, before anything paints, so a saved choice is what you
+// first see rather than something that swaps in a moment later.
+//
+// Lyric size is not here: b toggles it, per song, as it always has.
+window.CAROL_TYPE = {
+  lyric: {
+    label: 'Lyrics',
+    options: [
+      { id: 'lexend-300', name: 'Lexend Light',
+        vars: { '--lyric-font': '"Lexend", system-ui, sans-serif',
+                '--lyric-weight': '300' } },
+      { id: 'lexend-400', name: 'Lexend Regular',
+        vars: { '--lyric-font': '"Lexend", system-ui, sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'system', name: 'System sans',
+        vars: { '--lyric-font': 'system-ui, -apple-system, "Segoe UI", sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'atkinson', name: 'Atkinson Hyperlegible',
+        vars: { '--lyric-font': '"Atkinson Hyperlegible", system-ui, sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'serif', name: 'Serif',
+        vars: { '--lyric-font': 'Georgia, "Iowan Old Style", "Times New Roman", serif',
+                '--lyric-weight': '400' } }
+    ]
+  },
+  chord: {
+    label: 'Chords',
+    options: [
+      { id: 'commit', name: 'CommitMono',
+        vars: { '--chord-font': '"CommitMono", ui-monospace, monospace',
+                '--chord-weight': '400' } },
+      { id: 'system-mono', name: 'System mono',
+        vars: { '--chord-font': 'ui-monospace, "SF Mono", Menlo, monospace',
+                '--chord-weight': '500' } },
+      { id: 'jetbrains', name: 'JetBrains Mono',
+        vars: { '--chord-font': '"JetBrains Mono", ui-monospace, monospace',
+                '--chord-weight': '400' } },
+      { id: 'match', name: 'Same as lyrics',
+        vars: { '--chord-font': 'var(--lyric-font)', '--chord-weight': '500' } }
+    ]
+  },
+  chordSize: {
+    label: 'Chord size',
+    options: [
+      { id: 'half', name: 'Half', vars: { '--chord-size': '.5em' } },
+      { id: 'two-thirds', name: 'Two thirds', vars: { '--chord-size': '.66em' } },
+      { id: 'three-quarters', name: 'Three quarters', vars: { '--chord-size': '.75em' } },
+      { id: 'match', name: 'Match lyrics', vars: { '--chord-size': '1em' } }
+    ]
+  },
+  chordColour: {
+    label: 'Chord colour',
+    options: [
+      { id: 'blue', name: 'Blue', vars: { '--chord-colour': '#0d6efd' } },
+      { id: 'deep', name: 'Deep blue', vars: { '--chord-colour': '#2761e3' } },
+      { id: 'ink', name: 'Ink', vars: { '--chord-colour': '#1a1f26' } },
+      { id: 'rust', name: 'Rust', vars: { '--chord-colour': '#b4531f' } },
+      { id: 'green', name: 'Green', vars: { '--chord-colour': '#1d7a4c' } },
+      { id: 'plum', name: 'Plum', vars: { '--chord-colour': '#7b3f8f' } }
+    ]
+  }
+};
+
+window.carolType = function (kind, id) {
+  var group = window.CAROL_TYPE[kind];
+  if (!group) return null;
+  var choice = null, i;
+  for (i = 0; i < group.options.length; i++) {
+    if (group.options[i].id === id) choice = group.options[i];
+  }
+  if (!choice) return null;
+  var root = document.documentElement;
+  for (var name in choice.vars) root.style.setProperty(name, choice.vars[name]);
+  return choice.id;
+};
+
+window.carolTypeChoice = function () {
+  try { return JSON.parse(localStorage.getItem('carols-type') || '{}'); }
+  catch (e) { return {}; }
+};
+
+(function () {
+  var saved = window.carolTypeChoice();
+  for (var kind in window.CAROL_TYPE) {
+    if (saved[kind]) window.carolType(kind, saved[kind]);
+  }
+})();
+</script>
 
 
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed lyrics quarto-light">
+<body class="nav-sidebar docked nav-fixed lyrics has-chords quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -208,6 +299,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">12. We Wish You a Merry Christmas</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../songs/silent-night.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">13. Silent Night</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -252,42 +349,33 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="verse-1" class="level2">
 <h2 class="anchored" data-anchor-id="verse-1">Verse 1</h2>
-<p>Deck the halls with boughs of holly<br>
-Fa-la-la-la-la, la-la, la, la<br>
-’Tis the season to be jolly<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Don we now our gay apparel<br>
-Fa-la-la, la-la-la, la, la, la<br>
-Troll the ancient Yule-tide carol<br>
-Fa-la-la-la-la, la-la, la, la</p>
+<div class="cline">
+<p><span class="ln"><span class="cw"><span class="ch">D</span>Deck the halls with </span><span class="cw"><span class="ch">Bm</span>boughs of holly</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>’Tis the season </span><span class="cw"><span class="ch">Bm</span>to be jolly</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">A7</span>Don we now our </span><span class="cw"><span class="ch">D</span>gay apparel</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>Fa-la-la, </span><span class="cw"><span class="ch">Bm</span>la-la-la, </span><span class="cw"><span class="ch">A</span>la, </span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>Troll the ancient </span><span class="cw"><span class="ch">Bm</span>Yule-tide carol</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span></p>
+</div>
 </section>
 <section id="interlude" class="level2">
 <h2 class="anchored" data-anchor-id="interlude">Interlude</h2>
+<div class="cline">
+
+</div>
 </section>
 <section id="verse-2" class="level2">
 <h2 class="anchored" data-anchor-id="verse-2">Verse 2</h2>
-<p>See the blazing Yule before us<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Strike the harp and join the chorus<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Follow me in merry measure<br>
-Fa-la-la-la-la, la-la, la, la<br>
-While I tell of Yuletide treasure<br>
-Fa-la-la-la-la, la-la, la, la</p>
+<div class="cline">
+<p><span class="ln"><span class="cw"><span class="ch">D</span>See the blazing </span><span class="cw"><span class="ch">Bm</span>Yule before us</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>Strike the harp and </span><span class="cw"><span class="ch">Bm</span>join the chorus</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">A7</span>Follow me in </span><span class="cw"><span class="ch">D</span>merry measure</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">D</span>Fa-la-la-</span><span class="cw"><span class="ch">Bm</span>la-la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>While I tell of </span><span class="cw"><span class="ch">Bm</span>Yuletide treasure</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span></p>
+</div>
 </section>
 <section id="interlude-1" class="level2">
 <h2 class="anchored" data-anchor-id="interlude-1">Interlude</h2>
+<div class="cline">
+
+</div>
 </section>
 <section id="verse-3" class="level2">
 <h2 class="anchored" data-anchor-id="verse-3">Verse 3</h2>
-<p>Fast away the old year passes -<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Hail the new, ye lads and lasses<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Sing we joyous all together<br>
-Fa-la-la-la-la, la-la, la, la<br>
-Heedless of the wind and weather –<br>
-(Fa-la-la-la-la, la-la, la, la - <em>3 times</em>)</p>
+<div class="cline">
+<p><span class="ln"><span class="cw"><span class="ch">D</span>Fast away the </span><span class="cw"><span class="ch">Bm</span>old year passes -</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>Hail the new, ye </span><span class="cw"><span class="ch">Bm</span>lads and lasses</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">A7</span>Sing we joyous </span><span class="cw"><span class="ch">D</span>all together</span></span> <span class="ln"><span class="nb"><span class="cw"><span class="ch">D</span>Fa-la-la-</span><span class="cw"><span class="ch">Bm</span>la-la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span> <span class="ln"><span class="cw"><span class="ch">D</span>Heedless of the </span><span class="cw"><span class="ch">Bm</span>wind and weather –</span></span> <span class="ln"><span class="nb"><span class="cw">(</span><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la - <em>3 times</em>)</span></span></p>
+</div>
 <div class="songnav">
 <p><a href="../index.html" class="nav-prev">← Programme</a> <a href="../songs/winter-wonderland.html" class="nav-next">Winter Wonderland →</a></p>
 </div>
@@ -309,19 +397,209 @@ Heedless of the wind and weather –<br>
         // A da capo sends you back to the top -- once. On the second pass
         // through it, j stops rather than looping the song forever.
         dacapo: !!h && /^d\.?\s*[cs]\b/i.test(h.textContent.trim()),
+        // Fine is where that second pass ends.
+        fine: !!h && /^fine$/i.test(h.textContent.trim()),
         // Played once on the way down, an interlude is skipped on the repeat.
         interlude: !!h && /^interlude$/i.test(h.textContent.trim()),
         taken: false
       };
     })
     .filter(function (h) { return h.heading; });
+
+  // A direction tells you what to do; it is not a place in the song, so
+  // neither j nor k nor a click in the list ever lands on one.
+  function isDirection(h) { return h.dacapo || h.fine; }
+
+  // A flag on a jump nobody has verified yet, on the page and in the list.
+  function check() {
+    var mark = document.createElement('span');
+    mark.className = 'check';
+    mark.textContent = 'CHECK';
+    mark.title = 'Verify this jump: where it goes back to, and where it ends';
+    return mark;
+  }
+
+  // "D.C. al Fine" with no Fine to stop at means the song ends where it ends.
+  // Wrapped, because everything below depends on it: a page whose shape this
+  // does not expect should cost the song its Fine, not its keys.
+  (function supplyFine() {
+    try {
+      var main = document.querySelector('main.content');
+      if (!main) return;
+      if (!heads.some(function (h) { return h.dacapo; })) return;
+      if (heads.some(function (h) { return h.fine; })) return;
+      var section = document.createElement('section');
+      section.className = 'level2';
+      section.id = 'fine';
+      var h = document.createElement('h2');
+      h.textContent = 'Fine';
+      section.appendChild(h);
+      // The prev/next links sit inside the last section rather than beside
+      // it, so the Fine goes in wherever they are, just above them.
+      var nav = main.querySelector('.songnav');
+      if (nav && nav.parentNode) nav.parentNode.insertBefore(section, nav);
+      else main.appendChild(section);
+      heads.push({ section: section, heading: h, dacapo: false, fine: true,
+                   interlude: false, taken: false });
+    } catch (e) { /* no Fine on this page; the song still works */ }
+  })();
+  // Our own section list, built from the song itself. Quarto's table of
+  // contents is hidden on these pages: it is keyed to scroll position, it
+  // fights any marking of its own we apply, and its links navigate by anchor
+  // rather than by section. This list does exactly what j and k do.
+  //
+  // The page's own label stays plain -- VERSE, CHORUS -- because you are
+  // reading the words underneath it. The list numbers the repeats, because
+  // there you are choosing which one to go to.
+  var entries = [];
+
+  (function buildSectionList() {
+   try {
+    var total = {}, seen = {};
+    var labels = heads.map(function (h) {
+      var written = h.heading.textContent.trim();
+      var m = /^(.*?)\s+(\d+)$/.exec(written);
+      var base = m ? m[1] : written;
+      total[base] = (total[base] || 0) + 1;
+      // A verse the song itself numbers keeps that number, so a repeat of
+      // verse 2 is still verse 2. Anything else is counted as it comes.
+      return { base: base, number: m ? m[2] : null };
+    });
+
+    heads.forEach(function (h, n) {
+      var label = labels[n];
+      h.heading.textContent = label.base;
+      seen[label.base] = (seen[label.base] || 0) + 1;
+      var number = label.number
+        || (total[label.base] > 1 ? String(seen[label.base]) : '');
+      labels[n].text = number ? label.base + ' ' + number : label.base;
+    });
+
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (!sidebar || !heads.length) return;
+
+    var nav = document.createElement('nav');
+    nav.className = 'song-sections';
+    nav.setAttribute('aria-label', 'Sections of this song');
+    var title = document.createElement('div');
+    title.className = 'section-buttons-title';
+    title.textContent = 'Sections';
+    nav.appendChild(title);
+
+    var list = document.createElement('ol');
+    heads.forEach(function (h, n) {
+      var item = document.createElement('li');
+      if (isDirection(h)) {
+        var note = document.createElement('span');
+        note.className = 'direction';
+        note.textContent = labels[n].text + ' ';
+        h.heading.classList.add('direction');
+        // Where a song jumps is worth reading twice: a da capo written over a
+        // song that ends on a coda may want to be a dal segno instead.
+        if (h.dacapo) {
+          note.appendChild(check());
+          h.heading.appendChild(check());
+        }
+        item.appendChild(note);
+        list.appendChild(item);
+        entries.push(null);
+        return;
+      }
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = labels[n].text;
+      button.addEventListener('click', function () {
+        heads.forEach(function (head) { head.taken = false; });
+        focus(n);
+        send({ kind: 'section', index: n });
+        button.blur();
+      });
+      item.appendChild(button);
+      list.appendChild(item);
+      entries.push(button);
+    });
+    nav.appendChild(list);
+    sidebar.appendChild(nav);
+   } catch (e) { /* no list; the keys still move through the song */ }
+  })();
+
+
   var at = -1;
+
+  // Two windows, one song: the same site open twice -- one on the projector
+  // with the words only, one in front of the player with the chords -- moves
+  // together. Only the section and the song travel between them; whether
+  // chords are showing, and how big the text is, belong to each window.
+  var LINK_KEY = 'carols-link';
+  var linked = true;
+  try { linked = localStorage.getItem(LINK_KEY) !== 'off'; } catch (e) { linked = true; }
+  var applying = false;          // a remote update is being applied just now
+  var channel = null;
+  var linkButton = null;
+  var followTimer = null;
+
+  try {
+    if (window.BroadcastChannel) channel = new BroadcastChannel('carols');
+  } catch (e) { channel = null; }
+
+  function send(message) {
+    if (!linked || applying) return;
+    // A nav message names where it is going; everything else means here.
+    if (!message.path) message.path = location.pathname;
+    message.at = Date.now();
+    if (channel) {
+      try { channel.postMessage(message); return; } catch (e) { /* fall through */ }
+    }
+    // No BroadcastChannel (or it failed): a storage write other tabs hear.
+    try { localStorage.setItem('carols-sync', JSON.stringify(message)); } catch (e) {}
+  }
+
+  function showFollowing() {
+    if (!linkButton) return;
+    linkButton.classList.add('following');
+    if (followTimer) clearTimeout(followTimer);
+    followTimer = setTimeout(function () {
+      linkButton.classList.remove('following');
+    }, 1200);
+  }
+
+  function receive(message) {
+    if (!linked || !message) return;
+    if (message.kind === 'nav') {
+      // The other window changed song; follow it there.
+      if (message.path && message.path !== location.pathname) {
+        applying = true;
+        location.href = message.path;
+      }
+      return;
+    }
+    if (message.kind !== 'section' || message.path !== location.pathname) return;
+    applying = true;
+    showFollowing();
+    if (message.reset) heads.forEach(function (h) { h.taken = false; });
+    if (heads[message.dacapo]) heads[message.dacapo].taken = true;
+    if (heads[message.untake]) heads[message.untake].taken = false;
+    focus(message.index);
+    applying = false;
+  }
+
+  if (channel) {
+    channel.addEventListener('message', function (e) { receive(e.data); });
+  }
+  window.addEventListener('storage', function (e) {
+    if (e.key !== 'carols-sync' || !e.newValue) return;
+    try { receive(JSON.parse(e.newValue)); } catch (err) { /* ignore */ }
+  });
 
   // The Twelve Days page holds one fixed verse and reveals it a day at a time
   // instead of scrolling between twelve near-identical ones.
   var reveal = document.body.classList.contains('day-reveal');
   var gifts = Array.prototype.slice.call(document.querySelectorAll('.gift'));
   var opening = document.getElementById('day-opening');
+  // The ordinal has its own span so that rewriting it leaves the rest of the
+  // line -- chords included -- standing. Older pages name no span; there the
+  // whole line is rewritten as before.
+  var ordinal = document.getElementById('day-ordinal');
   var ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth',
                   'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth'];
 
@@ -330,7 +608,9 @@ Heedless of the wind and weather –<br>
       // Hidden, not removed: the lines already sung hold their place.
       g.classList.toggle('unsung', +g.getAttribute('data-day') > day);
     });
-    if (opening) {
+    if (ordinal) {
+      ordinal.textContent = ORDINALS[day - 1];
+    } else if (opening) {
       opening.textContent = opening.textContent.replace(
         /\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth)\b/,
         ORDINALS[day - 1]);
@@ -349,12 +629,24 @@ Heedless of the wind and weather –<br>
     } else {
       heads[at].section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    var id = heads[at].section.getAttribute('id');
-    var link = id && document.querySelector('#TOC a[href="#' + id + '"]');
-    document.querySelectorAll('#TOC a.current').forEach(function (a) {
-      a.classList.remove('current');
+    entries.forEach(function (button, n) {
+      if (!button) return;
+      var on = n === at;
+      button.classList.toggle('is-current', on);
+      if (on) {
+        button.setAttribute('aria-current', 'true');
+        button.style.setProperty('color', '#2761e3', 'important');
+        button.style.setProperty('font-weight', '700', 'important');
+        button.style.setProperty('border-left-color', '#2761e3', 'important');
+        button.style.setProperty('background', 'rgba(39, 97, 227, .08)', 'important');
+      } else {
+        button.removeAttribute('aria-current');
+        button.style.removeProperty('color');
+        button.style.removeProperty('font-weight');
+        button.style.removeProperty('border-left-color');
+        button.style.removeProperty('background');
+      }
     });
-    if (link) link.classList.add('current');
   }
 
   function nearest() {
@@ -378,27 +670,98 @@ Heedless of the wind and weather –<br>
     });
   }
 
+  function go(index, extra) {
+    focus(index);
+    var message = { kind: 'section', index: at };
+    if (extra) for (var key in extra) message[key] = extra[key];
+    send(message);
+  }
+
   function step(dir) {
     var base = at < 0 ? nearest() : at;
-    if (dir < 0) { focus(base - 1); return; }
-
     var repeating = heads.some(function (h) { return h.taken; });
-    var next = at < 0 ? base : base + 1;
-    while (repeating && heads[next] && heads[next].interlude) next++;
-    var dc = heads[next];
-    if (dc && dc.dacapo) {
-      if (!dc.taken) { dc.taken = true; focus(0); return; }
-      next++;
-      while (heads[next] && (heads[next].interlude || heads[next].dacapo)) next++;
+    var i;
+
+    if (dir > 0) {
+      var next = at < 0 ? base : base + 1;
+      while (heads[next]) {
+        var ahead = heads[next];
+        // Played on the way down, an interlude is passed over on the repeat.
+        if (repeating && ahead.interlude) { next++; continue; }
+        if (ahead.dacapo) {
+          if (!ahead.taken) {           // read it once: back to the beginning
+            ahead.taken = true;
+            go(0, { dacapo: next });
+            return;
+          }
+          next++;                        // read already: carry on past it
+          continue;
+        }
+        if (ahead.fine) {
+          if (repeating) return;         // the second pass ends here
+          next++;                        // first time through, Fine is passed
+          continue;
+        }
+        break;
+      }
       if (!heads[next]) return;
+      go(next);
+      return;
     }
-    focus(next);
+
+    // Backwards is the same road travelled the other way.
+    var prev = base - 1;
+    while (prev >= 0) {
+      if (repeating && heads[prev].interlude) { prev--; continue; }
+      if (isDirection(heads[prev])) { prev--; continue; }
+      break;
+    }
+    if (prev >= 0) { go(prev); return; }
+
+    // At the top of the song. If a da capo put us here, give the marker back
+    // and return to the section it was read from.
+    var dc = -1;
+    for (i = heads.length - 1; i >= 0; i--) {
+      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
+    }
+    if (dc < 0) { go(0); return; }
+    heads[dc].taken = false;
+    var back = dc - 1;
+    while (back >= 0 && isDirection(heads[back])) back--;
+    go(Math.max(0, back), { untake: dc });
+  }
+
+  var hasChords = document.body.classList.contains('has-chords');
+
+  // Per tab, not per browser: the player's window keeps its chords from song
+  // to song, and the projector's window stays on the words.
+  function remember(name, on) {
+    try { sessionStorage.setItem('carols-' + name, on ? 'on' : 'off'); } catch (e) {}
+  }
+  function remembered(name) {
+    try { return sessionStorage.getItem('carols-' + name) === 'on'; } catch (e) { return false; }
+  }
+  if (hasChords && remembered('chords')) document.body.classList.add('chords');
+  if (remembered('big')) document.body.classList.add('big');
+
+  function toggleChords() {
+    remember('chords', document.body.classList.toggle('chords'));
   }
 
   function toBeginning() {
     // Back to the top of the song, ready to run the da capo again.
     heads.forEach(function (h) { h.taken = false; });
     focus(0);
+    send({ kind: 'section', index: 0, reset: true });
+  }
+
+  function toggleLink() {
+    linked = !linked;
+    try { localStorage.setItem(LINK_KEY, linked ? 'on' : 'off'); } catch (e) {}
+    if (linkButton) {
+      linkButton.setAttribute('aria-pressed', String(linked));
+      linkButton.firstChild.nodeValue = linked ? 'Linked ' : 'Not linked ';
+    }
   }
 
   // Buttons under the section list, for clicking or tapping a whiteboard.
@@ -408,31 +771,106 @@ Heedless of the wind and weather –<br>
       var panel = document.createElement('div');
       panel.className = 'section-buttons';
       panel.innerHTML = '<div class="section-buttons-title">Section Navigation</div>';
-      [['Previous', 'k', function () { step(-1); }],
-       ['Next', 'j', function () { step(1); }],
-       ['Beginning', 'g', toBeginning]].forEach(function (spec) {
+      var specs = [['Previous', 'k', function () { step(-1); }],
+                   ['Next', 'j', function () { step(1); }],
+                   ['Beginning', 'g', toBeginning]];
+      if (hasChords) specs.push(['Chords', 'c', toggleChords]);
+      specs.push([linked ? 'Linked' : 'Not linked', 'l', toggleLink]);
+      specs.forEach(function (spec) {
         var b = document.createElement('button');
         b.type = 'button';
-        b.innerHTML = spec[0] + ' <span class="key">' + spec[1] + '</span>';
+        b.appendChild(document.createTextNode(spec[0] + ' '));
+        var key = document.createElement('span');
+        key.className = 'key';
+        key.textContent = spec[1];
+        b.appendChild(key);
         b.addEventListener('click', function () { spec[2](); b.blur(); });
+        if (spec[1] === 'l') {
+          b.className = 'link-button';
+          b.setAttribute('aria-pressed', String(linked));
+          b.title = 'Move both open windows through the song together';
+          linkButton = b;
+        }
         panel.appendChild(b);
       });
       sidebar.appendChild(panel);
+
+      // Type pickers. Each choice is remembered and applied in the head
+      // before the page paints, so a song opens the way you left it.
+      if (window.CAROL_TYPE && window.carolType) {
+        var type = document.createElement('div');
+        type.className = 'type-panel';
+        var typeTitle = document.createElement('div');
+        typeTitle.className = 'section-buttons-title';
+        typeTitle.textContent = 'Type';
+        type.appendChild(typeTitle);
+
+        var saved = window.carolTypeChoice();
+        Object.keys(window.CAROL_TYPE).forEach(function (kind) {
+          var group = window.CAROL_TYPE[kind];
+          var label = document.createElement('label');
+          label.appendChild(document.createTextNode(group.label));
+          var select = document.createElement('select');
+          select.id = 'type-' + kind;
+          group.options.forEach(function (option) {
+            var el = document.createElement('option');
+            el.value = option.id;
+            el.textContent = option.name;
+            select.appendChild(el);
+          });
+          if (saved[kind]) select.value = saved[kind];
+          select.addEventListener('change', function () {
+            var chosen = window.carolType(kind, select.value);
+            var keep = window.carolTypeChoice();
+            keep[kind] = chosen;
+            try { localStorage.setItem('carols-type', JSON.stringify(keep)); }
+            catch (e) { /* the choice holds for this page either way */ }
+          });
+          label.appendChild(select);
+          type.appendChild(label);
+        });
+        sidebar.appendChild(type);
+      }
     }
   }
+
+  function goTo(href) {
+    // Take the other window along before this one leaves.
+    send({ kind: 'nav', path: new URL(href, location.href).pathname });
+    window.location.href = href;
+  }
+
+  // Clicking the prev/next links moves both windows, as the arrow keys do.
+  document.querySelectorAll('.songnav a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault();
+      goTo(a.getAttribute('href'));
+    });
+  });
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.target.matches('input, textarea, [contenteditable]')) return;
     var k = e.key;
 
+    if ((k === 'c' || k === 'C') && hasChords) {
+      toggleChords();
+      e.preventDefault();
+      return;
+    }
     if (k === 'g' || k === 'G') {
       toBeginning();
       e.preventDefault();
       return;
     }
+    if (k === 'l' || k === 'L') {
+      toggleLink();
+      e.preventDefault();
+      return;
+    }
     if (k === 'b' || k === 'B') {
-      document.body.classList.toggle('big');
+      remember('big', document.body.classList.toggle('big'));
       if (!reveal && at === 0) window.scrollTo({ top: 0 });
       else if (!reveal && at > 0) heads[at].section.scrollIntoView({ block: 'start' });
       e.preventDefault();
@@ -447,7 +885,7 @@ Heedless of the wind and weather –<br>
             : k === 'ArrowLeft' ? '.songnav .nav-prev' : null;
     if (!sel) return;
     var a = document.querySelector(sel);
-    if (a) { window.location.href = a.getAttribute('href'); e.preventDefault(); }
+    if (a) { goTo(a.getAttribute('href')); e.preventDefault(); }
   });
 })();
 </script>

@@ -1,37 +1,49 @@
 ---
 title: "9. O Tannenbaum (O Christmas Tree )"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-O Tannenbaum, o Tannenbaum  
-Wie treu sind deine Blätter  
-O Tannenbaum, o Tannenbaum  
-Wie treu sind deine Blätter  
+::: {.cline}
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Tannenbaum, </span><span class="cw"><span class="ch">A7</span>o </span><span class="cw"><span class="ch">D</span>Tannenbaum</span></span>
+<span class="ln"><span class="cw">Wie </span><span class="cw"><span class="ch">Em</span>treu sind </span><span class="cw"><span class="ch">A7</span>deine </span><span class="nb"><span class="cw"><span class="ch">A</span>Blät</span><span class="cw"><span class="ch">D</span>ter</span></span></span>
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Tannenbaum, </span><span class="cw"><span class="ch">A7</span>o </span><span class="cw"><span class="ch">D</span>Tannenbaum</span></span>
+<span class="ln"><span class="cw">Wie </span><span class="cw"><span class="ch">Em</span>treu sind </span><span class="cw"><span class="ch">A7</span>deine </span><span class="nb"><span class="cw"><span class="ch">A</span>Blät</span><span class="cw"><span class="ch">D</span>ter</span></span></span>
+:::
 
 ## Verse 2
 
-Du grünst nicht nur zur Sommerzeit  
-Nein auch im Winter, wenn es schneit  
-O Tannenbaum, o Tannenbaum  
-Wie treu sind deine Blätter  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>Du grünst nicht </span><span class="cw"><span class="ch">G</span>nur zur </span><span class="cw"><span class="ch">A7</span>Sommerzeit</span></span>
+<span class="ln"><span class="cw"><span class="ch">Em</span>Nein auch im </span><span class="cw"><span class="ch">A7</span>Winter, </span><span class="cw"><span class="ch">D</span>wenn es schneit</span></span>
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Tannenbaum, </span><span class="cw"><span class="ch">A7</span>o </span><span class="cw"><span class="ch">D</span>Tannenbaum</span></span>
+<span class="ln"><span class="cw">Wie </span><span class="cw"><span class="ch">Em</span>treu sind </span><span class="cw"><span class="ch">A7</span>deine </span><span class="nb"><span class="cw"><span class="ch">A</span>Blät</span><span class="cw"><span class="ch">D</span>ter</span></span></span>
+:::
 
 ## Interlude
 
+::: {.cline}
+
+:::
+
 ## Verse 3
 
-O Christmas tree, O Christmas tree  
-You stand in splendid beauty  
-O Christmas tree, O Christmas tree  
-You stand in splendid beauty  
+::: {.cline}
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Christmas tree, </span><span class="cw"><span class="ch">A7</span>O </span><span class="cw"><span class="ch">D</span>Christmas tree</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">Em</span>stand in </span><span class="cw"><span class="ch">A7</span>splendid </span><span class="nb"><span class="cw"><span class="ch">A</span>beau</span><span class="cw"><span class="ch">D</span>ty</span></span></span>
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Christmas tree, </span><span class="cw"><span class="ch">A7</span>O </span><span class="cw"><span class="ch">D</span>Christmas tree</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">Em</span>stand in </span><span class="cw"><span class="ch">A7</span>splendid </span><span class="nb"><span class="cw"><span class="ch">A</span>beau</span><span class="cw"><span class="ch">D</span>ty</span></span></span>
+:::
 
 ## Verse 4
 
-Your branches green in summer’s glow  
-And evergreen in winter’s snow  
-O Christmas tree, O Christmas tree  
-You stand in splendid beauty  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>Your branches </span><span class="cw"><span class="ch">G</span>green in </span><span class="cw"><span class="ch">A7</span>summer’s glow</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">Em</span>And ever</span><span class="cw"><span class="ch">A7</span>green </span></span><span class="cw">in </span><span class="cw"><span class="ch">D</span>winter’s snow</span></span>
+<span class="ln"><span class="cw">O </span><span class="cw"><span class="ch">D</span>Christmas tree, </span><span class="cw"><span class="ch">A7</span>O </span><span class="cw"><span class="ch">D</span>Christmas tree</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">Em</span>stand in </span><span class="cw"><span class="ch">A7</span>splendid </span><span class="nb"><span class="cw"><span class="ch">A</span>beau</span><span class="cw"><span class="ch">D</span>ty</span></span></span>
+:::
 
 ::: {.songnav}
 [&larr; Merry Christmas Bells](merry-christmas-bells.qmd){.nav-prev}

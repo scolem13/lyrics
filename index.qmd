@@ -25,4 +25,5 @@ Song lyrics for class. Open a song, then:
 10. [Twelve Days of Christmas](songs/twelve-days-of-christmas.qmd)
 11. [Feliz Navidad](songs/feliz-navidad.qmd)
 12. [We Wish You a Merry Christmas](songs/we-wish-you-a-merry-christmas.qmd)
+13. [Silent Night](songs/silent-night.qmd)
 :::

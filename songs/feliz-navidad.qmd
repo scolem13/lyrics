@@ -1,51 +1,67 @@
 ---
 title: "11. Feliz Navidad"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
-## Verse 1
+## Verse
 
-Feliz Navidad  
-Feliz Navidad  
-Feliz Navidad  
-Próspero año y felicidad  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span><span class="cw bare"><span class="ch">A7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">D</span></span></span><span class="cw bare"><span class="ch">Bm7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span></span>
+<span class="ln"><span class="cw">Próspero </span><span class="nb"><span class="cw"><span class="ch">A7</span>año y felici</span><span class="cw"><span class="ch">D</span>dad</span></span></span>
+:::
 
-## Verse 1
+## Verse
 
-Feliz Navidad  
-Feliz Navidad  
-Feliz Navidad  
-Próspero año y felicidad  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span><span class="cw bare"><span class="ch">A7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">D</span></span></span><span class="cw bare"><span class="ch">Bm7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span></span>
+<span class="ln"><span class="cw">Próspero </span><span class="nb"><span class="cw"><span class="ch">A7</span>año y felici</span><span class="cw"><span class="ch">D</span>dad</span></span></span>
+:::
 
 ## Chorus
 
-*I wanna wish you a Merry Christmas*  
-*I wanna wish you a Merry Christmas*  
-*I wanna wish you a Merry Christmas*  
-*From the bottom of my heart.*  
+::: {.cline}
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="nb"><span class="cw"><span class="ch">Em7</span>Merry Christmas</span><span class="cw bare"><span class="ch">A7</span></span></span></em></span>
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="nb"><span class="cw"><span class="ch">D</span>Merry Christmas</span><span class="cw bare"><span class="ch">Bm7</span></span></span></em></span>
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="cw"><span class="ch">Em7</span>Merry Christmas</span></em></span>
+<span class="ln"><em><span class="cw">From the </span><span class="cw"><span class="ch">A7</span>bottom of my </span><span class="cw"><span class="ch">D</span>heart.</span></em></span>
+:::
 
 ## Interlude
 
-## Verse 1
+::: {.cline}
 
-Feliz Navidad  
-Feliz Navidad  
-Feliz Navidad  
-Próspero año y felicidad  
+:::
 
-## Verse 1
+## Verse
 
-Feliz Navidad  
-Feliz Navidad  
-Feliz Navidad  
-Próspero año y felicidad  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span><span class="cw bare"><span class="ch">A7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">D</span></span></span><span class="cw bare"><span class="ch">Bm7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span></span>
+<span class="ln"><span class="cw">Próspero </span><span class="nb"><span class="cw"><span class="ch">A7</span>año y felici</span><span class="cw"><span class="ch">D</span>dad</span></span></span>
+:::
+
+## Verse
+
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span><span class="cw bare"><span class="ch">A7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">D</span></span></span><span class="cw bare"><span class="ch">Bm7</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Feliz Navidad</span><span class="cw bare"><span class="ch">Em7</span></span></span></span>
+<span class="ln"><span class="cw">Próspero </span><span class="nb"><span class="cw"><span class="ch">A7</span>año y felici</span><span class="cw"><span class="ch">D</span>dad</span></span></span>
+:::
 
 ## Chorus
 
-*I wanna wish you a Merry Christmas*  
-*I wanna wish you a Merry Christmas*  
-*I wanna wish you a Merry Christmas*  
-*From the bottom of my heart.*  
+::: {.cline}
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="nb"><span class="cw"><span class="ch">Em7</span>Merry Christmas</span><span class="cw bare"><span class="ch">A7</span></span></span></em></span>
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="nb"><span class="cw"><span class="ch">D</span>Merry Christmas</span><span class="cw bare"><span class="ch">Bm7</span></span></span></em></span>
+<span class="ln"><em><span class="cw">I wanna wish you a </span><span class="cw"><span class="ch">Em7</span>Merry Christmas</span></em></span>
+<span class="ln"><em><span class="cw">From the </span><span class="cw"><span class="ch">A7</span>bottom of my </span><span class="cw"><span class="ch">D</span>heart.</span></em></span>
+:::
 
 ::: {.songnav}
 [&larr; Twelve Days of Christmas](twelve-days-of-christmas.qmd){.nav-prev}

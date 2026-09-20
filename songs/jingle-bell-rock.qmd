@@ -1,66 +1,86 @@
 ---
 title: "6. Jingle Bell Rock"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-Jingle bell, jingle bell, jingle bell rock  
-Jingle bells swing and jingle bells ring  
-Snowin’ and blowin’ up bushels of fun  
-Now the jingle hop has begun  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Jingle bell, </span><span class="cw"><span class="ch">Gmaj7</span>jingle bell, </span><span class="cw"><span class="ch">G6</span>jingle bell </span><span class="cw"><span class="ch">G</span>rock</span></span>
+<span class="ln"><span class="cw"><span class="ch">G6</span>Jingle bells </span><span class="cw"><span class="ch">G</span>swing and </span><span class="cw"><span class="ch">Am</span>jingle bells </span><span class="cw"><span class="ch">D7</span>ring</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Snowin’ and </span><span class="cw"><span class="ch">D7</span>blowin’ up </span><span class="cw"><span class="ch">Am</span>bushels of </span><span class="cw"><span class="ch">D7</span>fun</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Now the jingle hop </span><span class="nb"><span class="cw"><span class="ch">Am</span>has be</span><span class="cw"><span class="ch">D7</span>gun</span></span></span>
+:::
 
 ## Verse 2
 
-Jingle bell, jingle bell, jingle bell rock  
-Jingle bells chime in jingle bell time  
-Dancin’ and prancin’ in Jingle Bell Square  
-In the frosty air  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Jingle bell, </span><span class="cw"><span class="ch">Gmaj7</span>jingle bell, </span><span class="cw"><span class="ch">G6</span>jingle bell </span><span class="cw"><span class="ch">G</span>rock</span></span>
+<span class="ln"><span class="cw"><span class="ch">G6</span>Jingle bells </span><span class="cw"><span class="ch">G</span>swing and </span><span class="cw"><span class="ch">Am</span>jingle bells </span><span class="cw"><span class="ch">D7</span>ring</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Dancin’ and </span><span class="cw"><span class="ch">D7</span>prancin’ in </span><span class="cw"><span class="ch">Am</span>Jingle Bell </span><span class="cw"><span class="ch">D7</span>Square</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>In the </span><span class="cw"><span class="ch">D</span>frosty air </span><span class="cw bare"><span class="ch">G</span></span><span class="cw bare"><span class="ch">G7</span></span></span>
+:::
 
 ## Chorus
 
-*What a bright time, it’s the right time*  
-*To rock the night away*  
-*Jingle bell time is a swell time*  
-*To go glidin’ in a one-horse sleigh*  
+::: {.cline}
+<span class="ln"><em><span class="cw">What a </span><span class="cw"><span class="ch">C</span>bright time, it’s the </span><span class="cw"><span class="ch">Cm</span> right time</span></em></span>
+<span class="ln"><em><span class="cw">To </span><span class="nb"><span class="cw"><span class="ch">G</span>rock the night a</span><span class="cw"><span class="ch">G7</span>way</span></span></em></span>
+<span class="ln"><em><span class="cw">Jingle </span><span class="cw"><span class="ch">A</span>bell time is a </span><span class="cw"><span class="ch">A7</span> swell time</span></em></span>
+<span class="ln"><em><span class="cw"><span class="ch">D</span>To go </span><span class="cw"><span class="ch">D7</span>glidin’ in a </span><span class="cw"><span class="ch">D</span>one-horse </span><span class="cw"><span class="ch">D7</span>sleigh</span></em></span>
+:::
 
 ## Verse 3
 
-Giddy-up, jingle horse, pick up your feet  
-Jingle around the clock  
-Mix and mingle in a jinglin’ beat  
-That’s the jingle bell rock\!  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Giddy-up, </span><span class="cw"><span class="ch">Gmaj7</span>jingle horse, </span><span class="cw"><span class="ch">G6</span>pick up your </span><span class="cw"><span class="ch">G</span>feet</span></span>
+<span class="ln"><span class="cw">Jingle around the </span><span class="cw"><span class="ch">E7</span>clock</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Mix and </span><span class="cw"><span class="ch">Cm</span>mingle in a </span><span class="cw"><span class="ch">A7</span>jinglin’ </span><span class="cw"><span class="ch">Cm</span>beat</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>That’s the </span><span class="cw"><span class="ch">D7</span>jingle bell </span><span class="cw"><span class="ch">G</span>rock!</span></span>
+:::
 
 ## Verse 2
 
-Jingle bell, jingle bell, jingle bell rock  
-Jingle bells chime in jingle bell time  
-Dancin’ and prancin’ in Jingle Bell Square  
-In the frosty air  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Jingle </span><span class="cw"><span class="ch">Gmaj7</span>bell, jingle </span><span class="cw"><span class="ch">G6</span>bell, </span><span class="cw"><span class="ch">G</span>jingle bell rock</span></span>
+<span class="ln"><span class="cw"><span class="ch">G6</span>Jingle </span><span class="cw"><span class="ch">G</span>bells chime </span><span class="cw"><span class="ch">Am</span>in </span><span class="cw"><span class="ch">D7</span>jingle bell time</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Dancin’ and </span><span class="cw"><span class="ch">D7</span>prancin’ in </span><span class="cw"><span class="ch">Am</span>Jingle Bell </span><span class="cw"><span class="ch">D7</span>Square</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>In the </span><span class="cw"><span class="ch">D</span>frosty air </span><span class="cw bare"><span class="ch">G</span></span><span class="cw bare"><span class="ch">G7</span></span></span>
+:::
 
 ## Chorus
 
-*What a bright time, it’s the right time*  
-*To rock the night away*  
-*Jingle bell time is a swell time*  
-*To go glidin’ in a one-horse sleigh*  
+::: {.cline}
+<span class="ln"><em><span class="cw">What </span><span class="cw"><span class="ch">C</span>a bright time, </span><span class="cw"><span class="ch">Cm</span>it’s the right time</span></em></span>
+<span class="ln"><em><span class="cw">To </span><span class="cw"><span class="ch">G</span>rock the </span><span class="cw"><span class="ch">G7</span>night away</span></em></span>
+<span class="ln"><em><span class="cw">Jingle </span><span class="cw"><span class="ch">A</span>bell time is a </span><span class="cw"><span class="ch">A7</span> swell time</span></em></span>
+<span class="ln"><em><span class="cw"><span class="ch">D</span>To go </span><span class="cw"><span class="ch">D7</span>glidin’ in a </span><span class="cw"><span class="ch">D</span>one-horse </span><span class="cw"><span class="ch">D7</span>sleigh</span></em></span>
+:::
 
 ## First Ending
 
-Giddy-up, jingle horse, pick up your feet  
-Jingle around the clock  
-Mix and mingle in a jinglin’ beat  
-That’s the jingle bell rock.  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Giddy-up, </span><span class="cw"><span class="ch">Gmaj7</span>jingle </span><span class="cw"><span class="ch">G6</span>horse, pick </span><span class="cw"><span class="ch">G</span>up your feet</span></span>
+<span class="ln"><span class="cw">Jingle around the </span><span class="cw"><span class="ch">E7</span>clock</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Mix and </span><span class="cw"><span class="ch">Cm</span>mingle in a </span><span class="cw"><span class="ch">A7</span>jinglin’ </span><span class="cw"><span class="ch">Cm</span>beat</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>That’s the </span><span class="cw"><span class="ch">D7</span>jingle bell </span><span class="cw"><span class="ch">G</span>rock!</span></span>
+:::
 
 ## D.C. al Fine
 
+::: {.cline}
+
+:::
+
 ## Second Ending
 
-Giddy-up, jingle horse, pick up your feet  
-Jingle around the clock  
-Mix and mingle in a jinglin’ beat  
-That’s the jingle bell, that’s the jingle bell  
-That’s the jingle bell rock\!  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>Giddy-up, </span><span class="cw"><span class="ch">Gmaj7</span>jingle horse, </span><span class="cw"><span class="ch">G6</span>pick up your </span><span class="cw"><span class="ch">G</span>feet</span></span>
+<span class="ln"><span class="cw">Jingle around </span><span class="cw"><span class="ch">E7</span>the clock</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Mix and </span><span class="cw"><span class="ch">Cm</span>mingle in a </span><span class="cw"><span class="ch">A7</span>jinglin’ </span><span class="cw"><span class="ch">Cm</span>beat</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>That’s the jingle bell, </span><span class="cw"><span class="ch">D7</span>that’s the jingle bell</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>That’s the </span><span class="cw"><span class="ch">D7</span>jingle bell </span><span class="cw"><span class="ch">G</span>rock!</span></span>
+:::
 
 ::: {.songnav}
 [&larr; O Hanukkah](o-hanukkah.qmd){.nav-prev}

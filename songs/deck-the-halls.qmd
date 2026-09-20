@@ -1,44 +1,58 @@
 ---
 title: "1. Deck The Halls"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-Deck the halls with boughs of holly  
-Fa-la-la-la-la, la-la, la, la  
-’Tis the season to be jolly  
-Fa-la-la-la-la, la-la, la, la  
-Don we now our gay apparel  
-Fa-la-la, la-la-la, la, la, la  
-Troll the ancient Yule-tide carol  
-Fa-la-la-la-la, la-la, la, la  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>Deck the halls with </span><span class="cw"><span class="ch">Bm</span>boughs of holly</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>’Tis the season </span><span class="cw"><span class="ch">Bm</span>to be jolly</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">A7</span>Don we now our </span><span class="cw"><span class="ch">D</span>gay apparel</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Fa-la-la, </span><span class="cw"><span class="ch">Bm</span>la-la-la, </span><span class="cw"><span class="ch">A</span>la, </span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Troll the ancient </span><span class="cw"><span class="ch">Bm</span>Yule-tide carol</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+:::
 
 ## Interlude
+
+::: {.cline}
+
+:::
 
 ## Verse 2
 
-See the blazing Yule before us  
-Fa-la-la-la-la, la-la, la, la  
-Strike the harp and join the chorus  
-Fa-la-la-la-la, la-la, la, la  
-Follow me in merry measure  
-Fa-la-la-la-la, la-la, la, la  
-While I tell of Yuletide treasure  
-Fa-la-la-la-la, la-la, la, la  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>See the blazing </span><span class="cw"><span class="ch">Bm</span>Yule before us</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Strike the harp and </span><span class="cw"><span class="ch">Bm</span>join the chorus</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">A7</span>Follow me in </span><span class="cw"><span class="ch">D</span>merry measure</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">D</span>Fa-la-la-</span><span class="cw"><span class="ch">Bm</span>la-la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>While I tell of </span><span class="cw"><span class="ch">Bm</span>Yuletide treasure</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+:::
 
 ## Interlude
 
+::: {.cline}
+
+:::
+
 ## Verse 3
 
-Fast away the old year passes \-  
-Fa-la-la-la-la, la-la, la, la  
-Hail the new, ye lads and lasses  
-Fa-la-la-la-la, la-la, la, la  
-Sing we joyous all together  
-Fa-la-la-la-la, la-la, la, la  
-Heedless of the wind and weather –  
-(Fa-la-la-la-la, la-la, la, la \- *3 times*)  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>Fast away the </span><span class="cw"><span class="ch">Bm</span>old year passes -</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Hail the new, ye </span><span class="cw"><span class="ch">Bm</span>lads and lasses</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A7</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">A7</span>Sing we joyous </span><span class="cw"><span class="ch">D</span>all together</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">D</span>Fa-la-la-</span><span class="cw"><span class="ch">Bm</span>la-la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A</span>la, </span></span><span class="cw"><span class="ch">E7</span>la, </span><span class="cw"><span class="ch">A</span>la</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Heedless of the </span><span class="cw"><span class="ch">Bm</span>wind and weather –</span></span>
+<span class="ln"><span class="nb"><span class="cw">(</span><span class="cw"><span class="ch">G</span>Fa-la-la-la-</span><span class="cw"><span class="ch">D</span>la, </span></span><span class="nb"><span class="cw">la-</span><span class="cw"><span class="ch">A7</span>la, </span></span><span class="cw">la, </span><span class="cw"><span class="ch">D</span>la - *3 times*)</span></span>
+:::
 
 ::: {.songnav}
 [&larr; Programme](../index.qmd){.nav-prev}

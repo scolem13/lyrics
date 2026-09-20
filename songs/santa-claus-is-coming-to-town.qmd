@@ -1,45 +1,63 @@
 ---
 title: "3. Santa Claus is Coming to Town"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Chorus
 
-Oh, you better watch out  
-You better not cry  
-You better not pout I'm telling you why  
-Santa Claus is coming to town  
+::: {.cline}
+<span class="ln"><span class="cw">Oh, you </span><span class="cw"><span class="ch">A</span>better watch out</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">D</span>better not cry</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">A</span>better not pout I&#x27;m </span><span class="cw"><span class="ch">D</span>telling you why</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town</span></span>
+:::
 
-## Verse 1
+## Verse
 
-He's making a list  
-And he's checking it twice  
-He's gonna find out who's naughty or nice  
-Santa Claus is coming to town  
+::: {.cline}
+<span class="ln"><span class="cw">He&#x27;s </span><span class="cw"><span class="ch">A</span>making a list</span></span>
+<span class="ln"><span class="cw">And he&#x27;s </span><span class="cw"><span class="ch">D</span>checking it twice</span></span>
+<span class="ln"><span class="cw">He&#x27;s </span><span class="cw"><span class="ch">A</span>gonna find out who&#x27;s </span><span class="cw"><span class="ch">D</span>naughty or nice</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town</span></span>
+:::
 
-## Verse 2
+## Bridge
 
-He sees you when you're sleeping  
-He knows when you're awake  
-He knows if you've been bad or good  
-So be good for goodness sake  
+::: {.cline}
+<span class="ln"><span class="cw">He </span><span class="cw"><span class="ch">A7</span>sees you when you&#x27;re </span><span class="cw"><span class="ch">D</span>sleeping</span></span>
+<span class="ln"><span class="cw">He </span><span class="nb"><span class="cw"><span class="ch">A7</span>knows when you&#x27;re a</span><span class="cw"><span class="ch">D</span>wake</span></span></span>
+<span class="ln"><span class="cw">He </span><span class="cw"><span class="ch">B7</span>knows if you&#x27;ve been </span><span class="cw"><span class="ch">E</span>bad or good</span></span>
+<span class="ln"><span class="cw">So be </span><span class="cw"><span class="ch">B7</span>good for goodness </span><span class="cw"><span class="ch">E</span>sake </span><span class="cw bare"><span class="ch">E7</span></span></span>
+:::
 
 ## Chorus
 
-Oh, you better watch out  
-You better not cry  
-You better not pout I'm telling you why  
-Santa Claus is coming to town  
+::: {.cline}
+<span class="ln"><span class="cw">Oh, you </span><span class="cw"><span class="ch">A</span>better watch out</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">D</span>better not cry</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">A</span>better not pout I&#x27;m </span><span class="cw"><span class="ch">D</span>telling you why</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town</span></span>
+:::
 
 ## Interlude
 
+::: {.cline}
+
+:::
+
 ## D.C. al Fine
+
+::: {.cline}
+
+:::
 
 ## Coda
 
-Santa Claus is coming to town\!  
-Santa Claus is coming to town\!  
-Santa Claus is coming to town\!  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
+:::
 
 ::: {.songnav}
 [&larr; Winter Wonderland](winter-wonderland.qmd){.nav-prev}

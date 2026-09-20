@@ -1,44 +1,62 @@
 ---
 title: "2. Winter Wonderland"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-Sleigh bells ring, are you listening?  
-In the lane, snow is glistening  
-A beautiful sight, we’re happy tonight  
-Walking in a winter wonderland  
+::: {.cline}
+<span class="ln"><span class="cw">Sleigh bells </span><span class="cw"><span class="ch">Eb</span>ring, are you </span><span class="nb"><span class="cw"><span class="ch">Gm</span>listening?</span><span class="cw bare"><span class="ch">Cm</span></span></span></span>
+<span class="ln"><span class="cw">In the </span><span class="cw"><span class="ch">Fm</span>lane, snow is </span><span class="cw"><span class="ch">Bb</span>glistening</span></span>
+<span class="ln"><span class="cw">A </span><span class="nb"><span class="cw"><span class="ch">Gm</span>beautiful s</span><span class="cw"><span class="ch">D9</span>ight, </span></span><span class="cw">we’re </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>happy to</span><span class="cw"><span class="ch">C9#5</span>night</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span>
+:::
 
 ## Verse 2
 
-Gone away, is the bluebird  
-Here to stay, is a new bird  
-He sings a love song, as we go along  
-Walking in a winter wonderland  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">Gone a</span><span class="cw"><span class="ch">Eb</span>way, </span></span><span class="cw">is the </span><span class="nb"><span class="cw"><span class="ch">Gm</span>bluebird</span><span class="cw bare"><span class="ch">Cm</span></span></span></span>
+<span class="ln"><span class="cw">Here to </span><span class="cw"><span class="ch">Fm</span>stay, is a </span><span class="cw"><span class="ch">Bb</span>new bird</span></span>
+<span class="ln"><span class="cw">He </span><span class="cw"><span class="ch">Gm</span>sings a love </span><span class="cw"><span class="ch">D9</span>song, as </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>we go a</span><span class="cw"><span class="ch">C9#5</span>long</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span>
+:::
+
+## Bridge
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">GM7</span>In the meadow </span><span class="cw"><span class="ch">AM7/D</span>we can build a </span><span class="cw"><span class="ch">GM7</span>snowman</span></span>
+<span class="ln"><span class="cw"><span class="ch">G</span>Then pretend that </span><span class="cw"><span class="ch">AM7/D</span>he is Parson </span><span class="cw"><span class="ch">GM7</span>Brown</span></span>
+<span class="ln"><span class="cw"><span class="ch">Bb</span>He’ll say, “Are you </span><span class="cw"><span class="ch">Cm7/F</span>married?”</span></span>
+<span class="ln"><span class="cw">We’ll say, </span><span class="cw"><span class="ch">Bb</span>“No man, but </span><span class="nb"><span class="cw"><span class="ch">C7</span>you can do the</span><span class="cw"><span class="ch">F7</span> job </span></span><span class="cw">while you’re in </span><span class="cw"><span class="ch">Bb</span>town”</span></span>
+:::
 
 ## Verse 3
 
-In the meadow we can build a snowman  
-Then pretend that he is Parson Brown  
-He’ll say, “Are you married?”  
-We’ll say, “No man, but you can do the job while you’re in town”  
-
-## Verse 4
-
-Later on, we’ll conspire  
-As we dream, by the fire  
-To face unafraid, the plans that we made  
-Walking in a winter wonderland  
+::: {.cline}
+<span class="ln"><span class="cw">Later </span><span class="cw"><span class="ch">Eb</span>on, we’ll </span><span class="nb"><span class="cw"><span class="ch">Gm</span>conspire</span><span class="cw bare"><span class="ch">Cm</span></span></span></span>
+<span class="ln"><span class="cw">As we </span><span class="cw"><span class="ch">Fm</span>dream, by the </span><span class="cw"><span class="ch">Bb</span>fire</span></span>
+<span class="ln"><span class="cw">To </span><span class="nb"><span class="cw"><span class="ch">Gm</span>face una</span><span class="cw"><span class="ch">D9</span>fraid, </span></span><span class="cw">the </span><span class="cw"><span class="ch">Gm7</span>plans that we </span><span class="cw"><span class="ch">C9#5</span>made</span></span>
+<span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span>
+:::
 
 ## Interlude
 
+::: {.cline}
+
+:::
+
 ## D.C. al Fine
+
+::: {.cline}
+
+:::
 
 ## Coda
 
-Walking in a winter wonderland  
-Walking in a winter wonderland  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span>
+:::
 
 ::: {.songnav}
 [&larr; Deck The Halls](deck-the-halls.qmd){.nav-prev}

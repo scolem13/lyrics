@@ -1,35 +1,49 @@
 ---
 title: "5. O Hanukkah"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
 ## Verse 1
 
-Hanukkah, Oh Hanukkah  
-Come light the menorah  
-Let’s have a party  
-We’ll all dance the hora  
-Gather round the table,  
-We’ll give you a treat.  
-Dreidels to play with and latkes to eat  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">Am</span>Hanukkah, Oh Hanukkah</span></span>
+<span class="ln"><span class="cw">Come light the menorah</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Let’s have a party</span></span>
+<span class="ln"><span class="nb"><span class="cw">We’</span><span class="cw"><span class="ch">G</span>ll </span></span><span class="cw">all dance the </span><span class="cw"><span class="ch">C</span>hora</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Gather round the </span><span class="cw"><span class="ch">G</span>table,</span></span>
+<span class="ln"><span class="cw">We’ll </span><span class="cw"><span class="ch">C</span>give you a </span><span class="cw"><span class="ch">C/B</span>treat.</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>Dreidels to play with </span><span class="cw"><span class="ch">E7</span>and </span><span class="cw"><span class="ch">Am</span>latkes to eat</span></span>
+:::
 
 ## Verse 2
 
-And while we are playing,  
-The candles are burning low.  
-One for each night, they shed a sweet light  
-To remind us of days long ago.  
-One for each night, they shed a sweet light  
-To remind us of days long ago.  
+::: {.cline}
+<span class="ln"><span class="cw">And </span><span class="cw"><span class="ch">Am</span>while we are </span><span class="cw"><span class="ch">Am</span>playing,</span></span>
+<span class="ln"><span class="cw">The </span><span class="cw"><span class="ch">C</span>candles are </span><span class="cw"><span class="ch">G</span>burning </span><span class="cw"><span class="ch">C</span>low. </span><span class="cw bare"><span class="ch">E7</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>One for each </span><span class="cw"><span class="ch">Dm</span>night, they </span><span class="cw"><span class="ch">Am</span>shed a sweet </span><span class="cw"><span class="ch">Dm</span>light</span></span>
+<span class="ln"><span class="cw">To </span><span class="cw"><span class="ch">Am</span>remind us of </span><span class="nb"><span class="cw"><span class="ch">E7</span>days long a</span><span class="cw"><span class="ch">Am</span>go.</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">Am</span>One for </span><span class="cw"><span class="ch">Dm</span>each night, they </span><span class="cw"><span class="ch">Am</span>shed a sweet </span><span class="cw"><span class="ch">Dm</span>light</span></span>
+<span class="ln"><span class="nb"><span class="cw">To re</span><span class="cw"><span class="ch">Am</span>mind </span></span><span class="cw">us of </span><span class="nb"><span class="cw"><span class="ch">E7</span>days long a</span><span class="cw"><span class="ch">Am</span>go.</span></span></span>
+:::
 
 ## Chorus
 
-*O Hanukkah\! Hanukkah*  
-*O Hanukkah\! Hanukkah*  
+::: {.cline}
+<span class="ln"><em><span class="cw"><span class="ch">Am</span>O Hanukkah! Hanukkah</span></em></span>
+<span class="ln"><em><span class="cw"><span class="ch">Am</span>O Hanukkah! Hanukkah</span></em></span>
+:::
 
 ## Interlude
 
+::: {.cline}
+<span class="ln"><span class="ibar"><span class="ch">Am</span><span class="ch">Dm</span><span class="ch">Am</span><span class="ch">Dm</span><span class="ch">Am</span><span class="ch">E7</span><span class="ch">Am</span><span class="ch">x2</span></span></span>
+:::
+
 ## D.C. al Fine
+
+::: {.cline}
+
+:::
 
 ::: {.songnav}
 [&larr; Frosty the Snowman](frosty-the-snowman.qmd){.nav-prev}
