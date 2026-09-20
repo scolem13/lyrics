@@ -45,7 +45,7 @@ body-classes: lyrics has-chords
 
 :::
 
-## D.C. al Fine
+## D.C. al Coda
 
 ::: {.cline}
 

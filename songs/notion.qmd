@@ -1,0 +1,74 @@
+---
+title: "Notion"
+body-classes: lyrics has-chords
+---
+
+## Coleman has moved some of these around a bit, but assume none of it is done yet
+
+::: {.cline}
+
+:::
+
+## Intro
+
+::: {.cline}
+<span class="ln"><span class="ibar"><span class="ch">A</span><span class="ch">Faug</span><span class="ch">Dmaj7</span><span class="ch">Dm6</span></span></span>
+:::
+
+## Verse 1
+
+::: {.cline}
+<span class="ln"><span class="cw">Sure it’s a </span><span class="nb"><span class="cw"><span class="ch">Bm</span>calming notion, perpetu</span><span class="cw"><span class="ch">F#m</span>al </span></span><span class="cw">in motion</span></span>
+<span class="ln"><span class="cw">But I don’t </span><span class="cw"><span class="ch">Bm</span>need the comfort of any </span><span class="cw"><span class="ch">F#m</span>lies</span></span>
+<span class="ln"><span class="cw">For I have </span><span class="cw"><span class="ch">Bm</span>seen the </span><span class="nb"><span class="cw"><span class="ch">F#m</span>ending and there is no asc</span><span class="cw"><span class="ch">A</span>ending </span></span><span class="cw"><span class="ch">Faug</span>rise</span></span>
+:::
+
+## Verse 2
+
+::: {.cline}
+<span class="ln"><span class="cw">Oh, back </span><span class="cw"><span class="ch">Bm</span>when I was younger, was </span><span class="cw"><span class="ch">F#m</span>told by other youngsters</span></span>
+<span class="ln"><span class="cw">That my </span><span class="cw"><span class="ch">Bm</span>end will be torture beneath the </span><span class="cw"><span class="ch">F#m</span>earth</span></span>
+<span class="ln"><span class="cw">‘Cause I </span><span class="cw"><span class="ch">Bm</span>don’t see what they see when </span><span class="cw"><span class="ch">F#m</span>death is staring at me</span></span>
+<span class="ln"><span class="cw">I see </span><span class="cw"><span class="ch">Bm6</span>a </span><span class="cw"><span class="ch">Bm7</span>window, a </span><span class="cw"><span class="ch">Bm</span>limit, to live </span><span class="cw"><span class="ch">Bmadd9</span>it, or </span><span class="cw"><span class="ch">Faug</span>not at all</span></span>
+:::
+
+## Interlude
+
+::: {.cline}
+<span class="ln"><span class="ibar"><span class="ch">Dmaj7</span><span class="ch">Fmaj7</span><span class="ch">Amaj7</span><span class="ch">F#m7</span><span class="ch">Bm7</span><span class="ch">C#m7</span><span class="ch">Dmaj7</span><span class="ch">Fmaj7</span></span></span>
+:::
+
+## Verse 3
+
+::: {.cline}
+<span class="ln"><span class="cw">If you </span><span class="cw"><span class="ch">Bm</span>could pull the lever to </span><span class="cw"><span class="ch">F#m</span>carry on forever</span></span>
+<span class="ln"><span class="cw">Would your </span><span class="cw"><span class="ch">Bm</span>life even </span><span class="cw"><span class="ch">F#m</span>matter anymore?</span></span>
+<span class="ln"><span class="cw">Sure it’s </span><span class="cw"><span class="ch">Bm</span>a calming notion, </span><span class="cw"><span class="ch">F#m</span>perpetual in motion</span></span>
+<span class="ln"><span class="cw">But </span><span class="cw"><span class="ch">A</span>it’s not what you </span><span class="cw"><span class="ch">Faug</span>signed up for</span></span>
+:::
+
+## Bridge
+
+::: {.cline}
+<span class="ln"><span class="ibar"><span class="ch">A</span><span class="ch">Faug</span><span class="ch">Dmaj7</span><span class="ch">Faug</span><span class="ch">(x2)</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>I’m sure </span><span class="cw"><span class="ch">Faug</span>there won’t </span><span class="cw"><span class="ch">Dmaj7</span>always be </span><span class="cw"><span class="ch">Faug</span>sun - shine</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>But there’s </span><span class="cw"><span class="ch">Faug</span>this </span><span class="cw"><span class="ch">Dmaj7</span>momentary </span><span class="cw"><span class="ch">Faug</span>beam of light</span></span>
+<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">A</span>don’t have to wait </span><span class="cw"><span class="ch">Faug</span>those salty decades</span></span>
+<span class="ln"><span class="cw">To </span><span class="cw"><span class="ch">Dmaj7</span>get through the gate, it’s </span><span class="cw"><span class="ch">Faug</span>all in front of your face</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>I’m sure </span><span class="cw"><span class="ch">Faug</span>there won’t </span><span class="cw"><span class="ch">Dmaj7</span>always be </span><span class="cw"><span class="ch">Faug</span>sun - shine</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>I’m sure </span><span class="cw"><span class="ch">Faug</span>there won’t </span><span class="cw"><span class="ch">Dmaj7</span>always be </span><span class="cw"><span class="ch">Dm</span>sun - shine</span></span>
+<span class="ln"><span class="cw"><span class="ch">A</span>But there’s </span><span class="cw"><span class="ch">Faug</span>this </span><span class="cw"><span class="ch">Dmaj7</span>momentary </span><span class="cw"><span class="ch">Dm</span>beam of light</span></span>
+:::
+
+## Chorus 3
+
+::: {.cline}
+<span class="ln"><span class="cw">I could </span><span class="cw"><span class="ch">A</span>could cross the ocean in </span><span class="cw"><span class="ch">Bm</span>a fit of devotion</span></span>
+<span class="ln"><span class="cw">For </span><span class="cw"><span class="ch">A</span>every shining second this </span><span class="cw"><span class="ch">Bm</span>fragile body beckons</span></span>
+<span class="ln"><span class="cw">You think </span><span class="cw"><span class="ch">A</span>you’re owed it better </span><span class="cw"><span class="ch">Bm</span>believing ancient letters</span></span>
+<span class="ln"><span class="cw">Sure it’s </span><span class="cw"><span class="ch">A</span>a calming notion but </span><span class="cw"><span class="ch">Bm</span>it’s a lie</span></span>
+:::
+
+::: {.songnav}
+[&larr; Programme](../index.qmd){.nav-prev}
+:::

@@ -1,0 +1,9 @@
+---
+title: "2. Viva la Vida"
+body-classes: lyrics has-chords
+---
+
+::: {.songnav}
+[&larr; End of Beginning](end-of-beginning.qmd){.nav-prev}
+[Programme &rarr;](../index.qmd){.nav-next}
+:::

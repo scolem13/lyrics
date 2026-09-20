@@ -86,6 +86,10 @@ body.lyrics main.content h2.direction {
   letter-spacing: 0;
   padding-left: 4ch;
 }
+/* A Fine the song has not reached yet: visible, but not yet in force. */
+body.lyrics main.content h2.direction.pending,
+.song-sections .direction.pending { color: #adb5bd; }
+
 .check {
   margin-left: .6em;
   padding: .05em .4em;
@@ -102,7 +106,7 @@ body.lyrics main.content h2.direction {
 }
 .song-sections .direction {
   display: block;
-  padding: .22rem .5rem .22rem calc(.5rem + 4ch);
+  padding: .22rem .5rem .22rem calc(.5rem + 2ch);
   border-left: 2px solid transparent;
   font-size: .95rem;
   line-height: 1.3;

@@ -82,5 +82,5 @@ body-classes: lyrics has-chords
 
 ::: {.songnav}
 [&larr; Feliz Navidad](feliz-navidad.qmd){.nav-prev}
-[Silent Night &rarr;](silent-night.qmd){.nav-next}
+[Programme &rarr;](../index.qmd){.nav-next}
 :::

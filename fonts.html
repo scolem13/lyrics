@@ -1,0 +1,91 @@
+<script>
+// How a song page is set is a matter of taste and of the room you are in, so
+// it is chosen from the sidebar rather than settled in the stylesheet. This
+// runs in the head, before anything paints, so a saved choice is what you
+// first see rather than something that swaps in a moment later.
+//
+// Lyric size is not here: b toggles it, per song, as it always has.
+window.CAROL_TYPE = {
+  lyric: {
+    label: 'Lyrics',
+    options: [
+      { id: 'lexend-300', name: 'Lexend Light',
+        vars: { '--lyric-font': '"Lexend", system-ui, sans-serif',
+                '--lyric-weight': '300' } },
+      { id: 'lexend-400', name: 'Lexend Regular',
+        vars: { '--lyric-font': '"Lexend", system-ui, sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'system', name: 'System sans',
+        vars: { '--lyric-font': 'system-ui, -apple-system, "Segoe UI", sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'atkinson', name: 'Atkinson Hyperlegible',
+        vars: { '--lyric-font': '"Atkinson Hyperlegible", system-ui, sans-serif',
+                '--lyric-weight': '400' } },
+      { id: 'serif', name: 'Serif',
+        vars: { '--lyric-font': 'Georgia, "Iowan Old Style", "Times New Roman", serif',
+                '--lyric-weight': '400' } }
+    ]
+  },
+  chord: {
+    label: 'Chords',
+    options: [
+      { id: 'commit', name: 'CommitMono',
+        vars: { '--chord-font': '"CommitMono", ui-monospace, monospace',
+                '--chord-weight': '400' } },
+      { id: 'system-mono', name: 'System mono',
+        vars: { '--chord-font': 'ui-monospace, "SF Mono", Menlo, monospace',
+                '--chord-weight': '500' } },
+      { id: 'jetbrains', name: 'JetBrains Mono',
+        vars: { '--chord-font': '"JetBrains Mono", ui-monospace, monospace',
+                '--chord-weight': '400' } },
+      { id: 'match', name: 'Same as lyrics',
+        vars: { '--chord-font': 'var(--lyric-font)', '--chord-weight': '500' } }
+    ]
+  },
+  chordSize: {
+    label: 'Chord size',
+    options: [
+      { id: 'half', name: 'Half', vars: { '--chord-size': '.5em' } },
+      { id: 'two-thirds', name: 'Two thirds', vars: { '--chord-size': '.66em' } },
+      { id: 'three-quarters', name: 'Three quarters', vars: { '--chord-size': '.75em' } },
+      { id: 'match', name: 'Match lyrics', vars: { '--chord-size': '1em' } }
+    ]
+  },
+  chordColour: {
+    label: 'Chord colour',
+    options: [
+      { id: 'blue', name: 'Blue', vars: { '--chord-colour': '#0d6efd' } },
+      { id: 'deep', name: 'Deep blue', vars: { '--chord-colour': '#2761e3' } },
+      { id: 'ink', name: 'Ink', vars: { '--chord-colour': '#1a1f26' } },
+      { id: 'rust', name: 'Rust', vars: { '--chord-colour': '#b4531f' } },
+      { id: 'green', name: 'Green', vars: { '--chord-colour': '#1d7a4c' } },
+      { id: 'plum', name: 'Plum', vars: { '--chord-colour': '#7b3f8f' } }
+    ]
+  }
+};
+
+window.carolType = function (kind, id) {
+  var group = window.CAROL_TYPE[kind];
+  if (!group) return null;
+  var choice = null, i;
+  for (i = 0; i < group.options.length; i++) {
+    if (group.options[i].id === id) choice = group.options[i];
+  }
+  if (!choice) return null;
+  var root = document.documentElement;
+  for (var name in choice.vars) root.style.setProperty(name, choice.vars[name]);
+  return choice.id;
+};
+
+window.carolTypeChoice = function () {
+  try { return JSON.parse(localStorage.getItem('carols-type') || '{}'); }
+  catch (e) { return {}; }
+};
+
+(function () {
+  var saved = window.carolTypeChoice();
+  for (var kind in window.CAROL_TYPE) {
+    if (saved[kind]) window.carolType(kind, saved[kind]);
+  }
+})();
+</script>

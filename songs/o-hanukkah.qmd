@@ -33,6 +33,12 @@ body-classes: lyrics has-chords
 <span class="ln"><em><span class="cw"><span class="ch">Am</span>O Hanukkah! Hanukkah</span></em></span>
 :::
 
+## Fine
+
+::: {.cline}
+
+:::
+
 ## Interlude
 
 ::: {.cline}

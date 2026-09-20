@@ -16,7 +16,7 @@ website:
     contents:
       - href: index.qmd
         text: Programme
-      - section: "Songs"
+      - section: "Conrad Tree Lighting"
         contents:
           - songs/deck-the-halls.qmd
           - songs/winter-wonderland.qmd
@@ -30,7 +30,10 @@ website:
           - songs/twelve-days-of-christmas.qmd
           - songs/feliz-navidad.qmd
           - songs/we-wish-you-a-merry-christmas.qmd
-          - songs/silent-night.qmd
+      - section: "Winter Concert"
+        contents:
+          - songs/end-of-beginning.qmd
+          - songs/viva-la-vida.qmd
 
 format:
   html:

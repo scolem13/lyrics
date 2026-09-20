@@ -1,0 +1,18 @@
+# The day-reveal page is hand-built markup, not generated from this file --
+# the build skips *-seed.cho. This is the editable source of that verse;
+# tools/twelve-days.py folds it back into site/songs/twelve-days-of-christmas.qmd.
+{comment: The verse}
+On the [D]first day of [Bm]Christmas,
+My [Em]true love [A]sent to [D]me
+[A]Twelve drummers drumming,
+[A]Eleven pipers piping,
+[A]Ten lords a-leaping,
+[A]Nine ladies dancing,
+[A]Eight maids a-milking,
+[A]Seven swans a-swimming,
+[A]Six geese a-laying,
+[D]Five [E]golden [A]rings,
+[D]Four calling birds,
+[Bm]Three French hens,
+[E]Two turtle [A]doves,
+And a [D/F#]partr[G]idge [D/A]in a [A]pear [D]tree!

@@ -1,0 +1,72 @@
+---
+title: "1. End of Beginning"
+body-classes: lyrics has-chords
+---
+
+## Intro
+
+::: {.cline}
+<span class="ln"><span class="ibar"><span class="ch">|</span><span class="ch">N.C.</span><span class="ch">|</span></span></span>
+:::
+
+## Verse 1
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>Just one more tear to cry</span></span>
+<span class="ln"><span class="cw">One teardrop from my </span><span class="cw"><span class="ch">Bm</span>eye</span></span>
+<span class="ln"><span class="cw">You better </span><span class="cw"><span class="ch">A</span>save it for</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>The middle of the night</span></span>
+<span class="ln"><span class="cw">When things aren&#x27;t black and... </span><span class="cw"><span class="ch">Bm</span>white</span></span>
+<span class="ln"><span class="cw"><span class="ch">Em</span>Enter, </span><span class="nb"><span class="cw"><span class="ch">A</span>Troubadour:</span><span class="cw"><span class="ch">Em</span>&#x27;Remember </span></span><span class="cw"><span class="ch">A</span>24?&#x27;</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">Gmaj7</span>And when I&#x27;m </span><span class="nb"><span class="cw"><span class="ch">D</span>back in Chi</span><span class="cw"><span class="ch">A</span>cago, </span></span><span class="cw">I </span><span class="cw"><span class="ch">Gmaj7</span>feel it</span></span>
+<span class="ln"><span class="cw">Another </span><span class="cw"><span class="ch">Bm</span>version of </span><span class="cw"><span class="ch">A</span>me, I was in </span><span class="cw"><span class="ch">Gmaj7</span>it</span></span>
+<span class="ln"><span class="nb"><span class="cw">I wave good</span><span class="cw"><span class="ch">D</span>bye </span></span><span class="cw">to the </span><span class="nb"><span class="cw"><span class="ch">A</span>end of be</span><span class="cw"><span class="ch">G</span>ginning</span></span></span>
+:::
+
+## Verse 2
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">D</span>This song has started now</span></span>
+<span class="ln"><span class="nb"><span class="cw">And you&#x27;re just finding</span><span class="cw"><span class="ch">Bm</span> out</span></span></span>
+<span class="ln"><span class="cw">Now isn&#x27;t </span><span class="cw"><span class="ch">A</span>that a laugh?</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>A major sacrifice, but clueless at the </span><span class="cw"><span class="ch">Bm</span>time</span></span>
+<span class="ln"><span class="cw"><span class="ch">Em</span>Enter, </span><span class="cw"><span class="ch">A</span>Caroline: &quot;Just trust me, you&#x27;ll be fine&quot;</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">Gmaj7</span>And when I&#x27;m </span><span class="nb"><span class="cw"><span class="ch">D</span>back in Chi</span><span class="cw"><span class="ch">A</span>cago, </span></span><span class="cw">I </span><span class="cw"><span class="ch">Gmaj7</span>feel it</span></span>
+<span class="ln"><span class="cw">Another </span><span class="cw"><span class="ch">Bm</span>version of </span><span class="cw"><span class="ch">A</span>me, I was in </span><span class="cw"><span class="ch">Gmaj7</span>it</span></span>
+<span class="ln"><span class="nb"><span class="cw">I wave good</span><span class="cw"><span class="ch">D</span>bye </span></span><span class="cw">to the </span><span class="nb"><span class="cw"><span class="ch">A</span>end of be</span><span class="cw"><span class="ch">G</span>ginning</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">G</span>(Goodbye, goodbye)</span></span>
+<span class="ln"><span class="cw"><span class="ch">G</span>(Goodbye, goodbye)</span></span>
+:::
+
+## Bridge
+
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A</span>You take the man out of the city, not the ci</span><span class="cw"><span class="ch">Bm</span>ty </span></span><span class="cw">out the man</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A</span>You take the man out of the city, not the ci</span><span class="cw"><span class="ch">Bm</span>ty </span></span><span class="cw">out the man</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">A</span>You take the man out of the city, not the ci</span><span class="cw"><span class="ch">Bm</span>ty </span></span><span class="cw">out the man</span></span>
+<span class="ln"><span class="cw"><span class="ch">N.C.</span>You take the man out of the</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">G</span>And when I&#x27;m </span><span class="nb"><span class="cw"><span class="ch">D</span>back in Chi</span><span class="cw"><span class="ch">A</span>cago, </span></span><span class="cw">I </span><span class="cw"><span class="ch">G</span>feel it</span></span>
+<span class="ln"><span class="cw">Another </span><span class="cw"><span class="ch">Bm</span>version of </span><span class="cw"><span class="ch">A</span>me, I was </span><span class="cw"><span class="ch">F#m7</span>in </span><span class="cw"><span class="ch">G</span>it</span></span>
+<span class="ln"><span class="nb"><span class="cw">I wave good</span><span class="cw"><span class="ch">D</span>bye </span></span><span class="cw">to the </span><span class="nb"><span class="cw"><span class="ch">A</span>end of be</span><span class="cw"><span class="ch">G</span>ginning</span></span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>(Goodbye, goodbye)</span><span class="cw bare"><span class="ch">N.C.</span></span></span></span>
+:::
+
+::: {.songnav}
+[&larr; Programme](../index.qmd){.nav-prev}
+[Viva la Vida &rarr;](viva-la-vida.qmd){.nav-next}
+:::

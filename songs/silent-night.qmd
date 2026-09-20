@@ -1,0 +1,32 @@
+---
+title: "Silent Night"
+body-classes: lyrics has-chords
+---
+
+## Verse 1
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">F</span>Silent night, Holy </span><span class="cw"><span class="ch">C</span>night, </span><span class="cw"><span class="ch">C7</span>All is </span><span class="cw"><span class="ch">F</span>calm all is bright</span></span>
+<span class="ln"><span class="cw"><span class="ch">A#</span>Round yon </span><span class="cw"><span class="ch">F</span>virgin mother and </span><span class="cw"><span class="ch">A#</span>child, Holy </span><span class="cw"><span class="ch">F</span>infant so tender and mild</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Sleep </span><span class="nb"><span class="cw"><span class="ch">C7</span>in heav</span><span class="cw"><span class="ch">F</span>en</span><span class="cw"><span class="ch">Dm</span>ly </span></span><span class="cw"><span class="ch">F</span>peace, </span><span class="cw"><span class="ch">C</span>sleep in </span><span class="cw"><span class="ch">F</span>heavenly peace.</span></span>
+:::
+
+## Verse 2
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">F</span>Silent night, Holy </span><span class="cw"><span class="ch">C</span>night, </span><span class="cw"><span class="ch">C7</span>Shepherds </span><span class="cw"><span class="ch">F</span>quake at the sight</span></span>
+<span class="ln"><span class="cw"><span class="ch">A#</span>Glories stream </span><span class="cw"><span class="ch">F</span>from Heaven </span><span class="cw"><span class="ch">A#</span>afar, heavenly </span><span class="cw"><span class="ch">F</span>hosts sing Hallelujah</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Christ </span><span class="nb"><span class="cw"><span class="ch">C7</span>the Sav</span><span class="cw"><span class="ch">F</span>iour </span></span><span class="cw"><span class="ch">Dm</span>is </span><span class="cw"><span class="ch">F</span>born, </span><span class="cw"><span class="ch">C</span>Christ the </span><span class="cw"><span class="ch">F</span>Saviour is born.</span></span>
+:::
+
+## Verse 3
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">F</span>Silent night, Holy </span><span class="cw"><span class="ch">C</span>night, </span><span class="cw"><span class="ch">C7</span>Son of </span><span class="cw"><span class="ch">F</span>God love’s pure light</span></span>
+<span class="ln"><span class="cw"><span class="ch">A#</span>Radiant beams </span><span class="cw"><span class="ch">F</span>from thy holy </span><span class="cw"><span class="ch">A#</span>face, With the </span><span class="cw"><span class="ch">F</span>dawn of redeeming grace</span></span>
+<span class="ln"><span class="nb"><span class="cw"><span class="ch">C</span>Je</span><span class="cw"><span class="ch">C7</span>sus </span></span><span class="cw">Lord </span><span class="cw"><span class="ch">F</span>at </span><span class="cw"><span class="ch">Dm</span>thy </span><span class="cw"><span class="ch">F</span>birth, </span><span class="cw"><span class="ch">C</span>Jesus </span><span class="cw"><span class="ch">F</span>Lord at thy birth.</span></span>
+:::
+
+::: {.songnav}
+[&larr; Programme](../index.qmd){.nav-prev}
+:::

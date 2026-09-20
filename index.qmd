@@ -12,6 +12,8 @@ Song lyrics for class. Open a song, then:
 | `g` | back to the beginning of the song |
 | `b` | toggle bigger text |
 
+## Conrad Tree Lighting
+
 ::: {.programme}
 1. [Deck The Halls](songs/deck-the-halls.qmd)
 2. [Winter Wonderland](songs/winter-wonderland.qmd)
@@ -25,5 +27,11 @@ Song lyrics for class. Open a song, then:
 10. [Twelve Days of Christmas](songs/twelve-days-of-christmas.qmd)
 11. [Feliz Navidad](songs/feliz-navidad.qmd)
 12. [We Wish You a Merry Christmas](songs/we-wish-you-a-merry-christmas.qmd)
-13. [Silent Night](songs/silent-night.qmd)
+:::
+
+## Winter Concert
+
+::: {.programme}
+1. [End of Beginning](songs/end-of-beginning.qmd)
+2. [Viva la Vida](songs/viva-la-vida.qmd)
 :::

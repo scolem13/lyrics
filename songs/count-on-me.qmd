@@ -1,0 +1,98 @@
+---
+title: "Count on Me"
+body-classes: lyrics has-chords
+---
+
+## Intro
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">C</span>Ahahuh...</span></span>
+:::
+
+## Verse 1
+
+::: {.cline}
+<span class="ln"><span class="cw">If you </span><span class="cw"><span class="ch">C</span>ever find yourself stuck in the middle of the </span><span class="cw"><span class="ch">Em</span>sea</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>sail the world </span><span class="cw"><span class="ch">G</span>to </span><span class="cw"><span class="ch">F</span>find you</span></span>
+<span class="ln"><span class="cw">If you </span><span class="cw"><span class="ch">C</span>ever find yourself lost in the dark and you can&#x27;t </span><span class="cw"><span class="ch">Em</span>see</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>be the light </span><span class="cw"><span class="ch">G</span>to </span><span class="cw"><span class="ch">F</span>guide you</span></span>
+:::
+
+## Pre-Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">Dm</span>Find out what we&#x27;re </span><span class="cw"><span class="ch">Em</span>made of</span></span>
+<span class="ln"><span class="cw">When </span><span class="cw"><span class="ch">F</span>we are called to help our friends in </span><span class="cw"><span class="ch">G*</span>need</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw">You can </span><span class="cw"><span class="ch">C</span>count on me like </span><span class="cw"><span class="ch">Em</span>one, two, three</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">And </span><span class="cw"><span class="ch">F</span>I know when I need it</span></span>
+<span class="ln"><span class="cw">I can </span><span class="cw"><span class="ch">C</span>count on you like </span><span class="cw"><span class="ch">Em</span>four, three, two</span></span>
+<span class="ln"><span class="cw">And you&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">&#x27;cos </span><span class="cw"><span class="ch">F</span>that&#x27;s what friends are s&#x27;posed to do</span></span>
+<span class="ln"><span class="cw">Oh </span><span class="cw"><span class="ch">C</span>yeah</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Em</span>ooh...</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Am</span>ooh.. </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">F</span>Yeah </span><span class="cw"><span class="ch">G</span>yeah</span></span>
+:::
+
+## Verse 2
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">C</span>If you&#x27;re tossin&#x27; and you&#x27;re turnin&#x27; and you just can&#x27;t fall </span><span class="cw"><span class="ch">Em</span>asleep</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>sing a song </span><span class="nb"><span class="cw"><span class="ch">G</span>bes</span><span class="cw"><span class="ch">F</span>ide </span></span><span class="cw">you</span></span>
+<span class="ln"><span class="cw">And if you </span><span class="cw"><span class="ch">C</span>ever forget how much you really mean to </span><span class="cw"><span class="ch">Em</span>me</span></span>
+<span class="ln"><span class="cw">Every </span><span class="cw"><span class="ch">Am</span>day I will </span><span class="nb"><span class="cw"><span class="ch">G</span>rem</span><span class="cw"><span class="ch">F</span>ind </span></span><span class="cw">you, oh</span></span>
+:::
+
+## Pre-Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">Dm</span>Find out what we&#x27;re </span><span class="cw"><span class="ch">Em</span>made of</span></span>
+<span class="ln"><span class="cw">When </span><span class="cw"><span class="ch">F</span>we are called to help our friends in </span><span class="cw"><span class="ch">G*</span>need</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw">You can </span><span class="cw"><span class="ch">C</span>count on me like </span><span class="cw"><span class="ch">Em</span>one, two, three</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">And </span><span class="cw"><span class="ch">F</span>I know when I need it</span></span>
+<span class="ln"><span class="cw">I can </span><span class="cw"><span class="ch">C</span>count on you like </span><span class="cw"><span class="ch">Em</span>four, three, two</span></span>
+<span class="ln"><span class="cw">And you&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">&#x27;cos </span><span class="cw"><span class="ch">F</span>that&#x27;s what friends are s&#x27;posed to do</span></span>
+<span class="ln"><span class="cw">Oh </span><span class="cw"><span class="ch">C</span>yeah</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Em</span>ooh...</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Am</span>ooh.. </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">F</span>Yeah </span><span class="cw"><span class="ch">G</span>yeah</span></span>
+:::
+
+## Bridge
+
+::: {.cline}
+<span class="ln"><span class="cw">You&#x27;ll </span><span class="cw"><span class="ch">Dm</span>always have my </span><span class="cw"><span class="ch">Em</span>shoulder when you </span><span class="cw"><span class="ch">Am</span>cry      </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Dm</span>never let go, </span><span class="cw"><span class="ch">Em</span>never say </span><span class="cw"><span class="ch">F</span>goodbye, </span><span class="cw"><span class="ch">G*</span>you know you can-</span></span>
+:::
+
+## Chorus
+
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">C</span>-count on me like </span><span class="cw"><span class="ch">Em</span>one, two, three</span></span>
+<span class="ln"><span class="cw">I&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">And </span><span class="cw"><span class="ch">F</span>I know when I need it</span></span>
+<span class="ln"><span class="cw">I can </span><span class="cw"><span class="ch">C</span>count on you like </span><span class="cw"><span class="ch">Em</span>four, three, two</span></span>
+<span class="ln"><span class="cw">And you&#x27;ll </span><span class="cw"><span class="ch">Am</span>be there  </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">&#x27;cos </span><span class="cw"><span class="ch">F</span>that&#x27;s what friends are s&#x27;posed to do</span></span>
+<span class="ln"><span class="cw">Oh </span><span class="cw"><span class="ch">C</span>yeah</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Em</span>ooh...</span></span>
+<span class="ln"><span class="cw">Ooh ooh ooh ooh </span><span class="cw"><span class="ch">Am</span>ooh.. </span><span class="cw bare"><span class="ch">G</span></span></span>
+<span class="ln"><span class="cw">You can </span><span class="cw"><span class="ch">F</span>count on me &#x27;cos I can count on </span><span class="cw"><span class="ch">C</span>you!</span></span>
+:::
+
+::: {.songnav}
+[&larr; Programme](../index.qmd){.nav-prev}
+:::
