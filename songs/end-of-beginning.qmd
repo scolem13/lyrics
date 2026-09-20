@@ -17,7 +17,7 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="cw">You better </span><span class="cw"><span class="ch">A</span>save it for</span></span>
 <span class="ln"><span class="cw"><span class="ch">D</span>The middle of the night</span></span>
 <span class="ln"><span class="cw">When things aren&#x27;t black and... </span><span class="cw"><span class="ch">Bm</span>white</span></span>
-<span class="ln"><span class="cw"><span class="ch">Em</span>Enter, </span><span class="nb"><span class="cw"><span class="ch">A</span>Troubadour:</span><span class="cw"><span class="ch">Em</span>&#x27;Remember </span></span><span class="cw"><span class="ch">A</span>24?&#x27;</span></span>
+<span class="ln"><span class="cw"><span class="ch">Em</span>Enter, </span><span class="nb"><span class="cw"><span class="ch">A</span>Troubadour: &quot;</span><span class="cw"><span class="ch">Em</span>Remember </span></span><span class="cw"><span class="ch">A</span>24?&quot;</span></span>
 :::
 
 ## Chorus
