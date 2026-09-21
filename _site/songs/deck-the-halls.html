@@ -125,6 +125,18 @@ window.CAROL_TYPE = {
       { id: 'match', name: 'Match lyrics', vars: { '--chord-size': '1em' } }
     ]
   },
+  staffWidth: {
+    label: 'Staff width',
+    control: 'range',
+    min: 320, max: 1400, step: 20, fallback: 720, unit: 'px',
+    cssVar: '--staff-width', cssUnit: 'px'
+  },
+  staffHeight: {
+    label: 'Staff height',
+    control: 'range',
+    min: 50, max: 220, step: 5, fallback: 100, unit: '%',
+    cssVar: '--staff-height', cssUnit: '%'
+  },
   chordColour: {
     label: 'Chord colour',
     options: [
@@ -141,14 +153,35 @@ window.CAROL_TYPE = {
 window.carolType = function (kind, id) {
   var group = window.CAROL_TYPE[kind];
   if (!group) return null;
+  var root = document.documentElement;
+
+  if (group.control === 'range') {
+    var n = Number(id);
+    if (!isFinite(n)) n = group.fallback;
+    n = Math.min(group.max, Math.max(group.min, n));
+    root.style.setProperty(group.cssVar, n + (group.cssUnit || ''));
+    return n;
+  }
+
   var choice = null, i;
   for (i = 0; i < group.options.length; i++) {
     if (group.options[i].id === id) choice = group.options[i];
   }
   if (!choice) return null;
-  var root = document.documentElement;
   for (var name in choice.vars) root.style.setProperty(name, choice.vars[name]);
   return choice.id;
+};
+
+// What a control is set to now, saved or not. The engraver asks for these.
+window.carolTypeValue = function (kind) {
+  var group = window.CAROL_TYPE[kind];
+  if (!group) return null;
+  var saved = window.carolTypeChoice()[kind];
+  if (group.control === 'range') {
+    var n = Number(saved);
+    return isFinite(n) ? n : group.fallback;
+  }
+  return saved || (group.options[0] && group.options[0].id);
 };
 
 window.carolTypeChoice = function () {
@@ -334,7 +367,8 @@ window.carolTypeChoice = function () {
     <h2 id="toc-title">Sections</h2>
    
   <ul class="collapse">
-  <li><a href="#verse-1" id="toc-verse-1" class="nav-link active" data-scroll-target="#verse-1">Verse 1</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#verse-1" id="toc-verse-1" class="nav-link" data-scroll-target="#verse-1">Verse 1</a></li>
   <li><a href="#interlude" id="toc-interlude" class="nav-link" data-scroll-target="#interlude">Interlude</a></li>
   <li><a href="#verse-2" id="toc-verse-2" class="nav-link" data-scroll-target="#verse-2">Verse 2</a></li>
   <li><a href="#interlude-1" id="toc-interlude-1" class="nav-link" data-scroll-target="#interlude-1">Interlude</a></li>
@@ -364,6 +398,17 @@ window.carolTypeChoice = function () {
 </header>
 
 
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<div class="abc-wrap">
+<div class="abc" data-abc="M:4/4
+L:1/4
+K:D
+&quot;D&quot;A>G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F>E | &quot;A7&quot;D C &quot;D&quot;D2 ||">
+
+</div>
+</div>
+</section>
 <section id="verse-1" class="level2">
 <h2 class="anchored" data-anchor-id="verse-1">Verse 1</h2>
 <div class="cline">
@@ -372,8 +417,13 @@ window.carolTypeChoice = function () {
 </section>
 <section id="interlude" class="level2">
 <h2 class="anchored" data-anchor-id="interlude">Interlude</h2>
-<div class="cline">
+<div class="abc-wrap">
+<div class="abc" data-abc="M:4/4
+L:1/4
+K:D
+&quot;D&quot;A>G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F>E | &quot;A7&quot;D C &quot;D&quot;D2 ||">
 
+</div>
 </div>
 </section>
 <section id="verse-2" class="level2">
@@ -384,8 +434,13 @@ window.carolTypeChoice = function () {
 </section>
 <section id="interlude-1" class="level2">
 <h2 class="anchored" data-anchor-id="interlude-1">Interlude</h2>
-<div class="cline">
+<div class="abc-wrap">
+<div class="abc" data-abc="M:4/4
+L:1/4
+K:D
+&quot;D&quot;A>G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F>E | &quot;A7&quot;D C &quot;D&quot;D2 ||">
 
+</div>
 </div>
 </section>
 <section id="verse-3" class="level2">
@@ -771,6 +826,11 @@ window.carolTypeChoice = function () {
     go(Math.max(0, back), { untake: dc });
   }
 
+  // Anything that can advance the song -- a key, a click, a pedal on the way
+  // in over MIDI -- comes through here.
+  window.carolNext = function () { step(1); };
+  window.carolPrev = function () { step(-1); };
+
   var hasChords = document.body.classList.contains('has-chords');
 
   // Per tab, not per browser: the player's window keeps its chords from song
@@ -846,10 +906,44 @@ window.carolTypeChoice = function () {
         type.appendChild(typeTitle);
 
         var saved = window.carolTypeChoice();
+        function remember(kind, value) {
+          var keep = window.carolTypeChoice();
+          keep[kind] = value;
+          try { localStorage.setItem('carols-type', JSON.stringify(keep)); }
+          catch (e) { /* the choice holds for this page either way */ }
+        }
+
         Object.keys(window.CAROL_TYPE).forEach(function (kind) {
           var group = window.CAROL_TYPE[kind];
           var label = document.createElement('label');
           label.appendChild(document.createTextNode(group.label));
+
+          if (group.control === 'range') {
+            // Only worth showing where there is a stave to size.
+            if (!document.querySelector('.abc[data-abc]')) return;
+            var slider = document.createElement('input');
+            slider.type = 'range';
+            slider.id = 'type-' + kind;
+            slider.min = group.min;
+            slider.max = group.max;
+            slider.step = group.step;
+            slider.value = window.carolTypeValue(kind);
+            var readout = document.createElement('span');
+            readout.className = 'readout';
+            readout.textContent = slider.value + (group.unit || '');
+            slider.addEventListener('input', function () {
+              var value = window.carolType(kind, slider.value);
+              readout.textContent = value + (group.unit || '');
+              remember(kind, value);
+              if (window.carolDrawAbc) window.carolDrawAbc();
+            });
+            label.appendChild(readout);
+            label.appendChild(slider);
+            label.className = 'range';
+            type.appendChild(label);
+            return;
+          }
+
           var select = document.createElement('select');
           select.id = 'type-' + kind;
           group.options.forEach(function (option) {
@@ -860,11 +954,7 @@ window.carolTypeChoice = function () {
           });
           if (saved[kind]) select.value = saved[kind];
           select.addEventListener('change', function () {
-            var chosen = window.carolType(kind, select.value);
-            var keep = window.carolTypeChoice();
-            keep[kind] = chosen;
-            try { localStorage.setItem('carols-type', JSON.stringify(keep)); }
-            catch (e) { /* the choice holds for this page either way */ }
+            remember(kind, window.carolType(kind, select.value));
           });
           label.appendChild(select);
           type.appendChild(label);
@@ -927,6 +1017,218 @@ window.carolTypeChoice = function () {
     var a = document.querySelector(sel);
     if (a) { goTo(a.getAttribute('href')); e.preventDefault(); }
   });
+})();
+</script>
+<script>
+// Tunes embedded in a song page: the intro line, an interlude, anything
+// written as {start_of_abc} in the ChordPro. They belong with the chords, so
+// they appear and hide with them, and abcjs is fetched only if a page has
+// one. The library is vendored under libs/, so this works offline.
+(function () {
+  var blocks = Array.prototype.slice.call(
+    document.querySelectorAll('.abc[data-abc]'));
+  if (!blocks.length) return;
+
+  // Both dimensions are given, never measured. These staves are drawn while
+  // the chord view is hidden, where there is nothing to measure -- which is
+  // what made the engraving come out differently from one load to the next.
+  function size(kind, fallback) {
+    if (window.carolTypeValue) {
+      var n = window.carolTypeValue(kind);
+      if (typeof n === 'number' && isFinite(n)) return n;
+    }
+    return fallback;
+  }
+
+  function draw() {
+    if (!window.ABCJS) return;
+    var width = size('staffWidth', 720);
+    var scale = size('staffHeight', 100) / 100;
+    blocks.forEach(function (block) {
+      var tune = block.getAttribute('data-abc');
+      try {
+        window.ABCJS.renderAbc(block, tune, {
+          staffwidth: width,
+          scale: scale,
+          paddingtop: 0,
+          paddingbottom: 0,
+          paddingleft: 0,
+          paddingright: 0
+        });
+      } catch (e) {
+        plain(block, tune);
+      }
+    });
+  }
+
+  // The sliders redraw through this.
+  var pending = null;
+  window.carolDrawAbc = function () {
+    if (pending) cancelAnimationFrame(pending);
+    pending = requestAnimationFrame(function () { pending = null; draw(); });
+  };
+
+  // No engraving: the notes themselves are still worth reading.
+  function plain(block, tune) {
+    var pre = document.createElement('pre');
+    pre.className = 'abc-source';
+    pre.textContent = tune;
+    block.textContent = '';
+    block.appendChild(pre);
+  }
+
+  if (window.ABCJS) { draw(); return; }
+  var script = document.createElement('script');
+  var depth = location.pathname.indexOf('/songs/') > -1 ? '../' : '';
+  script.src = depth + 'libs/abcjs/abcjs-basic-min.js';
+  script.onload = draw;
+  script.onerror = function () {
+    blocks.forEach(function (block) {
+      plain(block, block.getAttribute('data-abc'));
+    });
+  };
+  document.head.appendChild(script);
+})();
+</script>
+<script>
+// A footswitch on a keyboard, arriving as MIDI, does what j does: next
+// section, both windows if they are linked. Needs a secure context, so the
+// site has to be served over localhost or https -- opening the file directly
+// will not do. Chrome and Edge implement Web MIDI; Safari may not.
+(function () {
+  var sidebar = document.getElementById('quarto-margin-sidebar');
+  if (!sidebar || !document.querySelector('main.content section.level2')) return;
+
+  var KEY = 'carols-midi';
+  // Until a pedal is learned, only switch-like controllers count: sustain and
+  // its neighbours, and the general purpose switches. A mod wheel or an
+  // expression pedal sweeping past halfway must not turn the page.
+  var SWITCHES = [64, 65, 66, 67, 68, 69, 80, 81, 82, 83];
+  var access = null;
+  var learning = false;
+  var last = {};                 // the value each controller last sent
+
+  function saved() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function remember(pedal) {
+    try { localStorage.setItem(KEY, JSON.stringify(pedal)); } catch (e) {}
+  }
+
+  var panel = document.createElement('div');
+  panel.className = 'midi-panel';
+  var title = document.createElement('div');
+  title.className = 'section-buttons-title';
+  title.textContent = 'Pedal';
+  panel.appendChild(title);
+
+  var status = document.createElement('div');
+  status.className = 'midi-status';
+  panel.appendChild(status);
+
+  var connect = document.createElement('button');
+  connect.type = 'button';
+  connect.className = 'plain-button';
+  panel.appendChild(connect);
+
+  var learn = document.createElement('button');
+  learn.type = 'button';
+  learn.className = 'plain-button';
+  learn.textContent = 'Learn pedal';
+  learn.hidden = true;
+  panel.appendChild(learn);
+
+  function describe() {
+    var pedal = saved();
+    if (pedal.cc === undefined) return 'any footswitch';
+    return 'controller ' + pedal.cc + ', channel ' + (pedal.channel + 1);
+  }
+
+  function say(text) { status.textContent = text; }
+
+  function onMessage(event) {
+    var data = event.data;
+    if (!data || data.length < 3) return;
+    if ((data[0] & 0xf0) !== 0xb0) return;          // control change only
+    var channel = data[0] & 0x0f, cc = data[1], value = data[2];
+
+    if (learning) {
+      if (value < 64) return;                        // wait for a press
+      learning = false;
+      remember({ cc: cc, channel: channel });
+      learn.textContent = 'Learn pedal';
+      say('Listening for ' + describe());
+      return;
+    }
+
+    var pedal = saved();
+    if (pedal.cc === undefined) {
+      if (SWITCHES.indexOf(cc) < 0) return;
+    } else if (cc !== pedal.cc || channel !== pedal.channel) {
+      return;
+    }
+    var was = last[cc] === undefined ? 0 : last[cc];
+    last[cc] = value;
+    // A press, not the release that follows it.
+    if (value >= 64 && was < 64 && window.carolNext) window.carolNext();
+  }
+
+  function listen() {
+    var names = [];
+    access.inputs.forEach(function (input) {
+      input.onmidimessage = onMessage;
+      names.push(input.name);
+    });
+    connect.hidden = true;
+    learn.hidden = false;
+    say(names.length ? names.join(', ') + ' — listening for ' + describe()
+                     : 'No MIDI device found. Plug one in, then reload.');
+  }
+
+  function open(prompted) {
+    if (!navigator.requestMIDIAccess) {
+      say('This browser has no Web MIDI. Chrome or Edge, served over '
+          + 'localhost, will do it.');
+      connect.hidden = true;
+      return;
+    }
+    navigator.requestMIDIAccess({ sysex: false }).then(function (midi) {
+      access = midi;
+      try { localStorage.setItem('carols-midi-on', 'yes'); } catch (e) {}
+      midi.onstatechange = listen;
+      listen();
+    }, function () {
+      say(prompted ? 'MIDI was refused. Allow it for this site and try again.'
+                   : 'Not connected.');
+      connect.hidden = false;
+    });
+  }
+
+  connect.textContent = 'Connect pedal';
+  connect.addEventListener('click', function () { open(true); });
+  learn.addEventListener('click', function () {
+    learning = !learning;
+    learn.textContent = learning ? 'Press the pedal…' : 'Learn pedal';
+    if (learning) say('Waiting for the pedal');
+    else say('Listening for ' + describe());
+  });
+
+  sidebar.appendChild(panel);
+
+  if (!navigator.requestMIDIAccess) {
+    say('This browser has no Web MIDI. Chrome or Edge, served over '
+        + 'localhost, will do it.');
+    connect.hidden = true;
+  } else if (!window.isSecureContext) {
+    say('Needs https or localhost; opened as a file, MIDI is not offered.');
+    connect.hidden = true;
+  } else {
+    say('Not connected.');
+    var was = null;
+    try { was = localStorage.getItem('carols-midi-on'); } catch (e) {}
+    if (was === 'yes') open(false);          // permission already given once
+  }
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">

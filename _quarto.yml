@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: _site
+  resources:
+    - libs/**
 
 website:
   title: "Carols"
@@ -45,4 +47,7 @@ format:
     toc-depth: 2
     anchor-sections: true
     include-in-header: fonts.html
-    include-after-body: keys.html
+    include-after-body:
+      - keys.html
+      - abc.html
+      - midi.html

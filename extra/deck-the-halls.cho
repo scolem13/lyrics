@@ -1,5 +1,13 @@
 {title: Deck The Halls}
 
+{comment: Intro}
+{start_of_abc}
+M:4/4
+L:1/4
+K:D
+"D"A>G F E | "G"D E "D"F D | "Em"E/F/G/E/ "D"F>E | "A7"D C "D"D2 ||
+{end_of_abc}
+
 {comment: Verse 1}
 [D]Deck the halls with [Bm]boughs of holly
 [A7]Fa-la-la-la-[D]la, la-[A]la, la, [D]la
@@ -11,6 +19,12 @@
 [G]Fa-la-la-la-[D]la, la-[A7]la, la, [D]la
 
 {comment: Interlude}
+{start_of_abc}
+M:4/4
+L:1/4
+K:D
+"D"A>G F E | "G"D E "D"F D | "Em"E/F/G/E/ "D"F>E | "A7"D C "D"D2 ||
+{end_of_abc}
 
 {comment: Verse 2}
 [D]See the blazing [Bm]Yule before us
@@ -23,6 +37,12 @@
 [G]Fa-la-la-la-[D]la, la-[A7]la, la, [D]la
 
 {comment: Interlude}
+{start_of_abc}
+M:4/4
+L:1/4
+K:D
+"D"A>G F E | "G"D E "D"F D | "Em"E/F/G/E/ "D"F>E | "A7"D C "D"D2 ||
+{end_of_abc}
 
 {comment: Verse 3}
 [D]Fast away the [Bm]old year passes -

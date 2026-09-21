@@ -1,0 +1,71 @@
+<script>
+// Tunes embedded in a song page: the intro line, an interlude, anything
+// written as {start_of_abc} in the ChordPro. They belong with the chords, so
+// they appear and hide with them, and abcjs is fetched only if a page has
+// one. The library is vendored under libs/, so this works offline.
+(function () {
+  var blocks = Array.prototype.slice.call(
+    document.querySelectorAll('.abc[data-abc]'));
+  if (!blocks.length) return;
+
+  // Both dimensions are given, never measured. These staves are drawn while
+  // the chord view is hidden, where there is nothing to measure -- which is
+  // what made the engraving come out differently from one load to the next.
+  function size(kind, fallback) {
+    if (window.carolTypeValue) {
+      var n = window.carolTypeValue(kind);
+      if (typeof n === 'number' && isFinite(n)) return n;
+    }
+    return fallback;
+  }
+
+  function draw() {
+    if (!window.ABCJS) return;
+    var width = size('staffWidth', 720);
+    var scale = size('staffHeight', 100) / 100;
+    blocks.forEach(function (block) {
+      var tune = block.getAttribute('data-abc');
+      try {
+        window.ABCJS.renderAbc(block, tune, {
+          staffwidth: width,
+          scale: scale,
+          paddingtop: 0,
+          paddingbottom: 0,
+          paddingleft: 0,
+          paddingright: 0
+        });
+      } catch (e) {
+        plain(block, tune);
+      }
+    });
+  }
+
+  // The sliders redraw through this.
+  var pending = null;
+  window.carolDrawAbc = function () {
+    if (pending) cancelAnimationFrame(pending);
+    pending = requestAnimationFrame(function () { pending = null; draw(); });
+  };
+
+  // No engraving: the notes themselves are still worth reading.
+  function plain(block, tune) {
+    var pre = document.createElement('pre');
+    pre.className = 'abc-source';
+    pre.textContent = tune;
+    block.textContent = '';
+    block.appendChild(pre);
+  }
+
+  if (window.ABCJS) { draw(); return; }
+  var script = document.createElement('script');
+  var depth = location.pathname.indexOf('/songs/') > -1 ? '../' : '';
+  script.src = depth + 'libs/abcjs/abcjs-basic-min.js';
+  script.onload = draw;
+  script.onerror = function () {
+    blocks.forEach(function (block) {
+      plain(block, block.getAttribute('data-abc'));
+    });
+  };
+  document.head.appendChild(script);
+})();
+</script>

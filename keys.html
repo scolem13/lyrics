@@ -368,6 +368,11 @@
     go(Math.max(0, back), { untake: dc });
   }
 
+  // Anything that can advance the song -- a key, a click, a pedal on the way
+  // in over MIDI -- comes through here.
+  window.carolNext = function () { step(1); };
+  window.carolPrev = function () { step(-1); };
+
   var hasChords = document.body.classList.contains('has-chords');
 
   // Per tab, not per browser: the player's window keeps its chords from song
@@ -443,10 +448,44 @@
         type.appendChild(typeTitle);
 
         var saved = window.carolTypeChoice();
+        function remember(kind, value) {
+          var keep = window.carolTypeChoice();
+          keep[kind] = value;
+          try { localStorage.setItem('carols-type', JSON.stringify(keep)); }
+          catch (e) { /* the choice holds for this page either way */ }
+        }
+
         Object.keys(window.CAROL_TYPE).forEach(function (kind) {
           var group = window.CAROL_TYPE[kind];
           var label = document.createElement('label');
           label.appendChild(document.createTextNode(group.label));
+
+          if (group.control === 'range') {
+            // Only worth showing where there is a stave to size.
+            if (!document.querySelector('.abc[data-abc]')) return;
+            var slider = document.createElement('input');
+            slider.type = 'range';
+            slider.id = 'type-' + kind;
+            slider.min = group.min;
+            slider.max = group.max;
+            slider.step = group.step;
+            slider.value = window.carolTypeValue(kind);
+            var readout = document.createElement('span');
+            readout.className = 'readout';
+            readout.textContent = slider.value + (group.unit || '');
+            slider.addEventListener('input', function () {
+              var value = window.carolType(kind, slider.value);
+              readout.textContent = value + (group.unit || '');
+              remember(kind, value);
+              if (window.carolDrawAbc) window.carolDrawAbc();
+            });
+            label.appendChild(readout);
+            label.appendChild(slider);
+            label.className = 'range';
+            type.appendChild(label);
+            return;
+          }
+
           var select = document.createElement('select');
           select.id = 'type-' + kind;
           group.options.forEach(function (option) {
@@ -457,11 +496,7 @@
           });
           if (saved[kind]) select.value = saved[kind];
           select.addEventListener('change', function () {
-            var chosen = window.carolType(kind, select.value);
-            var keep = window.carolTypeChoice();
-            keep[kind] = chosen;
-            try { localStorage.setItem('carols-type', JSON.stringify(keep)); }
-            catch (e) { /* the choice holds for this page either way */ }
+            remember(kind, window.carolType(kind, select.value));
           });
           label.appendChild(select);
           type.appendChild(label);

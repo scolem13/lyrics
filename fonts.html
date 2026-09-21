@@ -51,6 +51,18 @@ window.CAROL_TYPE = {
       { id: 'match', name: 'Match lyrics', vars: { '--chord-size': '1em' } }
     ]
   },
+  staffWidth: {
+    label: 'Staff width',
+    control: 'range',
+    min: 320, max: 1400, step: 20, fallback: 720, unit: 'px',
+    cssVar: '--staff-width', cssUnit: 'px'
+  },
+  staffHeight: {
+    label: 'Staff height',
+    control: 'range',
+    min: 50, max: 220, step: 5, fallback: 100, unit: '%',
+    cssVar: '--staff-height', cssUnit: '%'
+  },
   chordColour: {
     label: 'Chord colour',
     options: [
@@ -67,14 +79,35 @@ window.CAROL_TYPE = {
 window.carolType = function (kind, id) {
   var group = window.CAROL_TYPE[kind];
   if (!group) return null;
+  var root = document.documentElement;
+
+  if (group.control === 'range') {
+    var n = Number(id);
+    if (!isFinite(n)) n = group.fallback;
+    n = Math.min(group.max, Math.max(group.min, n));
+    root.style.setProperty(group.cssVar, n + (group.cssUnit || ''));
+    return n;
+  }
+
   var choice = null, i;
   for (i = 0; i < group.options.length; i++) {
     if (group.options[i].id === id) choice = group.options[i];
   }
   if (!choice) return null;
-  var root = document.documentElement;
   for (var name in choice.vars) root.style.setProperty(name, choice.vars[name]);
   return choice.id;
+};
+
+// What a control is set to now, saved or not. The engraver asks for these.
+window.carolTypeValue = function (kind) {
+  var group = window.CAROL_TYPE[kind];
+  if (!group) return null;
+  var saved = window.carolTypeChoice()[kind];
+  if (group.control === 'range') {
+    var n = Number(saved);
+    return isFinite(n) ? n : group.fallback;
+  }
+  return saved || (group.options[0] && group.options[0].id);
 };
 
 window.carolTypeChoice = function () {

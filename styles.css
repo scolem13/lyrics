@@ -45,7 +45,7 @@ body.lyrics #quarto-content.page-columns {
     [body-content-end] 0.4rem
     [body-end] 0.25rem
     [body-end-outset] minmax(110px, 170px)
-    [page-end-inset] 0.25rem
+    [page-end-inset] 0rem
     [page-end screen-end-inset] 0.4rem [screen-end];
 }
 /* Two lines of space: the first section's label has no margin above it to
@@ -270,7 +270,53 @@ body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }
   border: 1px solid #ced4da;
   border-radius: .25rem;
 }
+.type-panel label.range {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .1rem .5rem;
+}
+.type-panel label.range input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+  accent-color: #2761e3;
+}
+.type-panel .readout {
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: .72rem;
+  color: #212529;
+  font-variant-numeric: tabular-nums;
+}
 @media print { .type-panel { display: none; } }
+
+/* The pedal, arriving over MIDI. */
+.midi-panel {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin: 1.25rem 0 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+.midi-status {
+  font-size: .75rem;
+  line-height: 1.35;
+  color: #6c757d;
+}
+.plain-button {
+  font: inherit;
+  font-size: .8rem;
+  padding: .3rem .5rem;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  cursor: pointer;
+  text-align: left;
+}
+.plain-button:hover { background: #e9ecef; }
+@media print { .midi-panel { display: none; } }
 
 /* Chord sheets: chords ride above the words they belong to, and are hidden
    until asked for, so the page reads like every other song by default. */
@@ -304,6 +350,27 @@ body.chords .cw.bare::after {
   display: block;
 }
 body.chords .cw.bare > .ch { padding-right: .6em; }
+
+/* An embedded tune belongs with the chords: shown when they are, hidden when
+   they are not, so the sung page stays a page of words. */
+.abc-wrap { display: none; }
+body.chords .abc-wrap {
+  display: block;
+  margin: .2rem 0 1rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+body.chords .abc svg { max-width: 100%; height: auto; }
+body.chords .abc path, body.chords .abc text { fill: currentColor; }
+body.chords .abc .abcjs-chord { fill: var(--chord-colour); }
+.abc-source {
+  font-family: var(--chord-font);
+  font-size: .5em;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--chord-colour);
+  white-space: pre;
+}
 
 /* A lyric line that runs past the width of the page hangs its continuation,
    so you can see at a glance that it is the same line still. */

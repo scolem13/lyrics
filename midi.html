@@ -1,0 +1,141 @@
+<script>
+// A footswitch on a keyboard, arriving as MIDI, does what j does: next
+// section, both windows if they are linked. Needs a secure context, so the
+// site has to be served over localhost or https -- opening the file directly
+// will not do. Chrome and Edge implement Web MIDI; Safari may not.
+(function () {
+  var sidebar = document.getElementById('quarto-margin-sidebar');
+  if (!sidebar || !document.querySelector('main.content section.level2')) return;
+
+  var KEY = 'carols-midi';
+  // Until a pedal is learned, only switch-like controllers count: sustain and
+  // its neighbours, and the general purpose switches. A mod wheel or an
+  // expression pedal sweeping past halfway must not turn the page.
+  var SWITCHES = [64, 65, 66, 67, 68, 69, 80, 81, 82, 83];
+  var access = null;
+  var learning = false;
+  var last = {};                 // the value each controller last sent
+
+  function saved() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function remember(pedal) {
+    try { localStorage.setItem(KEY, JSON.stringify(pedal)); } catch (e) {}
+  }
+
+  var panel = document.createElement('div');
+  panel.className = 'midi-panel';
+  var title = document.createElement('div');
+  title.className = 'section-buttons-title';
+  title.textContent = 'Pedal';
+  panel.appendChild(title);
+
+  var status = document.createElement('div');
+  status.className = 'midi-status';
+  panel.appendChild(status);
+
+  var connect = document.createElement('button');
+  connect.type = 'button';
+  connect.className = 'plain-button';
+  panel.appendChild(connect);
+
+  var learn = document.createElement('button');
+  learn.type = 'button';
+  learn.className = 'plain-button';
+  learn.textContent = 'Learn pedal';
+  learn.hidden = true;
+  panel.appendChild(learn);
+
+  function describe() {
+    var pedal = saved();
+    if (pedal.cc === undefined) return 'any footswitch';
+    return 'controller ' + pedal.cc + ', channel ' + (pedal.channel + 1);
+  }
+
+  function say(text) { status.textContent = text; }
+
+  function onMessage(event) {
+    var data = event.data;
+    if (!data || data.length < 3) return;
+    if ((data[0] & 0xf0) !== 0xb0) return;          // control change only
+    var channel = data[0] & 0x0f, cc = data[1], value = data[2];
+
+    if (learning) {
+      if (value < 64) return;                        // wait for a press
+      learning = false;
+      remember({ cc: cc, channel: channel });
+      learn.textContent = 'Learn pedal';
+      say('Listening for ' + describe());
+      return;
+    }
+
+    var pedal = saved();
+    if (pedal.cc === undefined) {
+      if (SWITCHES.indexOf(cc) < 0) return;
+    } else if (cc !== pedal.cc || channel !== pedal.channel) {
+      return;
+    }
+    var was = last[cc] === undefined ? 0 : last[cc];
+    last[cc] = value;
+    // A press, not the release that follows it.
+    if (value >= 64 && was < 64 && window.carolNext) window.carolNext();
+  }
+
+  function listen() {
+    var names = [];
+    access.inputs.forEach(function (input) {
+      input.onmidimessage = onMessage;
+      names.push(input.name);
+    });
+    connect.hidden = true;
+    learn.hidden = false;
+    say(names.length ? names.join(', ') + ' — listening for ' + describe()
+                     : 'No MIDI device found. Plug one in, then reload.');
+  }
+
+  function open(prompted) {
+    if (!navigator.requestMIDIAccess) {
+      say('This browser has no Web MIDI. Chrome or Edge, served over '
+          + 'localhost, will do it.');
+      connect.hidden = true;
+      return;
+    }
+    navigator.requestMIDIAccess({ sysex: false }).then(function (midi) {
+      access = midi;
+      try { localStorage.setItem('carols-midi-on', 'yes'); } catch (e) {}
+      midi.onstatechange = listen;
+      listen();
+    }, function () {
+      say(prompted ? 'MIDI was refused. Allow it for this site and try again.'
+                   : 'Not connected.');
+      connect.hidden = false;
+    });
+  }
+
+  connect.textContent = 'Connect pedal';
+  connect.addEventListener('click', function () { open(true); });
+  learn.addEventListener('click', function () {
+    learning = !learning;
+    learn.textContent = learning ? 'Press the pedal…' : 'Learn pedal';
+    if (learning) say('Waiting for the pedal');
+    else say('Listening for ' + describe());
+  });
+
+  sidebar.appendChild(panel);
+
+  if (!navigator.requestMIDIAccess) {
+    say('This browser has no Web MIDI. Chrome or Edge, served over '
+        + 'localhost, will do it.');
+    connect.hidden = true;
+  } else if (!window.isSecureContext) {
+    say('Needs https or localhost; opened as a file, MIDI is not offered.');
+    connect.hidden = true;
+  } else {
+    say('Not connected.');
+    var was = null;
+    try { was = localStorage.getItem('carols-midi-on'); } catch (e) {}
+    if (was === 'yes') open(false);          // permission already given once
+  }
+})();
+</script>

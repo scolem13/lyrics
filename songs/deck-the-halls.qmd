@@ -3,6 +3,10 @@ title: "1. Deck The Halls"
 body-classes: lyrics has-chords
 ---
 
+## Intro
+
+<div class="abc-wrap"><div class="abc" data-abc="M:4/4&#10;L:1/4&#10;K:D&#10;&quot;D&quot;A&gt;G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F&gt;E | &quot;A7&quot;D C &quot;D&quot;D2 ||"></div></div>
+
 ## Verse 1
 
 ::: {.cline}
@@ -18,9 +22,7 @@ body-classes: lyrics has-chords
 
 ## Interlude
 
-::: {.cline}
-
-:::
+<div class="abc-wrap"><div class="abc" data-abc="M:4/4&#10;L:1/4&#10;K:D&#10;&quot;D&quot;A&gt;G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F&gt;E | &quot;A7&quot;D C &quot;D&quot;D2 ||"></div></div>
 
 ## Verse 2
 
@@ -37,9 +39,7 @@ body-classes: lyrics has-chords
 
 ## Interlude
 
-::: {.cline}
-
-:::
+<div class="abc-wrap"><div class="abc" data-abc="M:4/4&#10;L:1/4&#10;K:D&#10;&quot;D&quot;A&gt;G F E | &quot;G&quot;D E &quot;D&quot;F D | &quot;Em&quot;E/F/G/E/ &quot;D&quot;F&gt;E | &quot;A7&quot;D C &quot;D&quot;D2 ||"></div></div>
 
 ## Verse 3
 
