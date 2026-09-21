@@ -375,14 +375,22 @@
 
   var hasChords = document.body.classList.contains('has-chords');
 
-  // Per tab, not per browser: the player's window keeps its chords from song
-  // to song, and the projector's window stays on the words.
+  // A song opens as words alone, and what you ask for belongs to the window
+  // you ask in: sessionStorage follows this tab through the songs and is gone
+  // when it closes. That is what keeps the two windows apart -- chords on the
+  // player's screen, words alone on the projector, which was never touched.
   function remember(name, on) {
-    try { sessionStorage.setItem('carols-' + name, on ? 'on' : 'off'); } catch (e) {}
+    try {
+      window.sessionStorage.setItem('carols-' + name, on ? 'on' : 'off');
+    } catch (e) {}
   }
   function remembered(name) {
-    try { return sessionStorage.getItem('carols-' + name) === 'on'; } catch (e) { return false; }
+    try { return window.sessionStorage.getItem('carols-' + name) === 'on'; }
+    catch (e) { return false; }
   }
+  // The chord view was briefly kept in localStorage; drop that leftover so an
+  // old setting cannot outlive the window it was made in.
+  try { window.localStorage.removeItem('carols-chords'); } catch (e) {}
   if (hasChords && remembered('chords')) document.body.classList.add('chords');
   if (remembered('big')) document.body.classList.add('big');
 

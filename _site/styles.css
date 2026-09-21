@@ -316,6 +316,12 @@ body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }
   text-align: left;
 }
 .plain-button:hover { background: #e9ecef; }
+.midi-monitor {
+  font-family: var(--chord-font), monospace;
+  font-size: .7rem;
+  color: #adb5bd;
+  min-height: 1em;
+}
 @media print { .midi-panel { display: none; } }
 
 /* Chord sheets: chords ride above the words they belong to, and are hidden
@@ -402,3 +408,4 @@ body.chords .ibar .ch {
   margin-right: 1em;
   line-height: 1.15;
 }
+

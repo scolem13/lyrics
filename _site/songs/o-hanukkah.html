@@ -818,14 +818,22 @@ window.carolTypeChoice = function () {
 
   var hasChords = document.body.classList.contains('has-chords');
 
-  // Per tab, not per browser: the player's window keeps its chords from song
-  // to song, and the projector's window stays on the words.
+  // A song opens as words alone, and what you ask for belongs to the window
+  // you ask in: sessionStorage follows this tab through the songs and is gone
+  // when it closes. That is what keeps the two windows apart -- chords on the
+  // player's screen, words alone on the projector, which was never touched.
   function remember(name, on) {
-    try { sessionStorage.setItem('carols-' + name, on ? 'on' : 'off'); } catch (e) {}
+    try {
+      window.sessionStorage.setItem('carols-' + name, on ? 'on' : 'off');
+    } catch (e) {}
   }
   function remembered(name) {
-    try { return sessionStorage.getItem('carols-' + name) === 'on'; } catch (e) { return false; }
+    try { return window.sessionStorage.getItem('carols-' + name) === 'on'; }
+    catch (e) { return false; }
   }
+  // The chord view was briefly kept in localStorage; drop that leftover so an
+  // old setting cannot outlive the window it was made in.
+  try { window.localStorage.removeItem('carols-chords'); } catch (e) {}
   if (hasChords && remembered('chords')) document.body.classList.add('chords');
   if (remembered('big')) document.body.classList.add('big');
 
@@ -1091,7 +1099,7 @@ window.carolTypeChoice = function () {
   var SWITCHES = [64, 65, 66, 67, 68, 69, 80, 81, 82, 83];
   var access = null;
   var learning = false;
-  var last = {};                 // the value each controller last sent
+  var last = {};                 // the value each control last sent
 
   function saved() {
     try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
@@ -1099,6 +1107,9 @@ window.carolTypeChoice = function () {
   }
   function remember(pedal) {
     try { localStorage.setItem(KEY, JSON.stringify(pedal)); } catch (e) {}
+  }
+  function forget() {
+    try { localStorage.removeItem(KEY); } catch (e) {}
   }
 
   var panel = document.createElement('div');
@@ -1112,6 +1123,10 @@ window.carolTypeChoice = function () {
   status.className = 'midi-status';
   panel.appendChild(status);
 
+  var monitor = document.createElement('div');
+  monitor.className = 'midi-monitor';
+  panel.appendChild(monitor);
+
   var connect = document.createElement('button');
   connect.type = 'button';
   connect.className = 'plain-button';
@@ -1124,49 +1139,116 @@ window.carolTypeChoice = function () {
   learn.hidden = true;
   panel.appendChild(learn);
 
+  var forgetButton = document.createElement('button');
+  forgetButton.type = 'button';
+  forgetButton.className = 'plain-button';
+  forgetButton.textContent = 'Forget pedal';
+  forgetButton.hidden = true;
+  panel.appendChild(forgetButton);
+
+  // A MODX footswitch can be assigned to more than a control change: it may
+  // arrive as a note, or as a program change. Read them all.
+  function read(data) {
+    if (!data || data.length < 2) return null;
+    var kind = data[0] & 0xf0, channel = data[0] & 0x0f;
+    if (kind === 0xb0) return { kind: 'cc', channel: channel, id: data[1],
+                                value: data.length > 2 ? data[2] : 0 };
+    if (kind === 0x90) return { kind: 'note', channel: channel, id: data[1],
+                                value: data.length > 2 ? data[2] : 0 };
+    if (kind === 0x80) return { kind: 'note', channel: channel, id: data[1],
+                                value: 0 };
+    // A program change is momentary: it has no release to wait for.
+    if (kind === 0xc0) return { kind: 'pc', channel: channel, id: data[1],
+                                value: 127, momentary: true };
+    return null;
+  }
+
+  function name(msg) {
+    if (msg.kind === 'cc') return 'controller ' + msg.id;
+    if (msg.kind === 'note') return 'note ' + msg.id;
+    return 'program change ' + msg.id;
+  }
+
   function describe() {
     var pedal = saved();
-    if (pedal.cc === undefined) return 'any footswitch';
-    return 'controller ' + pedal.cc + ', channel ' + (pedal.channel + 1);
+    if (pedal.kind === undefined) return 'any footswitch';
+    return name(pedal) + ', channel ' + (pedal.channel + 1);
   }
 
   function say(text) { status.textContent = text; }
 
+  var seen = null;               // the last message, to drop a duplicate
+
   function onMessage(event) {
-    var data = event.data;
-    if (!data || data.length < 3) return;
-    if ((data[0] & 0xf0) !== 0xb0) return;          // control change only
-    var channel = data[0] & 0x0f, cc = data[1], value = data[2];
+    var msg = read(event.data);
+    if (!msg) return;
+    // The same press can reach us down two paths; count it once.
+    var mark = event.timeStamp + ':' + msg.kind + ':' + msg.channel + ':'
+             + msg.id + ':' + msg.value;
+    if (mark === seen) return;
+    seen = mark;
+    // Show everything that arrives, learned or not: if the pedal sends
+    // something unexpected, this is where it becomes visible.
+    monitor.textContent = name(msg) + ' ch ' + (msg.channel + 1)
+                        + ' = ' + msg.value;
 
     if (learning) {
-      if (value < 64) return;                        // wait for a press
+      if (msg.value < 64) return;                    // wait for a press
       learning = false;
-      remember({ cc: cc, channel: channel });
+      remember({ kind: msg.kind, id: msg.id, channel: msg.channel });
       learn.textContent = 'Learn pedal';
+      forgetButton.hidden = false;
+      last = {};
       say('Listening for ' + describe());
       return;
     }
 
     var pedal = saved();
-    if (pedal.cc === undefined) {
-      if (SWITCHES.indexOf(cc) < 0) return;
-    } else if (cc !== pedal.cc || channel !== pedal.channel) {
+    if (pedal.kind === undefined) {
+      if (msg.kind !== 'cc' || SWITCHES.indexOf(msg.id) < 0) return;
+    } else if (msg.kind !== pedal.kind || msg.id !== pedal.id
+               || msg.channel !== pedal.channel) {
       return;
     }
-    var was = last[cc] === undefined ? 0 : last[cc];
-    last[cc] = value;
+    var slot = msg.kind + ':' + msg.id;
+    var was = last[slot] === undefined ? 0 : last[slot];
+    last[slot] = msg.momentary ? 0 : msg.value;
     // A press, not the release that follows it.
-    if (value >= 64 && was < 64 && window.carolNext) window.carolNext();
+    if (msg.value >= 64 && was < 64 && window.carolNext) window.carolNext();
+  }
+
+  // Attach to a port every way the spec allows. Setting onmidimessage is
+  // meant to open the port by itself; Firefox has not been reliable about
+  // either the implicit open or that handler, so the port is opened
+  // explicitly, a listener is added as well, and the handler is re-attached
+  // once the open resolves. Belt and braces means a press can arrive twice,
+  // which onMessage drops by its timestamp.
+  function attach(input) {
+    input.onmidimessage = onMessage;
+    if (input.addEventListener && !input._carolBound) {
+      input._carolBound = true;
+      input.addEventListener('midimessage', onMessage);
+    }
+    if (input.open) {
+      try {
+        var opening = input.open();
+        if (opening && opening.then) {
+          opening.then(function () { input.onmidimessage = onMessage; },
+                       function () {});
+        }
+      } catch (e) {}
+    }
   }
 
   function listen() {
     var names = [];
     access.inputs.forEach(function (input) {
-      input.onmidimessage = onMessage;
+      attach(input);
       names.push(input.name);
     });
     connect.hidden = true;
     learn.hidden = false;
+    forgetButton.hidden = saved().kind === undefined;
     say(names.length ? names.join(', ') + ' — listening for ' + describe()
                      : 'No MIDI device found. Plug one in, then reload.');
   }
@@ -1184,8 +1266,16 @@ window.carolTypeChoice = function () {
       midi.onstatechange = listen;
       listen();
     }, function () {
-      say(prompted ? 'MIDI was refused. Allow it for this site and try again.'
-                   : 'Not connected.');
+      // Firefox gates MIDI behind a site permission add-on it offers to
+      // install, and that flow does not reliably appear on a localhost page.
+      var firefox = /Firefox\//.test(navigator.userAgent || '');
+      say(prompted
+            ? (firefox
+                 ? 'Firefox asks to install a site permission add-on before '
+                   + 'it will grant MIDI, and that prompt often does not '
+                   + 'appear on localhost. Chrome is the easier path.'
+                 : 'MIDI was refused. Allow it for this site and try again.')
+            : 'Not connected.');
       connect.hidden = false;
     });
   }
@@ -1197,6 +1287,12 @@ window.carolTypeChoice = function () {
     learn.textContent = learning ? 'Press the pedal…' : 'Learn pedal';
     if (learning) say('Waiting for the pedal');
     else say('Listening for ' + describe());
+  });
+  forgetButton.addEventListener('click', function () {
+    forget();
+    last = {};
+    forgetButton.hidden = true;
+    say('Listening for ' + describe());
   });
 
   sidebar.appendChild(panel);
