@@ -1,0 +1,76 @@
+/* Big Timestamp Player — scoped to .btp so it can't disturb reveal.js layout. */
+
+.btp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.55em;           /* everything below scales with reveal's own scaling */
+  text-align: center;
+}
+
+.btp .btp-clock {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 3.4em;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  user-select: all;
+}
+.btp .btp-clock.idle { opacity: 0.35; }
+
+.btp .btp-stage {
+  width: 100%;
+  max-width: 780px;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.btp .btp-stage > * { width: 100%; height: 100%; display: block; border: 0; }
+
+.btp .btp-drop {
+  width: 100%;
+  max-width: 780px;
+  padding: 1.2em;
+  border: 2px dashed currentColor;
+  border-radius: 8px;
+  opacity: 0.4;
+  font-size: 0.8em;
+}
+.btp .btp-drop.over { opacity: 1; border-style: solid; }
+
+.btp .btp-bar {
+  display: flex;
+  gap: 0.4em;
+  width: 100%;
+  max-width: 780px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btp .btp-bar input[type=text] {
+  flex: 1 1 18em;
+  min-width: 0;
+  padding: 0.5em 0.7em;
+  font: inherit;
+  font-size: 0.7em;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+}
+.btp .btp-bar button,
+.btp .btp-bar label.btp-filebtn {
+  padding: 0.5em 0.9em;
+  font: inherit;
+  font-size: 0.7em;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btp .btp-bar input[type=file] { display: none; }
+.btp .btp-err { min-height: 1.2em; font-size: 0.7em; color: #e06c6c; }

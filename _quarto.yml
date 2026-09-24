@@ -3,6 +3,8 @@ project:
   output-dir: _site
   resources:
     - libs/**
+    - player.css
+    - player.js
 
 website:
   title: "Carols"
@@ -13,11 +15,15 @@ website:
     left:
       - href: index.qmd
         text: Programme
+      - href: player.qmd
+        text: Player
   sidebar:
     style: docked
     contents:
       - href: index.qmd
         text: Programme
+      - href: player.qmd
+        text: Player
       - section: "Conrad Tree Lighting"
         contents:
           - songs/deck-the-halls.qmd

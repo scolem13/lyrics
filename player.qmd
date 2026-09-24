@@ -1,0 +1,32 @@
+---
+title: "Player"
+toc: false
+---
+
+```{=html}
+<link rel="stylesheet" href="player.css">
+<style>
+/* player.css is tuned for a reveal.js slide, where everything scales with the
+   deck. This is an ordinary page, so the component is given a base size of its
+   own -- and the clock the size the thing is named for. */
+.btp { font-size: 1.25rem; margin: 1.5rem 0 3rem; }
+.btp .btp-clock { font-size: clamp(3.5rem, 15vw, 9rem); }
+.btp .btp-stage,
+.btp .btp-drop,
+.btp .btp-bar { max-width: 900px; }
+</style>
+
+<div class="btp">
+  <div class="btp-clock idle">00:00</div>
+  <div class="btp-stage" hidden></div>
+  <div class="btp-drop">Drop a video file here</div>
+  <div class="btp-bar">
+    <input class="btp-url" type="text" placeholder="Paste a YouTube link…" spellcheck="false">
+    <button class="btp-load">Load</button>
+    <label class="btp-filebtn">Choose file<input class="btp-file" type="file" accept="video/*"></label>
+  </div>
+  <div class="btp-err"></div>
+</div>
+
+<script src="player.js"></script>
+```
