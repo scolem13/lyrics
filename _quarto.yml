@@ -5,6 +5,8 @@ project:
     - libs/**
     - player.css
     - player.js
+    - player-log.css
+    - player-log.js
 
 website:
   title: "Carols"
@@ -16,14 +18,14 @@ website:
       - href: index.qmd
         text: Programme
       - href: player.qmd
-        text: Player
+        text: "Big Timestamp Player"
   sidebar:
     style: docked
     contents:
       - href: index.qmd
         text: Programme
       - href: player.qmd
-        text: Player
+        text: "Big Timestamp Player"
       - section: "Conrad Tree Lighting"
         contents:
           - songs/deck-the-halls.qmd

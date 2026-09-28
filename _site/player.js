@@ -146,6 +146,30 @@
       if (f) loadFile(f);
     });
 
+    function togglePlay() {
+      if (!mediaEl) return false;
+      try {
+        if (mediaEl.getPlayerState) {            // youtube
+          // 1 is PLAYING; anything else (paused, buffering, ended) starts it.
+          if (mediaEl.getPlayerState() === 1) mediaEl.pauseVideo();
+          else mediaEl.playVideo();
+        } else if (mediaEl.paused) {
+          mediaEl.play();
+        } else {
+          mediaEl.pause();
+        }
+        return true;
+      } catch (e) { return false; }
+    }
+
+    /* What the page around the player can ask of it. The reveal deck uses
+       none of this; it is here so a host page can add its own controls. */
+    root._btp = {
+      time: function () { return getTime ? getTime() : null; },
+      toggle: togglePlay,
+      format: fmt
+    };
+
     /* pause when the slide goes away, so audio doesn't follow you */
     root._btpPause = function () {
       if (!mediaEl) return;

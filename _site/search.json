@@ -2,12 +2,12 @@
   {
     "objectID": "player.html",
     "href": "player.html",
-    "title": "Player",
+    "title": "Big Timestamp Player",
     "section": "",
-    "text": "00:00\n  \n  Drop a video file here\n  \n    \n    Load\n    Choose file",
+    "text": "00:00\n  \n  Drop a video file here\n  \n    \n    Load\n    Choose file\n  \n  \n\n\n\n  Timestamps\n  C stamps the time and copies it.\n     Return plays and pauses. Leave a note with Esc\n     or jk.\n  \n    \n    Jump to the note field after a stamp\n  \n  \n  Nothing stamped yet.\n  \n    Stamp now\n    Copy all\n    Download .txt\n    Clear",
     "crumbs": [
       "Programme",
-      "Player"
+      "Big Timestamp Player"
     ]
   },
   {

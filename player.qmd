@@ -1,20 +1,23 @@
 ---
-title: "Player"
+title: "Big Timestamp Player"
 toc: false
 ---
 
 ```{=html}
 <link rel="stylesheet" href="player.css">
+<link rel="stylesheet" href="player-log.css">
 <style>
 /* player.css is tuned for a reveal.js slide, where everything scales with the
    deck. This is an ordinary page, so the component is given a base size of its
    own -- and the clock the size the thing is named for. */
 .btp { font-size: 1.25rem; margin: 1.5rem 0 3rem; }
-.btp .btp-clock { font-size: clamp(3.5rem, 15vw, 9rem); }
+.btp .btp-clock { font-size: clamp(3rem, 11vw, 7rem); }
 .btp .btp-stage,
 .btp .btp-drop,
 .btp .btp-bar { max-width: 900px; }
 </style>
+
+<div class="btp-layout">
 
 <div class="btp">
   <div class="btp-clock idle">00:00</div>
@@ -28,5 +31,27 @@ toc: false
   <div class="btp-err"></div>
 </div>
 
+<section class="btp-log">
+  <h2>Timestamps</h2>
+  <p class="btp-log-note"><kbd>C</kbd> stamps the time and copies it.
+     <kbd>Return</kbd> plays and pauses. Leave a note with <kbd>Esc</kbd>
+     or <kbd>jk</kbd>.</p>
+  <label class="btp-autonote-label">
+    <input class="btp-autonote" type="checkbox" checked>
+    Jump to the note field after a stamp
+  </label>
+  <ol class="btp-log-rows"></ol>
+  <p class="btp-log-empty">Nothing stamped yet.</p>
+  <div class="btp-log-buttons">
+    <button class="btp-stamp-now" type="button">Stamp now</button>
+    <button class="btp-copy-all" type="button">Copy all</button>
+    <button class="btp-download" type="button">Download .txt</button>
+    <button class="btp-clear" type="button">Clear</button>
+  </div>
+</section>
+
+</div>
+
 <script src="player.js"></script>
+<script src="player-log.js"></script>
 ```

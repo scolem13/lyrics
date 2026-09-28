@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Player – Carols</title>
+<title>Big Timestamp Player – Carols</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -224,7 +224,7 @@ window.carolTypeChoice = function () {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./player.html"> 
-<span class="menu-text">Player</span></a>
+<span class="menu-text">Big Timestamp Player</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -237,7 +237,7 @@ window.carolTypeChoice = function () {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./player.html">Player</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./player.html">Big Timestamp Player</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -258,7 +258,7 @@ window.carolTypeChoice = function () {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./player.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Player</span></a>
+ <span class="menu-text">Big Timestamp Player</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -378,7 +378,7 @@ window.carolTypeChoice = function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Player</h1>
+<h1 class="title">Big Timestamp Player</h1>
 </div>
 
 
@@ -396,16 +396,19 @@ window.carolTypeChoice = function () {
 
 
 <link rel="stylesheet" href="player.css">
+<link rel="stylesheet" href="player-log.css">
 <style>
 /* player.css is tuned for a reveal.js slide, where everything scales with the
    deck. This is an ordinary page, so the component is given a base size of its
    own -- and the clock the size the thing is named for. */
 .btp { font-size: 1.25rem; margin: 1.5rem 0 3rem; }
-.btp .btp-clock { font-size: clamp(3.5rem, 15vw, 9rem); }
+.btp .btp-clock { font-size: clamp(3rem, 11vw, 7rem); }
 .btp .btp-stage,
 .btp .btp-drop,
 .btp .btp-bar { max-width: 900px; }
 </style>
+
+<div class="btp-layout">
 
 <div class="btp">
   <div class="btp-clock idle">00:00</div>
@@ -419,7 +422,29 @@ window.carolTypeChoice = function () {
   <div class="btp-err"></div>
 </div>
 
+<section class="btp-log">
+  <h2 class="anchored">Timestamps</h2>
+  <p class="btp-log-note"><kbd>C</kbd> stamps the time and copies it.
+     <kbd>Return</kbd> plays and pauses. Leave a note with <kbd>Esc</kbd>
+     or <kbd>jk</kbd>.</p>
+  <label class="btp-autonote-label">
+    <input class="btp-autonote" type="checkbox" checked="">
+    Jump to the note field after a stamp
+  </label>
+  <ol class="btp-log-rows"></ol>
+  <p class="btp-log-empty">Nothing stamped yet.</p>
+  <div class="btp-log-buttons">
+    <button class="btp-stamp-now" type="button">Stamp now</button>
+    <button class="btp-copy-all" type="button">Copy all</button>
+    <button class="btp-download" type="button">Download .txt</button>
+    <button class="btp-clear" type="button">Clear</button>
+  </div>
+</section>
+
+</div>
+
 <script src="player.js"></script>
+<script src="player-log.js"></script>
 
 
 

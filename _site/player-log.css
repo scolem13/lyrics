@@ -1,0 +1,122 @@
+/* The player and its timestamp log, side by side. */
+.btp-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+@media (max-width: 900px) {
+  .btp-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+.btp-log {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: .4rem;
+}
+.btp-log h2 {
+  margin: 0;
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #6c757d;
+  border: 0;
+}
+.btp-log-note,
+.btp-log-empty {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.4;
+  color: #6c757d;
+}
+.btp-log kbd {
+  padding: .05em .35em;
+  font-family: var(--bs-font-monospace, monospace);
+  font-size: .85em;
+  color: #495057;
+  background: #f1f3f5;
+  border: 1px solid #dee2e6;
+  border-radius: .2rem;
+}
+.btp-autonote-label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .8rem;
+  color: #495057;
+}
+
+/* One stamp per row: the time, then the note beside it. */
+.btp-log-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+.btp-log-rows li {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: .5rem;
+  align-items: center;
+}
+.btp-stamp {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: .9rem;
+  color: #0d6efd;
+}
+.btp-note {
+  width: 100%;
+  min-width: 0;
+  padding: .25rem .4rem;
+  font: inherit;
+  font-size: .85rem;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: .2rem;
+}
+.btp-note:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: -1px;
+  border-color: #0d6efd;
+}
+
+.btp-log-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding-top: .5rem;
+  border-top: 1px solid #dee2e6;
+}
+.btp-log-buttons button {
+  flex: 1 1 8rem;
+  padding: .35rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+.btp-log-buttons button:hover:not([disabled]) { background: #e9ecef; }
+.btp-log-buttons .btp-clear.armed {
+  color: #b4531f;
+  border-color: #b4531f;
+  background: rgba(180, 83, 31, .08);
+}
+.btp-log-buttons button[disabled] {
+  color: #adb5bd;
+  background: #f8f9fa;
+  cursor: default;
+}
