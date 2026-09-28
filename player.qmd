@@ -17,6 +17,8 @@ toc: false
 .btp .btp-bar { max-width: 900px; }
 </style>
 
+<button class="btp-nav-toggle" type="button">« Hide menu</button>
+
 <div class="btp-layout">
 
 <div class="btp">

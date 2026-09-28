@@ -69,10 +69,43 @@
   align-items: center;
 }
 .btp-stamp {
+  padding: .1rem .3rem;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-variant-numeric: tabular-nums;
   font-size: .9rem;
   color: #0d6efd;
+  background: none;
+  border: 0;
+  border-radius: .2rem;
+  cursor: pointer;
+}
+.btp-stamp:hover { background: rgba(13, 110, 253, .1); text-decoration: underline; }
+
+/* The site's docked sidebar, folded away to give the player the room.
+   Below 992px Quarto already collapses it behind its own toggle. */
+.btp-nav-toggle {
+  display: none;
+  margin: 0 0 .5rem;
+  padding: .2rem .6rem;
+  font: inherit;
+  font-size: .8rem;
+  color: #6c757d;
+  background: none;
+  border: 1px solid #dee2e6;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+.btp-nav-toggle:hover { background: #e9ecef; }
+@media (min-width: 992px) {
+  .btp-nav-toggle { display: inline-block; }
+  body.btp-nav-hidden #quarto-sidebar { display: none !important; }
+  body.btp-nav-hidden #quarto-content.page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0, 1fr)
+      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset] 1.5em
+      [screen-end];
+  }
 }
 .btp-note {
   width: 100%;

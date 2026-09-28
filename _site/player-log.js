@@ -11,6 +11,7 @@
 
   var STORE = 'btp-stamps';
   var AUTONOTE = 'btp-autonote';
+  var NAV = 'btp-nav';
 
   function boot() {
     var player = document.querySelector('.btp');
@@ -126,9 +127,15 @@
     function addRow(time, text) {
       var li = document.createElement('li');
 
-      var stamp = document.createElement('span');
+      var stamp = document.createElement('button');
+      stamp.type = 'button';
       stamp.className = 'btp-stamp';
       stamp.textContent = time;
+      stamp.title = 'Jump to ' + time;
+      stamp.addEventListener('click', function () {
+        jump(time);
+        stamp.blur();
+      });
       li.appendChild(stamp);
 
       var input = document.createElement('input');
@@ -157,6 +164,18 @@
                       function () { say('Stamped ' + text + ' (clipboard refused)'); });
       input.scrollIntoView({ block: 'nearest' });
       if (autoNote && autoNote.checked) input.focus();
+    }
+
+    // "MM:SS" (minutes may run past 59) or "H:MM:SS" back into seconds.
+    function seconds(text) {
+      var parts = String(text).split(':').map(Number);
+      if (!parts.length || parts.some(isNaN)) return NaN;
+      return parts.reduce(function (acc, n) { return acc * 60 + n; }, 0);
+    }
+
+    function jump(time) {
+      var a = api();
+      if (!a || !a.seek || !a.seek(seconds(time))) say('Nothing is loaded yet.');
     }
 
     function toggle() {
@@ -251,6 +270,24 @@
         e.preventDefault();
       }
     });
+
+    // Fold the site's left sidebar away, and remember that for next time.
+    var navToggle = document.querySelector('.btp-nav-toggle');
+    if (navToggle) {
+      var setNav = function (hidden) {
+        document.body.classList.toggle('btp-nav-hidden', hidden);
+        navToggle.textContent = hidden ? '» Show menu' : '« Hide menu';
+        navToggle.setAttribute('aria-expanded', String(!hidden));
+      };
+      try { setNav(localStorage.getItem(NAV) === 'hidden'); }
+      catch (e) { setNav(false); }
+      navToggle.addEventListener('click', function () {
+        var hidden = !document.body.classList.contains('btp-nav-hidden');
+        setNav(hidden);
+        try { localStorage.setItem(NAV, hidden ? 'hidden' : 'shown'); } catch (e) {}
+        navToggle.blur();
+      });
+    }
 
     // Whatever was on the page last time.
     saved().forEach(function (row) {

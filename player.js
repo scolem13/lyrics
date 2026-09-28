@@ -162,11 +162,21 @@
       } catch (e) { return false; }
     }
 
+    function seekTo(seconds) {
+      if (!mediaEl || !isFinite(seconds)) return false;
+      try {
+        if (mediaEl.seekTo) mediaEl.seekTo(seconds, true);   // youtube
+        else mediaEl.currentTime = seconds;
+        return true;
+      } catch (e) { return false; }
+    }
+
     /* What the page around the player can ask of it. The reveal deck uses
        none of this; it is here so a host page can add its own controls. */
     root._btp = {
       time: function () { return getTime ? getTime() : null; },
       toggle: togglePlay,
+      seek: seekTo,
       format: fmt
     };
 
