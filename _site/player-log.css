@@ -1,16 +1,53 @@
 /* The player and its timestamp log, side by side. */
+/* The log's width is --btp-log-w, set by dragging the splitter between them.
+   --btp-top is the fixed navbar's height, measured by player-log.js. */
 .btp-layout {
+  --btp-log-w: 24rem;
+  --btp-top: 4rem;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr) 1rem var(--btp-log-w);
+  gap: .5rem;
   align-items: start;
   margin-bottom: 3rem;
 }
 @media (max-width: 900px) {
   .btp-layout { grid-template-columns: minmax(0, 1fr); }
+  .btp-splitter { display: none; }
 }
 
+/* A thin grip: the line darkens on hover and while dragging. */
+.btp-splitter {
+  position: sticky;
+  top: var(--btp-top);
+  align-self: start;
+  height: calc(100vh - var(--btp-top) - 1rem);
+  cursor: col-resize;
+  touch-action: none;
+}
+.btp-splitter::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: #dee2e6;
+  border-radius: 1px;
+}
+.btp-splitter:hover::before,
+.btp-splitter:focus-visible::before,
+.btp-splitter.dragging::before { background: #0d6efd; width: 4px; margin-left: -2px; }
+.btp-splitter:focus { outline: none; }
+body.btp-resizing { cursor: col-resize; user-select: none; }
+/* An iframe under the pointer swallows the drag; keep it out of the way. */
+body.btp-resizing iframe, body.btp-resizing video { pointer-events: none; }
+
+/* The log stays in view while the page scrolls, and its rows scroll within
+   it, so the header and buttons never leave the screen. */
 .btp-log {
+  position: sticky;
+  top: var(--btp-top);
+  max-height: calc(100vh - var(--btp-top) - 1rem);
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: .75rem;
@@ -59,8 +96,10 @@
   display: flex;
   flex-direction: column;
   gap: .3rem;
-  max-height: 22rem;
+  flex: 1 1 auto;
+  min-height: 4rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .btp-log-rows li {
   display: grid;
@@ -81,32 +120,6 @@
 }
 .btp-stamp:hover { background: rgba(13, 110, 253, .1); text-decoration: underline; }
 
-/* The site's docked sidebar, folded away to give the player the room.
-   Below 992px Quarto already collapses it behind its own toggle. */
-.btp-nav-toggle {
-  display: none;
-  margin: 0 0 .5rem;
-  padding: .2rem .6rem;
-  font: inherit;
-  font-size: .8rem;
-  color: #6c757d;
-  background: none;
-  border: 1px solid #dee2e6;
-  border-radius: .25rem;
-  cursor: pointer;
-}
-.btp-nav-toggle:hover { background: #e9ecef; }
-@media (min-width: 992px) {
-  .btp-nav-toggle { display: inline-block; }
-  body.btp-nav-hidden #quarto-sidebar { display: none !important; }
-  body.btp-nav-hidden #quarto-content.page-columns {
-    grid-template-columns:
-      [screen-start] 1.5em
-      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0, 1fr)
-      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset] 1.5em
-      [screen-end];
-  }
-}
 .btp-note {
   width: 100%;
   min-width: 0;
@@ -131,7 +144,8 @@
   padding-top: .5rem;
   border-top: 1px solid #dee2e6;
 }
-.btp-log-buttons button {
+.btp-log-buttons button,
+.btp-log-buttons label.btp-import {
   flex: 1 1 8rem;
   padding: .35rem .6rem;
   font: inherit;
@@ -142,6 +156,7 @@
   border-radius: .25rem;
   cursor: pointer;
 }
+.btp-log-buttons label.btp-import:hover,
 .btp-log-buttons button:hover:not([disabled]) { background: #e9ecef; }
 .btp-log-buttons .btp-clear.armed {
   color: #b4531f;
@@ -153,3 +168,20 @@
   background: #f8f9fa;
   cursor: default;
 }
+
+/* Import: a file picker dressed as a button, and a box to paste into. */
+.btp-log-buttons label.btp-import { text-align: center; margin: 0; }
+.btp-import input[type=file] { display: none; }
+.btp-paste { display: flex; flex-direction: column; gap: .4rem; }
+.btp-paste[hidden] { display: none; }
+.btp-paste textarea {
+  width: 100%;
+  padding: .35rem .45rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .8rem;
+  color: inherit;
+  border: 1px solid #dee2e6;
+  border-radius: .2rem;
+  resize: vertical;
+}
+.btp-paste .btp-log-buttons { border-top: 0; padding-top: 0; }

@@ -17,8 +17,6 @@ toc: false
 .btp .btp-bar { max-width: 900px; }
 </style>
 
-<button class="btp-nav-toggle" type="button">« Hide menu</button>
-
 <div class="btp-layout">
 
 <div class="btp">
@@ -33,9 +31,13 @@ toc: false
   <div class="btp-err"></div>
 </div>
 
+<div class="btp-splitter" role="separator" aria-orientation="vertical"
+     aria-label="Resize the notes column" tabindex="0"
+     title="Drag to resize · double-click to reset"></div>
+
 <section class="btp-log">
   <h2>Timestamps</h2>
-  <p class="btp-log-note"><kbd>C</kbd> stamps the time and copies it.
+  <p class="btp-log-note"><kbd>C</kbd> stamps the time. Click a time to jump to it.
      <kbd>Return</kbd> plays and pauses. Leave a note with <kbd>Esc</kbd>
      or <kbd>jk</kbd>.</p>
   <label class="btp-autonote-label">
@@ -49,6 +51,16 @@ toc: false
     <button class="btp-copy-all" type="button">Copy all</button>
     <button class="btp-download" type="button">Download .txt</button>
     <button class="btp-clear" type="button">Clear</button>
+    <label class="btp-import">Import .txt<input class="btp-import-file" type="file" accept=".txt,text/plain"></label>
+    <button class="btp-paste-open" type="button">Paste…</button>
+  </div>
+  <div class="btp-paste" hidden>
+    <textarea rows="6" spellcheck="false"
+      placeholder="01:23&#9;Chorus starts&#10;02:05&#9;Key change"></textarea>
+    <div class="btp-log-buttons">
+      <button class="btp-paste-go" type="button">Import</button>
+      <button class="btp-paste-cancel" type="button">Cancel</button>
+    </div>
   </div>
 </section>
 

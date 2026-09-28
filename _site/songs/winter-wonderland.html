@@ -458,6 +458,79 @@ window.carolTypeChoice = function () {
 </section>
 
 </main> <!-- /main -->
+<!-- A button at the left of the navbar that folds the docked sidebar away on
+     every page, and remembers the choice. Below 992px Quarto already tucks the
+     sidebar behind its own toggle, so the button is hidden there. -->
+<script>
+(function () {
+  "use strict";
+
+  var KEY = 'btp-nav';   // the name the player page first used; kept so the choice carries over
+
+  function boot() {
+    var bar = document.querySelector('#quarto-header .navbar-container');
+    if (!bar || !document.getElementById('quarto-sidebar')) return;
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'sidebar-toggle';
+    var icon = document.createElement('i');
+    icon.className = 'bi bi-layout-sidebar';
+    button.appendChild(icon);
+    bar.insertBefore(button, bar.firstChild);
+
+    function set(hidden) {
+      document.body.classList.toggle('sidebar-hidden', hidden);
+      var label = hidden ? 'Show menu' : 'Hide menu';
+      button.title = label;
+      button.setAttribute('aria-label', label);
+      button.setAttribute('aria-expanded', String(!hidden));
+    }
+
+    try { set(localStorage.getItem(KEY) === 'hidden'); }
+    catch (e) { set(false); }
+
+    button.addEventListener('click', function () {
+      var hidden = !document.body.classList.contains('sidebar-hidden');
+      set(hidden);
+      try { localStorage.setItem(KEY, hidden ? 'hidden' : 'shown'); } catch (e) {}
+      button.blur();
+      // Anything laid out against the old width (the player's splitter) re-measures.
+      window.dispatchEvent(new Event('resize'));
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+<!-- Marks the navbar tab whose link is this page with .nav-current, so only
+     that tab is coloured. Quarto's own .active also lights a tab for pages
+     beneath it, which is quietened in the stylesheet. -->
+<script>
+(function () {
+  "use strict";
+  function norm(path) { return path.replace(/\/index\.html$/, '/').replace(/\.html$/, ''); }
+  function boot() {
+    var here = norm(location.pathname);
+    document.querySelectorAll('#quarto-header .navbar-nav .nav-link[href]').forEach(function (a) {
+      var there = norm(new URL(a.getAttribute('href'), location.href).pathname);
+      if (there === here) {
+        a.classList.add('nav-current');
+        a.setAttribute('aria-current', 'page');
+      } else {
+        a.classList.remove('nav-current');
+        a.removeAttribute('aria-current');
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 <script>
 (function () {
   // Quarto puts the anchor id on the wrapping <section>, not the heading.

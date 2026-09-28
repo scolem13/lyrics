@@ -166,6 +166,59 @@ body.lyrics #TOC { display: none; }
   border-left-color: #2761e3;
   background: rgba(39, 97, 227, .08);
 }
+/* The navbar's sidebar toggle (sidebar-toggle.html). When the sidebar is
+   folded away the left-hand columns collapse, so the body takes the room;
+   the right-hand margin -- the Sections list -- keeps its place. */
+.sidebar-toggle {
+  display: none;
+  margin-right: .75rem;
+  padding: .2rem .45rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--bs-navbar-color);
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+.sidebar-toggle:hover { color: var(--bs-navbar-hover-color); }
+
+/* Navbar tabs: only the page you are on is blue (nav-current.html marks it);
+   Quarto's own .active also lights up a parent tab, so it is quietened. */
+#quarto-header .navbar-nav .nav-link.active { color: var(--bs-navbar-color); }
+#quarto-header .navbar-nav .nav-link.nav-current { color: var(--bs-navbar-active-color); }
+@media (min-width: 992px) {
+  .sidebar-toggle { display: inline-block; }
+  body.sidebar-hidden #quarto-sidebar { display: none !important; }
+  body.sidebar-hidden #quarto-content.page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0, 1fr)
+      [body-content-end] 1.5em
+      [body-end] 50px
+      [body-end-outset] minmax(50px, 200px)
+      [page-end-inset] 1.5em
+      [page-end screen-end-inset] 1.5em [screen-end];
+  }
+  body.sidebar-hidden.fullcontent #quarto-content.page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0, 1fr)
+      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset] 1.5em
+      [screen-end];
+  }
+  body.lyrics.sidebar-hidden #quarto-content.page-columns {
+    grid-template-columns:
+      [screen-start] 0.4rem
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0, 1fr)
+      [body-content-end] 0.4rem
+      [body-end] 0.25rem
+      [body-end-outset] minmax(110px, 170px)
+      [page-end-inset] 0rem
+      [page-end screen-end-inset] 0.4rem [screen-end];
+  }
+}
+
 @media print { .song-sections { display: none; } }
 
 /* Prev/next navigation */

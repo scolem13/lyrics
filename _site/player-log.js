@@ -11,7 +11,7 @@
 
   var STORE = 'btp-stamps';
   var AUTONOTE = 'btp-autonote';
-  var NAV = 'btp-nav';
+  var LOG_W = 'btp-log-width';
 
   function boot() {
     var player = document.querySelector('.btp');
@@ -160,8 +160,7 @@
       var text = a.format(t);
       var input = addRow(text, '');
       save();
-      copy(text).then(function () { say('Copied ' + text); },
-                      function () { say('Stamped ' + text + ' (clipboard refused)'); });
+      say('Stamped ' + text);
       input.scrollIntoView({ block: 'nearest' });
       if (autoNote && autoNote.checked) input.focus();
     }
@@ -211,6 +210,82 @@
     });
     log.querySelector('.btp-copy-all').addEventListener('click', copyAll);
     log.querySelector('.btp-download').addEventListener('click', download);
+
+    // Bring back earlier work: a .txt from Download, or the same text pasted.
+    // Each line is a time, then optionally a tab (or spaces, or a dash) and the
+    // note -- "01:23\tChorus", "1:02:03 - bridge", "[04:10] key change".
+    // Lines without a time at the front are skipped. Imported stamps are
+    // added to what is already there, in time order, leaving out exact repeats.
+    var LINE = /^\s*\[?(\d+(?::\d{1,2}){1,2})\]?(?:\s*[-\u2013\u2014|]\s*|\s+|$)(.*)$/;
+
+    function importText(text) {
+      var have = {};
+      entries().forEach(function (row) { have[row.t + '\t' + row.n] = true; });
+      var found = [], skipped = 0;
+      String(text).split(/\r?\n/).forEach(function (line) {
+        if (!line.trim()) return;
+        var m = line.match(LINE);
+        if (!m) { skipped++; return; }
+        var t = m[1], n = m[2].trim();
+        if (have[t + '\t' + n]) return;
+        have[t + '\t' + n] = true;
+        found.push({ t: t, n: n });
+      });
+      if (!found.length) {
+        say(skipped ? 'No timestamps found in that text.' : 'Nothing new to import.');
+        return;
+      }
+      var all = entries().concat(found);
+      all.sort(function (a, b) { return seconds(a.t) - seconds(b.t); });
+      rows.innerHTML = '';
+      all.forEach(function (row) { addRow(row.t, row.n); });
+      save();
+      showEmpty();
+      say('Imported ' + found.length + (found.length === 1 ? ' stamp' : ' stamps')
+          + (skipped ? ' (' + skipped + ' lines skipped)' : ''));
+    }
+
+    var importFile = log.querySelector('.btp-import-file');
+    if (importFile) importFile.addEventListener('change', function () {
+      var f = importFile.files[0];
+      importFile.value = '';            // so choosing the same file again still fires
+      if (!f) return;
+      f.text().then(importText, function () { say('Could not read that file.'); });
+    });
+
+    var pasteBox = log.querySelector('.btp-paste');
+    var pasteButton = log.querySelector('.btp-paste-go');
+    function togglePaste(open) {
+      pasteBox.hidden = !open;
+      if (open) pasteBox.querySelector('textarea').focus();
+    }
+    log.querySelector('.btp-paste-open').addEventListener('click', function () {
+      togglePaste(pasteBox.hidden);
+    });
+    pasteButton.addEventListener('click', function () {
+      var area = pasteBox.querySelector('textarea');
+      importText(area.value);
+      area.value = '';
+      togglePaste(false);
+    });
+    pasteBox.querySelector('.btp-paste-cancel').addEventListener('click', function () {
+      pasteBox.querySelector('textarea').value = '';
+      togglePaste(false);
+    });
+    pasteBox.querySelector('textarea').addEventListener('keydown', function (e) {
+      e.stopPropagation();              // Enter is a newline here, not play/pause
+      if (e.key === 'Escape') togglePaste(false);
+    });
+
+    // A .txt dropped on the log imports too (a video dropped there is left alone).
+    log.addEventListener('dragover', function (e) { e.preventDefault(); });
+    log.addEventListener('drop', function (e) {
+      e.preventDefault();
+      var f = e.dataTransfer && e.dataTransfer.files[0];
+      if (f && (/^text\//.test(f.type) || /\.txt$/i.test(f.name))) {
+        f.text().then(importText);
+      }
+    });
 
     // Clear throws the lot away, so it asks first: the button becomes its own
     // confirmation for a few seconds rather than interrupting with a dialog.
@@ -271,21 +346,68 @@
       }
     });
 
-    // Fold the site's left sidebar away, and remember that for next time.
-    var navToggle = document.querySelector('.btp-nav-toggle');
-    if (navToggle) {
-      var setNav = function (hidden) {
-        document.body.classList.toggle('btp-nav-hidden', hidden);
-        navToggle.textContent = hidden ? '» Show menu' : '« Hide menu';
-        navToggle.setAttribute('aria-expanded', String(!hidden));
+    // The sticky log sits just under the fixed navbar, whatever its height.
+    var layout = log.closest('.btp-layout');
+    var header = document.getElementById('quarto-header');
+    function measureTop() {
+      if (!layout) return;
+      var h = header ? header.getBoundingClientRect().height : 0;
+      layout.style.setProperty('--btp-top', (h + 8) + 'px');
+    }
+    measureTop();
+    window.addEventListener('resize', measureTop);
+
+    // Dragging the splitter sets the notes column's width, in pixels, kept
+    // between a usable minimum and most of the layout.
+    var splitter = layout && layout.querySelector('.btp-splitter');
+    if (splitter) {
+      var MIN_LOG = 224, MIN_PLAYER = 320;
+      var clampWidth = function (w) {
+        var max = layout.getBoundingClientRect().width - MIN_PLAYER;
+        return Math.round(Math.max(MIN_LOG, Math.min(w, max)));
       };
-      try { setNav(localStorage.getItem(NAV) === 'hidden'); }
-      catch (e) { setNav(false); }
-      navToggle.addEventListener('click', function () {
-        var hidden = !document.body.classList.contains('btp-nav-hidden');
-        setNav(hidden);
-        try { localStorage.setItem(NAV, hidden ? 'hidden' : 'shown'); } catch (e) {}
-        navToggle.blur();
+      var setWidth = function (w, keep) {
+        if (w == null) layout.style.removeProperty('--btp-log-w');
+        else layout.style.setProperty('--btp-log-w', clampWidth(w) + 'px');
+        if (!keep) return;
+        try {
+          if (w == null) localStorage.removeItem(LOG_W);
+          else localStorage.setItem(LOG_W, String(clampWidth(w)));
+        } catch (e) {}
+      };
+      try {
+        var stored = parseFloat(localStorage.getItem(LOG_W));
+        if (isFinite(stored)) setWidth(stored, false);
+      } catch (e) {}
+
+      splitter.addEventListener('pointerdown', function (e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        splitter.setPointerCapture(e.pointerId);
+        splitter.classList.add('dragging');
+        document.body.classList.add('btp-resizing');
+        var right = layout.getBoundingClientRect().right;
+        var move = function (ev) { setWidth(right - ev.clientX, false); };
+        var up = function (ev) {
+          splitter.removeEventListener('pointermove', move);
+          splitter.removeEventListener('pointerup', up);
+          splitter.removeEventListener('pointercancel', up);
+          splitter.classList.remove('dragging');
+          document.body.classList.remove('btp-resizing');
+          setWidth(right - ev.clientX, true);
+        };
+        splitter.addEventListener('pointermove', move);
+        splitter.addEventListener('pointerup', up);
+        splitter.addEventListener('pointercancel', up);
+      });
+      splitter.addEventListener('dblclick', function () { setWidth(null, true); });
+      // Arrow keys nudge it, for anyone not using a pointer.
+      splitter.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        e.stopPropagation();
+        var w = log.getBoundingClientRect().width;
+        setWidth(w + (e.key === 'ArrowLeft' ? 32 : -32), true);
       });
     }
 

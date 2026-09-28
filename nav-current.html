@@ -1,0 +1,24 @@
+<!-- Marks the navbar tab whose link is this page with .nav-current, so only
+     that tab is coloured. Quarto's own .active also lights a tab for pages
+     beneath it, which is quietened in the stylesheet. -->
+<script>
+(function () {
+  "use strict";
+  function norm(path) { return path.replace(/\/index\.html$/, '/').replace(/\.html$/, ''); }
+  function boot() {
+    var here = norm(location.pathname);
+    document.querySelectorAll('#quarto-header .navbar-nav .nav-link[href]').forEach(function (a) {
+      var there = norm(new URL(a.getAttribute('href'), location.href).pathname);
+      if (there === here) {
+        a.classList.add('nav-current');
+        a.setAttribute('aria-current', 'page');
+      } else {
+        a.classList.remove('nav-current');
+        a.removeAttribute('aria-current');
+      }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
