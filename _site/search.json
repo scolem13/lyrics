@@ -15,7 +15,19 @@
     "href": "songs/merry-christmas-bells.html",
     "title": "8. Merry Christmas Bells",
     "section": "",
-    "text": "Oh, the bells are ringing out today\nIn a joyous Christmas kind of way.\nThey’re ringing, ringing!\nDing dong ding dong!\nMerry Christmas Bells!",
+    "text": "CGG7",
+    "crumbs": [
+      "Programme",
+      "Conrad Tree Lighting",
+      "8. Merry Christmas Bells"
+    ]
+  },
+  {
+    "objectID": "songs/merry-christmas-bells.html#intro",
+    "href": "songs/merry-christmas-bells.html#intro",
+    "title": "8. Merry Christmas Bells",
+    "section": "",
+    "text": "CGG7",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -26,8 +38,8 @@
     "objectID": "songs/merry-christmas-bells.html#verse-1",
     "href": "songs/merry-christmas-bells.html#verse-1",
     "title": "8. Merry Christmas Bells",
-    "section": "",
-    "text": "Oh, the bells are ringing out today\nIn a joyous Christmas kind of way.\nThey’re ringing, ringing!\nDing dong ding dong!\nMerry Christmas Bells!",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nOh, the Cbells are C/Eringing Fout toG/Cday In a Cjoyous C/EChristmas Fkind of G/Cway. They’re Fringing, F/Aringing! CDing dong C/Gding dong! Merry GChristmas Bells!G7",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -39,7 +51,7 @@
     "href": "songs/merry-christmas-bells.html#verse-2",
     "title": "8. Merry Christmas Bells",
     "section": "Verse 2",
-    "text": "Verse 2\nOh, the sound they make is sweet today,\nAnd I hope that you can hear them play.\nThey’re ringing, ringing!\nDing dong ding dong!\nMerry Christmas Bells!",
+    "text": "Verse 2\n\nOh, the Csound they C/Emake is Fsweet toG/Cday, And I Chope that C/Eyou can Fhear them G/Cplay. They’re Fringing, F/Aringing! CDing dong C/Gding dong! Merry GChristmas Bells!G7",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -51,7 +63,7 @@
     "href": "songs/merry-christmas-bells.html#chorus",
     "title": "8. Merry Christmas Bells",
     "section": "Chorus",
-    "text": "Chorus\nThey ring, they sing, they jingle\nThey ding dong ding\nThey ring, they sing, they jingle, jingle\nDing Dong\nDing Dong",
+    "text": "Chorus\n\nThey ring, they sing, they jingle They ding dong ding They ring, they sing, they jingle, jingle Ding Dong Ding Dong",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -59,11 +71,11 @@
     ]
   },
   {
-    "objectID": "songs/merry-christmas-bells.html#d.c.-al-fine",
-    "href": "songs/merry-christmas-bells.html#d.c.-al-fine",
+    "objectID": "songs/merry-christmas-bells.html#d.c.-al-coda",
+    "href": "songs/merry-christmas-bells.html#d.c.-al-coda",
     "title": "8. Merry Christmas Bells",
-    "section": "D.C. al Fine",
-    "text": "D.C. al Fine",
+    "section": "D.C. al Coda",
+    "text": "D.C. al Coda",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -75,7 +87,7 @@
     "href": "songs/merry-christmas-bells.html#coda",
     "title": "8. Merry Christmas Bells",
     "section": "Coda",
-    "text": "Coda\nThey’re ringing, ringing!\nDing dong ding dong!\nMe….rry Christmas Bells…!\nDing Dong!\n\n← La Navidad O Tannenbaum (O Christmas Tree ) →",
+    "text": "Coda\n\nThey’re ringing, ringing! Ding dong ding dong! Me….rry Christmas Bells…! Ding Dong!\n\n\n← La Navidad O Tannenbaum (O Christmas Tree ) →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1022,7 +1034,19 @@
     "href": "songs/la-navidad.html",
     "title": "7. La Navidad",
     "section": "",
-    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
+    "text": "La NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
+    "crumbs": [
+      "Programme",
+      "Conrad Tree Lighting",
+      "7. La Navidad"
+    ]
+  },
+  {
+    "objectID": "songs/la-navidad.html#verse",
+    "href": "songs/la-navidad.html#verse",
+    "title": "7. La Navidad",
+    "section": "",
+    "text": "La NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1033,20 +1057,8 @@
     "objectID": "songs/la-navidad.html#verse-1",
     "href": "songs/la-navidad.html#verse-1",
     "title": "7. La Navidad",
-    "section": "",
-    "text": "La Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "7. La Navidad"
-    ]
-  },
-  {
-    "objectID": "songs/la-navidad.html#verse-1-1",
-    "href": "songs/la-navidad.html#verse-1-1",
-    "title": "7. La Navidad",
-    "section": "Verse 1",
-    "text": "Verse 1\nLa Navidad.\nTodos celebramos!\nLa Navidad.\nLet us celebrate!",
+    "section": "Verse",
+    "text": "Verse\n\nLa NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1058,7 +1070,7 @@
     "href": "songs/la-navidad.html#chorus",
     "title": "7. La Navidad",
     "section": "Chorus",
-    "text": "Chorus\nBringing peace.\nTrayendo paz\nSinging joy to the world\nTodo el mundo!",
+    "text": "Chorus\n\nCBringing Dpeace. TraGyendo Cpaz DSinging D7joy to the world Todo el mundo!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1094,7 +1106,7 @@
     "href": "songs/la-navidad.html#d.c.-al-fine",
     "title": "7. La Navidad",
     "section": "D.C. al Fine",
-    "text": "D.C. al Fine\n\n← Jingle Bell Rock Merry Christmas Bells →",
+    "text": "D.C. al Fine\n\n\n\n\n← Jingle Bell Rock Merry Christmas Bells →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",

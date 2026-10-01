@@ -1,34 +1,52 @@
 ---
 title: "7. La Navidad"
-body-classes: lyrics
+body-classes: lyrics has-chords
 ---
 
-## Verse 1
+## Verse
 
-La Navidad.  
-Todos celebramos\!  
-La Navidad.  
-Let us celebrate\!  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">La Navi</span><span class="cw"><span class="ch">G</span>dad.</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Todos cele</span><span class="cw"><span class="ch">C</span>bramos!</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">La Navi</span><span class="cw"><span class="ch">D</span>dad.</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Let us cele</span><span class="cw"><span class="ch">G</span>brate!</span></span></span>
+:::
 
-## Verse 1
+## Verse
 
-La Navidad.  
-Todos celebramos\!  
-La Navidad.  
-Let us celebrate\!  
+::: {.cline}
+<span class="ln"><span class="nb"><span class="cw">La Navi</span><span class="cw"><span class="ch">G</span>dad.</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Todos cele</span><span class="cw"><span class="ch">C</span>bramos!</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">La Navi</span><span class="cw"><span class="ch">D</span>dad.</span></span></span>
+<span class="ln"><span class="nb"><span class="cw">Let us cele</span><span class="cw"><span class="ch">G</span>brate!</span></span></span>
+:::
 
 ## Chorus
 
-*Bringing peace.*  
-*Trayendo paz*  
-*Singing joy to the world*  
-*Todo el mundo\!*  
+::: {.cline}
+<span class="ln"><span class="cw"><span class="ch">C</span>Bringing </span><span class="cw"><span class="ch">D</span>peace.</span></span>
+<span class="ln"><span class="nb"><span class="cw">Tra</span><span class="cw"><span class="ch">G</span>yendo </span></span><span class="cw"><span class="ch">C</span>paz</span></span>
+<span class="ln"><span class="cw"><span class="ch">D</span>Singing </span><span class="cw"><span class="ch">D7</span>joy to the world</span></span>
+<span class="ln"><span class="cw">Todo el mundo!</span></span>
+:::
 
 ## Fine
 
+::: {.cline}
+
+:::
+
 ## Interlude
 
+::: {.cline}
+
+:::
+
 ## D.C. al Fine
+
+::: {.cline}
+
+:::
 
 ::: {.songnav}
 [&larr; Jingle Bell Rock](jingle-bell-rock.qmd){.nav-prev}
