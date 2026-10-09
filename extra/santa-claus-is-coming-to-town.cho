@@ -1,12 +1,38 @@
 {title: Santa Claus is Coming to Town}
+{tempo: 132}
+{style: swing}
 
-{comment: Chorus}
+# What the band plays. Each P: line names the section of the page whose bars
+# follow; the order and the repeats are the page's own.
+{start_of_abc: band}
+X:3
+T:Santa Claus is Coming to Town
+M:4/4
+L:1/4
+K:A
+P:Verse 1
+"A"z4 | "D"z4 | "A"z4 | "D"z4 |
+"A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |
+P:Verse 2
+"A"z4 | "D"z4 | "A"z4 | "D"z4 |
+"A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | "A7"z4 |
+P:Bridge
+"A7"z4 | "D"z4 | "A7"z4 | "D"z4 |
+"B7"z4 | "E"z4 | "B7"z4 | "E"z2 "E7"z2 |
+P:Interlude
+"A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |
+P:Outro
+"A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |
+"A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |]
+{end_of_abc}
+
+{comment: Verse 1}
 Oh, you [A]better watch out
 You [D]better not cry
 You [A]better not pout I'm [D]telling you why
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town
 
-{comment: Verse}
+{comment: Verse 2}
 He's [A]making a list
 And he's [D]checking it twice
 He's [A]gonna find out who's [D]naughty or nice
@@ -18,17 +44,6 @@ He [A7]knows when you're a[D]wake
 He [B7]knows if you've been [E]bad or good
 So be [B7]good for goodness [E]sake [E7]
 
-{comment: Chorus}
-Oh, you [A]better watch out
-You [D]better not cry
-You [A]better not pout I'm [D]telling you why
-[A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town
-
-{comment: Interlude}
-
-{comment: D.C. al Coda}
-
-{comment: Coda}
-[A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!
+{comment: Outro}
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!

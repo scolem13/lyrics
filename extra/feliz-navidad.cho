@@ -1,6 +1,14 @@
 {title: Feliz Navidad}
+{tempo: 148}
+{time: 4/4}
+{key: D}
+{style: strum}
 
 {comment: Verse}
+# Eight bars. The words start on the second beat of the D bars.
+{start_of_grid}
+| D | Em7 | A7 | D | Bm7 | Em7 | A7 | D |
+{end_of_grid}
 Feliz Navidad[Em7] [A7]
 Feliz Navidad[D] [Bm7]
 Feliz Navidad[Em7]
@@ -13,12 +21,18 @@ Feliz Navidad[Em7]
 Próspero [A7]año y felici[D]dad
 
 {comment: Chorus}
+{start_of_grid}
+| D | Em7 | A7 | D | Bm7 | Em7 | A7 | D |
+{end_of_grid}
 *I wanna wish you a [Em7]Merry Christmas[A7]*
 *I wanna wish you a [D]Merry Christmas[Bm7]*
 *I wanna wish you a [Em7]Merry Christmas*
 *From the [A7]bottom of my [D]heart.*
 
 {comment: Interlude}
+{start_of_grid}
+| D | Em7 | A7 | D | Bm7 | Em7 | A7 | D |
+{end_of_grid}
 
 {comment: Verse}
 Feliz Navidad[Em7] [A7]

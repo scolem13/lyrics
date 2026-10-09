@@ -9,7 +9,9 @@
   --chord-font: "CommitMono", ui-monospace, "SF Mono", Menlo, monospace;
   --chord-weight: 400;
   --chord-size: 1em;
-  --chord-colour: #0d6efd;
+  --chord-colour: #b4531f;
+  /* The chord the band is playing now. */
+  --chord-now: #0d6efd;
 }
 
 body { font-size: 1.15rem; }
@@ -44,7 +46,7 @@ body.lyrics #quarto-content.page-columns {
     [body-content-start] minmax(0, 1fr)
     [body-content-end] 0.4rem
     [body-end] 0.25rem
-    [body-end-outset] minmax(110px, 170px)
+    [body-end-outset] minmax(130px, 200px)
     [page-end-inset] 0rem
     [page-end screen-end-inset] 0.4rem [screen-end];
 }
@@ -342,6 +344,58 @@ body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }
   font-variant-numeric: tabular-nums;
 }
 @media print { .type-panel { display: none; } }
+
+/* The band (band.html): its buttons are the section buttons; the choices
+   under them are small, like the type pickers. */
+.band-panel button:disabled { color: #adb5bd; cursor: default; }
+.band-panel button[aria-pressed="true"] { border-color: #0d6efd; background: rgba(13, 110, 253, .08); }
+.band-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  font-size: .8rem;
+  color: #6c757d;
+}
+.band-field select,
+.band-field input {
+  font: inherit;
+  max-width: 68%;
+  min-width: 0;
+  padding: .15rem .3rem;
+  color: #212529;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+}
+.band-field input { width: 4.5rem; }
+.band-more { font-size: .8rem; color: #6c757d; }
+.band-more summary { cursor: pointer; padding: .2rem 0; }
+.band-more .band-field { margin-top: .35rem; }
+/* The margin holds a long list on song pages. Its own scrollbar took a strip
+   off an already narrow column; keep it thin and give the column more room. */
+body.lyrics #quarto-margin-sidebar { scrollbar-width: thin; }
+/* The chord the band is on. Heavier by a stroke, not by weight: a bold face
+   is wider, and its neighbours must not move. */
+body.chords .ch.now {
+  color: var(--chord-now);
+  -webkit-text-stroke: .045em var(--chord-now);
+}
+/* Words alone: the words under the chord the band has just struck light up
+   and fade back over a second. */
+@keyframes carol-flash { from { color: var(--chord-now); } }
+body:not(.chords) .cw.flash { animation: carol-flash 1s ease-out; }
+@media (prefers-reduced-motion: reduce) { body:not(.chords) .cw.flash { animation-duration: .01s; } }
+/* A click on a chord plays from there. */
+body.chords main.content .ch { cursor: pointer; }
+.band-field input[type=text] { width: 100%; max-width: 68%; }
+/* Panels that fold: the title is the handle. */
+.section-buttons-title.folds { cursor: pointer; user-select: none; }
+.section-buttons-title.folds::before { content: "\25BE\00a0"; }
+.folded > .section-buttons-title.folds::before { content: "\25B8\00a0"; }
+.folded > :not(.section-buttons-title) { display: none !important; }
+.folded { margin-bottom: .5rem; }
+@media print { .band-panel { display: none; } }
 
 /* The pedal, arriving over MIDI. */
 .midi-panel {

@@ -63,6 +63,10 @@ body-classes: lyrics has-chords
 <span class="ln"><em><span class="cw">From the </span><span class="cw"><span class="ch">A7</span>bottom of my </span><span class="cw"><span class="ch">D</span>heart.</span></em></span>
 :::
 
+```{=html}
+<script type="application/json" id="band-chart">{"sections": [{"name": "Verse", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}]}, {"name": "Verse", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}], "from": "Verse"}, {"name": "Chorus", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}]}, {"name": "Interlude", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}]}, {"name": "Verse", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}], "from": "Verse"}, {"name": "Verse", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}], "from": "Verse"}, {"name": "Chorus", "bars": [{"c": ["D"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}, {"c": ["Bm7"]}, {"c": ["Em7"]}, {"c": ["A7"]}, {"c": ["D"]}], "from": "Chorus"}], "tempo": "148", "time": "4/4", "key": "D", "style": "strum"}</script>
+```
+
 ::: {.songnav}
 [&larr; Twelve Days of Christmas](twelve-days-of-christmas.qmd){.nav-prev}
 [We Wish You a Merry Christmas &rarr;](we-wish-you-a-merry-christmas.qmd){.nav-next}

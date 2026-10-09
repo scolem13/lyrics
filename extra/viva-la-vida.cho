@@ -1,5 +1,19 @@
 {title: Viva la Vida}
 
+# What the band plays: four bars that go round under the whole song.
+{start_of_abc: band}
+X:1
+T:Viva la Vida
+M:4/4
+L:1/4
+Q: 138
+% Style: piano ballad
+K:Db
+"Db"z4 | "Eb"z4 | "Ab"z4 | "Fm"z4 |]
+{end_of_abc}
+# A line of words is two bars of it; in the last interlude and the outro, four.
+{bars_per_line: 2}
+
 {comment: Intro}
 [Db][Ebadd11][Ab][Fm][x2]
 
@@ -56,6 +70,7 @@ Never an [Db]honest [Ebadd11]word
 But that was [Cm]when I ruled the [Fm]world
 
 {comment: Interlude}
+{bars_per_line: 4}
 [Db][Fm][x3]
 [Ebadd11][Ebadd11]
 Oh[Db]hhhh[Ebadd11]h Oh[Ab]hhhh[Fm]h
@@ -72,5 +87,6 @@ Never an [Db]honest [Ebadd11]word
 But that was [Cm]when I ruled the [Fm]world
 
 {comment: Outro}
+{bars_per_line: 4}
 [Db]Oooo[Ebadd11]oh [Cm]Ooooo[Fm]oh
 [Db]Oooo[Ebadd11]oh [Cm]Ooooo[Fm]oh

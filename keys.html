@@ -144,6 +144,9 @@
       button.type = 'button';
       button.textContent = labels[n].text;
       button.addEventListener('click', function () {
+        // While the band is playing, a click asks the band to go there; the
+        // words follow when it does.
+        if (band('goto', n)) { button.blur(); return; }
         heads.forEach(function (head) { head.taken = false; });
         focus(n);
         send({ kind: 'section', index: n });
@@ -206,6 +209,13 @@
       if (message.path && message.path !== location.pathname) {
         applying = true;
         location.href = message.path;
+      }
+      return;
+    }
+    if (message.kind === 'chord' && message.path === location.pathname) {
+      // The chord the band is on, in the window that is playing it.
+      if (window.carolBand && window.carolBand.lightAt) {
+        window.carolBand.lightAt(message.head, message.n);
       }
       return;
     }
@@ -314,7 +324,54 @@
     send(message);
   }
 
+  // The band (band.html), when it is playing, may take a move for itself:
+  // holding a section, j and the pedal tell the band to move on, and the
+  // words change when the band gets there.
+  function band(what, arg) {
+    var b = window.carolBand;
+    try { return !!(b && b.intercept && b.intercept(what, arg)); }
+    catch (e) { return false; }
+  }
+
+  // The song from top to bottom as j would walk it: each stop is a section
+  // and the da capos read before reaching it. This is the order the band
+  // plays in, so the rules here are the rules in step() below.
+  function road() {
+    var out = [], taken = [], repeating = false, n = 0, guard = 0;
+    while (n < heads.length && guard++ < 1000) {
+      var h = heads[n];
+      if (repeating && h.interlude) { n++; continue; }
+      if (h.dacapo) {
+        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = 0; }
+        else n++;
+        continue;
+      }
+      if (h.fine) { if (repeating) break; n++; continue; }
+      out.push({ head: n, taken: taken.slice() });
+      n++;
+    }
+    return out;
+  }
+
+  window.carolSong = {
+    road: road,
+    count: function () { return heads.length; },
+    send: function (message) { send(message); },
+    section: function (n) { return heads[n] ? heads[n].section : null; },
+    at: function () { return at; },
+    // Put this window, and the linked one, on a stop of the road.
+    show: function (stop) {
+      if (!stop || !heads[stop.head]) return;
+      heads.forEach(function (h, n) { h.taken = stop.taken.indexOf(n) >= 0; });
+      focus(stop.head);
+      var message = { kind: 'section', index: stop.head, reset: true };
+      if (stop.taken.length) message.dacapo = stop.taken[stop.taken.length - 1];
+      send(message);
+    }
+  };
+
   function step(dir) {
+    if (band('step', dir)) return;
     var base = at < 0 ? nearest() : at;
     var repeating = heads.some(function (h) { return h.taken; });
     var i;
@@ -414,6 +471,29 @@
     }
   }
 
+  // A panel that folds under its title. Folded until asked for, and it stays
+  // the way it was left; the keys work either way.
+  function folds(box, name) {
+    var head = box.querySelector('.section-buttons-title');
+    if (!head) return;
+    var key = 'carols-fold-' + name, open = false;
+    try { open = localStorage.getItem(key) === 'open'; } catch (e) {}
+    head.classList.add('folds');
+    head.setAttribute('role', 'button');
+    head.tabIndex = 0;
+    function set(on) {
+      open = on;
+      box.classList.toggle('folded', !open);
+      head.setAttribute('aria-expanded', String(open));
+      try { localStorage.setItem(key, open ? 'open' : 'shut'); } catch (e) {}
+    }
+    head.addEventListener('click', function () { set(!open); });
+    head.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { set(!open); e.preventDefault(); e.stopPropagation(); }
+    });
+    set(open);
+  }
+
   // Buttons under the section list, for clicking or tapping a whiteboard.
   if (heads.length) {
     var sidebar = document.getElementById('quarto-margin-sidebar');
@@ -421,6 +501,7 @@
       var panel = document.createElement('div');
       panel.className = 'section-buttons';
       panel.innerHTML = '<div class="section-buttons-title">Section Navigation</div>';
+      folds(panel, 'nav');
       var specs = [['Previous', 'k', function () { step(-1); }],
                    ['Next', 'j', function () { step(1); }],
                    ['Beginning', 'g', toBeginning]];
@@ -452,8 +533,9 @@
         type.className = 'type-panel';
         var typeTitle = document.createElement('div');
         typeTitle.className = 'section-buttons-title';
-        typeTitle.textContent = 'Type';
+        typeTitle.textContent = 'Display style';
         type.appendChild(typeTitle);
+        folds(type, 'type');
 
         var saved = window.carolTypeChoice();
         function remember(kind, value) {

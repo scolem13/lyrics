@@ -3,7 +3,7 @@ title: "3. Santa Claus is Coming to Town"
 body-classes: lyrics has-chords
 ---
 
-## Chorus
+## Verse 1
 
 ::: {.cline}
 <span class="ln"><span class="cw">Oh, you </span><span class="cw"><span class="ch">A</span>better watch out</span></span>
@@ -12,7 +12,7 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town</span></span>
 :::
 
-## Verse
+## Verse 2
 
 ::: {.cline}
 <span class="ln"><span class="cw">He&#x27;s </span><span class="cw"><span class="ch">A</span>making a list</span></span>
@@ -30,34 +30,16 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="cw">So be </span><span class="cw"><span class="ch">B7</span>good for goodness </span><span class="cw"><span class="ch">E</span>sake </span><span class="cw bare"><span class="ch">E7</span></span></span>
 :::
 
-## Chorus
-
-::: {.cline}
-<span class="ln"><span class="cw">Oh, you </span><span class="cw"><span class="ch">A</span>better watch out</span></span>
-<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">D</span>better not cry</span></span>
-<span class="ln"><span class="cw">You </span><span class="cw"><span class="ch">A</span>better not pout I&#x27;m </span><span class="cw"><span class="ch">D</span>telling you why</span></span>
-<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town</span></span>
-:::
-
-## Interlude
-
-::: {.cline}
-
-:::
-
-## D.C. al Coda
-
-::: {.cline}
-
-:::
-
-## Coda
+## Outro
 
 ::: {.cline}
 <span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
 <span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
-<span class="ln"><span class="cw"><span class="ch">A</span>Santa </span><span class="cw"><span class="ch">F#m</span>Claus is </span><span class="cw"><span class="ch">Bm7</span>coming </span><span class="cw"><span class="ch">E7</span> to </span><span class="cw"><span class="ch">A</span>town!</span></span>
 :::
+
+```{=html}
+<script type="application/json" id="band-chart">{"sections": [{"name": "Verse 1", "abc": "M:4/4\nL:1/4\nK:A\n\"A\"z4 | \"D\"z4 | \"A\"z4 | \"D\"z4 |\n\"A\"z2 \"F#m\"z2 | \"Bm7\"z2 \"E7\"z2 | \"A\"z4 | z4 |"}, {"name": "Verse 2", "abc": "M:4/4\nL:1/4\nK:A\n\"A\"z4 | \"D\"z4 | \"A\"z4 | \"D\"z4 |\n\"A\"z2 \"F#m\"z2 | \"Bm7\"z2 \"E7\"z2 | \"A\"z4 | \"A7\"z4 |"}, {"name": "Bridge", "abc": "M:4/4\nL:1/4\nK:A\n\"A7\"z4 | \"D\"z4 | \"A7\"z4 | \"D\"z4 |\n\"B7\"z4 | \"E\"z4 | \"B7\"z4 | \"E\"z2 \"E7\"z2 |"}, {"name": "Outro", "abc": "M:4/4\nL:1/4\nK:A\n\"A\"z2 \"F#m\"z2 | \"Bm7\"z2 \"E7\"z2 | \"A\"z4 | z4 |\n\"A\"z2 \"F#m\"z2 | \"Bm7\"z2 \"E7\"z2 | \"A\"z4 | z4 |]"}], "tempo": "132", "time": "4/4", "key": "A", "style": "swing", "setup": {"v": 1, "name": "Santa Claus Backing Style", "tempo": 132, "style": "swing", "unlock": true, "feel": "swing", "bass": "two", "groove": "auto", "rhythm": "auto+charleston+garland+offbeats+ballSync", "mix": {}, "voicing": "standard+shell+drop3", "fields": {"bt-fills": "sections", "bt-hold": "through", "bt-bass-sound": "upright", "bt-comp": "piano", "bt-vmove": "move", "bt-ext": "0", "bt-variation": "0.6", "bt-boom": "35", "bt-stops": "", "bt-lift": "", "bt-half": "", "bt-figs": "always", "bt-timefeel": "normal", "bt-timeparts": "bass drums", "bt-intro": "none", "bt-intro-bars": "4", "bt-countin": "1", "bt-choruses": "1", "bt-ride": "ride", "bt-ride-sound": "ride", "bt-roman": "off", "bt-chartfor": "concert", "bt-start": "1", "bt-cyc-from": "1", "bt-cyc-to": "4", "bt-step-a": "8", "bt-step-b": "", "bt-vol-bass": "100", "bt-vol-comp": "100", "bt-vol-drums": "100", "bt-kit-kick": "100", "bt-kit-snare": "100", "bt-kit-hat": "100", "bt-kit-ride": "53", "bt-kit-crash": "53", "bt-kit-toms": "100"}, "checks": {"bt-push": false, "bt-intro-nodrums": false, "bt-ext-six": true, "bt-ext-nine": true, "bt-ext-thirteen": true, "bt-cyc-on": false, "bt-step-on": false}}}</script>
+```
 
 ::: {.songnav}
 [&larr; Winter Wonderland](winter-wonderland.qmd){.nav-prev}

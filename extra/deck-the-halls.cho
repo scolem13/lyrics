@@ -1,4 +1,8 @@
 {title: Deck The Halls}
+{tempo: 112}
+{time: 4/4}
+{key: D}
+{style: carol}
 
 {comment: Intro}
 {start_of_abc}
@@ -9,6 +13,13 @@ K:D
 {end_of_abc}
 
 {comment: Verse 1}
+# The band's bars, two to a line of words. Verse 2 plays the same.
+{start_of_grid}
+| D | Bm | A7 . D . | A . D . |
+| D | Bm | A7 . D . | A . D . |
+| A7 | D | D . Bm . | A E7 A . |
+| D | Bm | G . D . | A7 . D . |
+{end_of_grid}
 [D]Deck the halls with [Bm]boughs of holly
 [A7]Fa-la-la-la-[D]la, la-[A]la, la, [D]la
 [D]’Tis the season [Bm]to be jolly
@@ -45,6 +56,14 @@ K:D
 {end_of_abc}
 
 {comment: Verse 3}
+# As the other verses, with the last two bars three times.
+{start_of_grid}
+| D | Bm | A7 . D . | A . D . |
+| D | Bm | A7 . D . | A . D . |
+| A7 | D | D . Bm . | A E7 A . |
+| D | Bm | G . D . | A7 . D . |
+| G . D . | A7 . D . | G . D . | A7 . D . |
+{end_of_grid}
 [D]Fast away the [Bm]old year passes -
 [A7]Fa-la-la-la-[D]la, la-[A]la, la, [D]la
 [D]Hail the new, ye [Bm]lads and lasses

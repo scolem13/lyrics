@@ -107,8 +107,8 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#chorus",
-    "href": "songs/santa-claus-is-coming-to-town.html#chorus",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#verse-1",
+    "href": "songs/santa-claus-is-coming-to-town.html#verse-1",
     "title": "3. Santa Claus is Coming to Town",
     "section": "",
     "text": "Oh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
@@ -119,11 +119,11 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#verse",
-    "href": "songs/santa-claus-is-coming-to-town.html#verse",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#verse-2",
+    "href": "songs/santa-claus-is-coming-to-town.html#verse-2",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "Verse",
-    "text": "Verse\n\nHe's Amaking a list And he's Dchecking it twice He's Agonna find out who's Dnaughty or nice ASanta F#mClaus is Bm7coming E7 to Atown",
+    "section": "Verse 2",
+    "text": "Verse 2\n\nHe's Amaking a list And he's Dchecking it twice He's Agonna find out who's Dnaughty or nice ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -143,47 +143,11 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#chorus-1",
-    "href": "songs/santa-claus-is-coming-to-town.html#chorus-1",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#outro",
+    "href": "songs/santa-claus-is-coming-to-town.html#outro",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "Chorus",
-    "text": "Chorus\n\nOh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "3. Santa Claus is Coming to Town"
-    ]
-  },
-  {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#interlude",
-    "href": "songs/santa-claus-is-coming-to-town.html#interlude",
-    "title": "3. Santa Claus is Coming to Town",
-    "section": "Interlude",
-    "text": "Interlude",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "3. Santa Claus is Coming to Town"
-    ]
-  },
-  {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#d.c.-al-coda",
-    "href": "songs/santa-claus-is-coming-to-town.html#d.c.-al-coda",
-    "title": "3. Santa Claus is Coming to Town",
-    "section": "D.C. al Coda",
-    "text": "D.C. al Coda",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "3. Santa Claus is Coming to Town"
-    ]
-  },
-  {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#coda",
-    "href": "songs/santa-claus-is-coming-to-town.html#coda",
-    "title": "3. Santa Claus is Coming to Town",
-    "section": "Coda",
-    "text": "Coda\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n← Winter Wonderland Frosty the Snowman →",
+    "section": "Outro",
+    "text": "Outro\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n\n← Winter Wonderland Frosty the Snowman →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -686,7 +650,7 @@
     "href": "songs/deck-the-halls.html#verse-3",
     "title": "1. Deck The Halls",
     "section": "Verse 3",
-    "text": "Verse 3\n\nDFast away the Bmold year passes - A7Fa-la-la-la-Dla, la-Ala, la, Dla DHail the new, ye Bmlads and lasses A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Sing we joyous Dall together DFa-la-la-Bmla-la, la-Ala, E7la, Ala DHeedless of the Bmwind and weather – (GFa-la-la-la-Dla, la-A7la, la, Dla - 3 times)\n\n\n← Programme Winter Wonderland →",
+    "text": "Verse 3\n\nDFast away the Bmold year passes - A7Fa-la-la-la-Dla, la-Ala, la, Dla DHail the new, ye Bmlads and lasses A7Fa-la-la-la-Dla, la-Ala, la, Dla A7Sing we joyous Dall together DFa-la-la-Bmla-la, la-Ala, E7la, Ala DHeedless of the Bmwind and weather – (GFa-la-la-la-Dla, la-A7la, la, Dla - 3 times)\n\n\n\n← Programme Winter Wonderland →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -782,7 +746,7 @@
     "href": "songs/feliz-navidad.html#chorus-1",
     "title": "11. Feliz Navidad",
     "section": "Chorus",
-    "text": "Chorus\n\nI wanna wish you a Em7Merry ChristmasA7 I wanna wish you a DMerry ChristmasBm7 I wanna wish you a Em7Merry Christmas From the A7bottom of my Dheart.\n\n\n← Twelve Days of Christmas We Wish You a Merry Christmas →",
+    "text": "Chorus\n\nI wanna wish you a Em7Merry ChristmasA7 I wanna wish you a DMerry ChristmasBm7 I wanna wish you a Em7Merry Christmas From the A7bottom of my Dheart.\n\n\n\n← Twelve Days of Christmas We Wish You a Merry Christmas →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1446,7 +1410,7 @@
     "href": "songs/viva-la-vida.html#outro",
     "title": "2. Viva la Vida",
     "section": "Outro",
-    "text": "Outro\n\nDbOoooEbadd11oh CmOooooFmoh DbOoooEbadd11oh CmOooooFmoh\n\n\n← End of Beginning Programme →",
+    "text": "Outro\n\nDbOoooEbadd11oh CmOooooFmoh DbOoooEbadd11oh CmOooooFmoh\n\n\n\n← End of Beginning Programme →",
     "crumbs": [
       "Programme",
       "Winter Concert",
@@ -1566,7 +1530,7 @@
     "href": "songs/jingle-bell-rock.html#second-ending",
     "title": "6. Jingle Bell Rock",
     "section": "Second Ending",
-    "text": "Second Ending\n\nGGiddy-up, Gmaj7jingle horse, G6pick up your Gfeet Jingle around E7the clock CMix and Cmmingle in a A7jinglin’ Cmbeat AmThat’s the jingle bell, D7that’s the jingle bell AmThat’s the D7jingle bell Grock!\n\n\n← O Hanukkah La Navidad →",
+    "text": "Second Ending\n\nGGiddy-up, Gmaj7jingle horse, G6pick up your Gfeet Jingle around E7the clock CMix and Cmmingle in a A7jinglin’ Cmbeat AmThat’s the jingle bell, D7that’s the jingle bell AmThat’s the D7jingle bell Grock!\n\n\n\n← O Hanukkah La Navidad →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
