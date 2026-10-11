@@ -48,6 +48,10 @@ body-classes: lyrics has-chords
 
 :::
 
+```{=html}
+<script type="application/json" id="band-source">{"slug": "la-navidad", "title": "La Navidad", "cho": "{title: La Navidad}\n\n{comment: Verse}\nLa Navi[G]dad.\nTodos cele[C]bramos!\nLa Navi[D]dad.\nLet us cele[G]brate!\n\n{comment: Verse}\nLa Navi[G]dad.\nTodos cele[C]bramos!\nLa Navi[D]dad.\nLet us cele[G]brate!\n\n{comment: Chorus}\n[C]Bringing [D]peace.\nTra[G]yendo [C]paz\n[D]Singing [D7]joy to the world\nTodo el mundo!\n\n{comment: Fine}\n\n{comment: Interlude}\n\n{comment: D.C. al Fine}\n"}</script>
+```
+
 ::: {.songnav}
 [&larr; Jingle Bell Rock](jingle-bell-rock.qmd){.nav-prev}
 [Merry Christmas Bells &rarr;](merry-christmas-bells.qmd){.nav-next}

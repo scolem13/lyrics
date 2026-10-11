@@ -516,3 +516,32 @@ body.chords .ibar .ch {
   line-height: 1.15;
 }
 
+
+/* Tapping in the bars (tap.html): the result, along the bottom of the window. */
+.tap-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1050;
+  background: #fff; border-top: 2px solid #0d6efd; padding: .5rem .75rem .75rem;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, .15);
+}
+.tap-sheet-bar { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-bottom: .4rem; }
+.tap-sheet-bar button { font-size: .85rem; padding: .15rem .6rem; border: 1px solid #ced4da; border-radius: .25rem; background: #fff; }
+.tap-sheet-bar button[aria-pressed="true"] { border-color: #0d6efd; background: rgba(13, 110, 253, .08); }
+.tap-sheet-note { font-size: .8rem; color: #6c757d; }
+.tap-sheet textarea { width: 100%; height: 34vh; font: .8rem/1.35 ui-monospace, Menlo, monospace; white-space: pre; }
+
+/* Teacher view (teacher.html): what a student is not shown. */
+html:not(.teacher) .teacher-only { display: none !important; }
+.teacher-flag {
+  position: fixed; left: .5rem; bottom: .4rem; z-index: 5;
+  font-size: .7rem; color: #6c757d; text-decoration: none;
+  background: rgba(255, 255, 255, .85); padding: .05rem .35rem; border-radius: .25rem;
+}
+.teacher-flag:hover { color: #0d6efd; }
+/* Another version of the changes (band.html): a chord that differs from the
+   written one, and the note about the version. */
+.ch.alt { color: #b3541e; }
+.ch.held { opacity: .35; }
+.band-version { width: 100%; font-size: .8rem; margin-top: .3rem; }
+.band-version select { width: 100%; font-size: .8rem; }
+.band-version-note { font-size: .76rem; line-height: 1.35; color: #495057; margin-top: .3rem; white-space: pre-line; }
+@media print { .teacher-flag { display: none; } }

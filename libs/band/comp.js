@@ -34,8 +34,10 @@
 // (ctx.nextStop) does not push into it and lets nothing ring over the barline.
 //
 // Set patterns (GRID): rhythms that sit on the changes with no anticipations and repeat exactly:
-// boom-chick, driving eighths, every off-beat, bossa, tango, montuno, cha-cha and two arpeggios (single
-// notes of the voicing; those events carry arp:true). A two-bar pattern follows the form bar's parity.
+// boom-chick, driving eighths, every off-beat, bossa, tango, montuno, cha-cha, two arpeggios and two
+// fingerpicking patterns (single notes of the voicing; those events carry arp:true). A two-bar pattern follows the form bar's parity.
+// Several voicing styles ("a+b" in ctx.opts.voicing) are shared out by ctx.opts.voicingMix ({ id: 0..1 }, unlisted = 0.5) when the
+// shares differ: each new chord is voiced in one of them. With equal shares they are drawn on as before.
 // Several rhythms ("a+b+c" in ctx.opts.compRhythm): the one-bar figures among them are mixed bar by bar;
 // "four", "stabs" and the set patterns are textures, and one of them (or the figures) is chosen for
 // each four-bar phrase.
@@ -80,6 +82,10 @@
   var GRID = {
     oompah:  { bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2) h.push([b, "S"]); return h; } },
     eighths: { bars: everyEighth, quiet: true },
+    // The waltz in one: the left hand's root on 1 and light chords on 2 and 3, the third beat the lighter. The bars go
+    // in fours the way the beats of a bar of 12/8 do (bar 1 leans, bar 3 leans a little, 2 and 4 are let go), and the
+    // last bar of a phrase grows into the next. In other meters it is boom-chick.
+    waltz:   { waltz: true, bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2) h.push([b, "S"]); return h; } },
     // The piano ballad (balladBar): left-hand octaves on the root, the right hand a first-inversion triad broken
     // into its top pair and its thumb. F = the whole right hand, P = its top two notes, T = the thumb (lowest
     // note), M = the middle note, H = the top note. mix: when several are chosen they change bar by bar.
@@ -126,6 +132,12 @@
     g33433:   { bars: [ [[0, "L"], [1.5, "L"], [3, "L"]], [[1, "L"], [2.5, "L"]] ] },                  // 3+3+4+3+3 eighths
     g3x8:     { bars: [ [[0, "S"], [0.75, "S"], [1.5, "S"], [2.25, "S"], [3, "S"], [3.75, "S"]],       // eight threes then four twos, in sixteenths
                         [[0.5, "S"], [1.25, "S"], [2, "S"], [2.5, "S"], [3, "S"], [3.5, "S"]] ] },
+    // Fingerpicking, after John Prine (pickBar). The thumb is not written here: it plays every beat on the low strings. The
+    // entries are the fingers on the treble strings: M the lowest of them, H the next, T the top string.
+    // prine: a pinch with the thumb on 2 and 4 (2 and 3 of a waltz) and the string below it on the and after.
+    // travis: a pinch on 1, then between the thumb's notes: the and of 2, the and of 3, the and of 4.
+    prine:   { pick: true, bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2){ h.push([b, "H"]); h.push([b + 0.5, "M"]); } return h; } },
+    travis:  { pick: true, bars: function (beats){ var h = [[0, "H"]]; for (var b = 1; b < beats; b++) h.push([b + 0.5, b % 2 ? "M" : "H"]); return h; } },
     alberti: { bars: everyEighth, arp: "alberti" },                                                   // low, high, middle, high
     arp:     { bars: everyEighth, arp: "wave" },
     arp2:    { bars: everyEighth, arp: "pair" }
@@ -140,6 +152,21 @@
   }
   function sigOf(chords){ return (chords || []).map(function (c){ return c.pos + "=" + c.chord.key; }).join(","); }
   function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
+  // How a set pattern is shaped, beyond its own accents (first written for the quarter notes):
+  //   phraseDyn  the four-bar phrase swells towards its third bar, and its last bar grows into the next phrase
+  //   leanDyn    the bar leans on beat 1 (and a little on 3 in four); the other beats are let go. Off-beats are left alone.
+  //   spread     loud and soft move further apart as the band plays harder (ctx.intensity), around `mid`
+  function heatOf(ctx){ return ctx.intensity == null ? 0.5 : ctx.intensity; }
+  function phraseDyn(ctx, pos){
+    var qp = ((ctx.phrase && ctx.phrase.bar) || 0) % 4, beats = ctx.beats || 4;
+    return [0, 0.015, 0.035, 0.005][qp] + (qp === 3 ? 0.05 * (pos / Math.max(1, beats - 1)) : 0);
+  }
+  function leanDyn(ctx, pos, k){
+    var beats = ctx.beats || 4, b = Math.round(pos); if (Math.abs(pos - b) > 1e-6) return 0;
+    var lean = b === 0 ? 0.055 : beats === 4 && b === 2 ? 0.015 : beats % 2 === 0 && b % 2 ? -0.045 : -0.035;
+    return lean * (0.8 + 0.6 * heatOf(ctx)) * (k == null ? 1 : k);
+  }
+  function spread(ctx, v, mid){ return mid + (v - mid) * (0.8 + 0.4 * heatOf(ctx)); }
   // instrument + voicing style from the page options (unknown style -> that instrument's default)
   function setup(opts){
     var H = global.BandHarmony, inst = (opts && opts.comp === "guitar") ? "guitar" : "piano";
@@ -151,7 +178,7 @@
     var figs = list.filter(isFig), tex = list.filter(isTexture), r = list.length === 1 ? list[0] : list.length ? list.join("+") : (opts && opts.compRhythm);
     var mv = opts && opts.voiceMove;
     return { inst: inst, style: style, four: r === "four", stabs: r === "stabs", grid: GRID[r] ? r : null, figs: figs, tex: tex, pins: (opts && opts.pins) || null, rhythm: r,
-             move: mv === "move" || mv === "passing", passing: mv === "passing", weights: (opts && opts.rhythmMix) || null,
+             move: mv === "move" || mv === "passing", passing: mv === "passing", weights: (opts && opts.rhythmMix) || null, vweights: (opts && opts.voicingMix) || null,
              ext: (opts && opts.extend && opts.extend.amount > 0) ? opts.extend : (opts && opts.maj6) ? { amount: 1, six: true } : null };
   }
   // the beat where the chord sounding at `pos` started (the chord list is in beat order)
@@ -178,6 +205,12 @@
       var H = global.BandHarmony, pin = pinOf(su, key);
       chord = tint(chord, su);
       var id = pin ? "pin|" + pin.join(",") : chord.key + "|" + su.style + "|" + su.inst;
+      // several voicing styles with unequal shares (opts.voicingMix: { id: 0..1 }): each new chord takes one of them, as likely as its share
+      var vparts = su.vweights ? String(su.style).split("+") : [];
+      if (!pin && vparts.length > 1 && vparts.some(function (x){ return vShare(su, x) !== vShare(su, vparts[0]); })){
+        if (st.vKey !== id || !st.vOne){ st.vKey = id; st.vOne = byWeight(vparts, su.vweights); }
+        su = Object.assign({}, su, { style: st.vOne });
+      }
       st.wasPassing = false;
       if (pin){ st.prevV = pin.slice(); st.lastKey = id; track(su); return st.prevV; }
       var same = id === st.lastKey && st.prevV && st.prevV.length;
@@ -223,6 +256,7 @@
     // Several styles ticked ("a+b"). Moving voicings draw on every shape of all of them. With "hold" the
     // shapes never change on a held chord, so each new chord takes one of the styles in turn instead,
     // which is how all of them get heard.
+    function vShare(su, x){ var w = su.vweights[x]; return w == null ? 0.5 : Math.max(0, +w || 0); }
     function oneOf(su){
       var parts = String(su.style).split("+");
       if (parts.length < 2 || su.move) return su.style;
@@ -563,7 +597,7 @@
           if (mode === "late" && i === 1 && w !== "F" && w !== "P") ms = [notes[role.root]];                 // the root arrives on its own
           else ms = w === "F" ? cur : w === "P" ? cur.slice(-2) : w === "T" ? [cur[0]] : w === "H" ? [cur[cn - 1]] : [cur[Math.max(0, cn - 2)]];
           var on = h.pos === Math.floor(h.pos), base = w === "F" ? 0.58 : w === "P" ? 0.50 : 0.42;
-          var e = { pos: h.pos, dur: Math.min(sg.end - h.pos - 0.03, ms.length > 1 ? 8 : 2), midis: ms, vel: clamp(base + (h.pos === 0 ? 0.03 : on ? 0 : -0.02) + (rng() - 0.5) * 0.05, 0.4, 0.7), of: ck };
+          var e = { pos: h.pos, dur: Math.min(sg.end - h.pos - 0.03, ms.length > 1 ? 8 : 2), midis: ms, vel: clamp(base + (h.pos === 0 ? 0.03 : on ? 0 : -0.02) + phraseDyn(ctx, h.pos) + (rng() - 0.5) * 0.05, 0.4, 0.74), of: ck };
           if (w !== "F" || tense || ms.join() !== v.join()) e.arp = true;         // (a piece of the voicing, or an ornament: not the chord's voicing for the hand-off)
           out(e.arp ? e : grip(e));
         });
@@ -600,11 +634,87 @@
       return ev;
     }
 
+    // Fingerpicking (GRID patterns marked pick), after John Prine: a steady thumb and one or two fingers, single notes
+    // of the chord shape, nothing strummed.
+    //   Thumb: every beat, a little damped. The root as each chord arrives, then an inner string (the 4th; the 3rd
+    //     under a D shape), the alternate bass, and the inner string again. The alternate bass is the fifth below the
+    //     root where the guitar has one (the low G under C, the open A under D, the open E under A); under a shape
+    //     rooted on the 6th string it is the 5th string (6-4-5-4). In three the thumb plays root, inner, inner, and a
+    //     chord held into the next bar starts that bar on its alternate bass. In 6/8 and 12/8 it is root and alternate
+    //     bass on the beats, with two finger notes after each.
+    //   Fingers: the pattern's entries, on the strings above the thumb's, ringing until the chord changes.
+    //   The strings come from the guitar's grip (the "open" voicing style is the one this is written for). Any other
+    //     voicing, or a pin, is picked by pitch: lowest note, next note, the rest. On the piano the thumb is the left
+    //     hand: the root below the chord and its fifth, with the chord's lowest note as the inner string.
+    //   With opts.variation > 0 a pinch sometimes takes the top string, a note between the beats is sometimes left
+    //     out or changes string, and beat 1 sometimes gets a pinch of its own.
+    function pickBar(ctx, su, g){
+      var H = global.BandHarmony, ev = [], beats = ctx.beats, lift = !!(H.lifted && H.lifted(ctx)), amount = Math.max(0, Math.min(1, +(ctx.opts && ctx.opts.variation) || 0));
+      var three = !ctx.compound && Math.round(beats) % 2 === 1, cyc = ctx.compound ? ["B", "A"] : three ? ["B", "I", "I"] : ["B", "I", "A", "I"], fing = [], b;
+      function pc(n){ return ((n % 12) + 12) % 12; }
+      if (ctx.compound) for (b = 0; b < beats; b++){ fing.push([b + 1 / 3, "M"]); fing.push([b + 0.5, "H"]); }
+      else fing = g.bars(beats).filter(function (h){ return h[0] < beats - 1e-6; });
+      function out(pos, midi, vel, dur, ck, thumb){
+        var on = Math.abs(pos - Math.round(pos)) < 1e-6;
+        var e = { pos: pos, dur: Math.round(Math.max(0.12, Math.min(dur, beats - pos)) * 1000) / 1000, midis: [midi], inst: su.inst, of: ck, arp: true,
+                  vel: Math.round(clamp((spread(ctx, vel + (thumb && on ? leanDyn(ctx, pos, 0.5) : 0), 0.52) + phraseDyn(ctx, pos) + (rng() - 0.5) * 0.04) * (lift ? 1.09 : 1), 0.36, 0.76) * 1000) / 1000 };
+        if (thumb && su.inst === "piano") e.hand = "L";
+        if (Math.abs(pos * 2 - Math.round(pos * 2)) > 1e-6) e.straight = true;
+        ev.push(e);
+      }
+      var segs = []; (ctx.chords || []).forEach(function (c, k){ if (!c.chord || c.chord.nc) return; segs.push({ start: c.pos, end: k + 1 < ctx.chords.length ? ctx.chords[k + 1].pos : beats, chord: c.chord }); });
+      segs.forEach(function (sg){
+        var chord = sg.chord, ck = ctx.index + ":" + sg.start, pin = pinOf(su, ck);
+        pick(chord, su, ck); var v = (st.prevV || []).slice().sort(function (x, y){ return x - y; }), n = v.length; if (!n) return;
+        var grip = su.inst === "guitar" && !pin && H.gripOf ? H.gripOf(st.prevV) : null, f5 = chord.fifth != null ? chord.fifth : 7, B, I, A, tr;
+        if (grip && grip.length >= 3){                                  // by string (0 = the low E string)
+          var gs = grip.slice().sort(function (x, y){ return x.string - y.string; }), rs = gs[0].string, ii = 0;
+          for (var q = 1; q < gs.length - 1; q++) if (gs[q].string <= Math.max(2, rs + 1)) ii = q;
+          if (!ii) ii = 1;
+          B = gs[0].midi; I = gs[ii].midi; tr = gs.slice(ii + 1).map(function (x){ return x.midi; });
+          A = pc(B - chord.root) === 0 && B - (12 - f5) >= 40 ? B - (12 - f5) : ii > 1 ? gs[1].midi : B;
+        } else if (su.inst === "piano" && !pin){                        // the left hand under the chord
+          B = 41 + pc(chord.bass - 41); if (B > v[0] - 4) B -= 12; if (B < 36) B += 12;
+          A = chord.bass !== chord.root ? B : B - (12 - f5) >= 36 ? B - (12 - f5) : B + f5 < v[0] ? B + f5 : B;
+          I = v[0]; tr = v.slice(1);
+        } else {                                                        // by pitch
+          B = v[0]; I = n > 2 ? v[1] : v[0]; tr = n > 2 ? v.slice(2) : v.slice(1);
+          A = pc(B - chord.root) === 0 && B - (12 - f5) >= 40 ? B - (12 - f5) : B;
+        }
+        if (!tr.length) tr = [I];
+        var role = { M: tr[0], H: tr[Math.min(1, tr.length - 1)], T: tr[tr.length - 1] }, bass = { B: B, I: I, A: A }, bv = { B: 0.60, A: 0.56, I: 0.49 };
+        // the thumb: as the chord arrives, then on every beat
+        var times = [sg.start]; for (b = Math.floor(sg.start + 1e-6) + 1; b < sg.end - 1e-6 && b < beats; b++) times.push(b);
+        times.forEach(function (t, k){
+          var w = cyc[k % cyc.length];
+          if (three && k === 0 && sg.start === 0){ if (st.pkKey === chord.key && !st.pkAlt){ w = "A"; st.pkAlt = true; } else st.pkAlt = false; }
+          out(t, bass[w], bv[w], Math.min(0.9, (k + 1 < times.length ? times[k + 1] : sg.end) - t - 0.03), ck, true);
+        });
+        // the fingers
+        var mine = fing.filter(function (h){ return h[0] >= sg.start - 1e-6 && h[0] < sg.end - 1e-6; }).map(function (h){ return [h[0], h[1]]; });
+        if (amount > 0 && !ctx.compound && sg.start === 0 && !mine.some(function (h){ return h[0] === 0; }) && rng() < 0.15 * amount) mine.unshift([0, "T"]);
+        mine.forEach(function (h){
+          var pinch = times.indexOf(h[0]) >= 0, w = h[1];
+          if (amount > 0){ var r = rng();
+            if (pinch){ if (r < 0.25 * amount) w = "T"; }
+            else if (r < 0.12 * amount) return;
+            else if (r < 0.30 * amount) w = w === "M" ? "H" : "M"; }
+          if (pinch && role[w] === bass[cyc[times.indexOf(h[0]) % cyc.length]]) return;                    // (a small voicing: the thumb has that note)
+          out(h[0], role[w], pinch ? 0.53 : 0.46, Math.min(2.5, sg.end - h[0] - 0.03), ck, false);
+        });
+        st.pkKey = chord.key;
+      });
+      ev.sort(function (x, y){ return x.pos - y.pos; });
+      st.started = true; st.pushed = false;
+      return ev;
+    }
+
     // A set pattern (GRID): its hits exactly, each on the chord sounding there; every chord in the bar is heard.
     function gridBar(ctx, su){
       var H = global.BandHarmony, ev = [], tempo = ctx.tempo || 120, beats = ctx.beats, g = GRID[su.grid];
       st.antic = false; st.plan = null; st.queue = [];
       if (g.ballad) return balladBar(ctx, su, g);
+      if (g.pick) return pickBar(ctx, su, g);
       var pat = typeof g.bars === "function" ? g.bars(beats) : g.bars[ctx.index % g.bars.length];
       var hits = pat.filter(function (h){ return h[0] < beats - 1e-6; }).map(function (h){ return { pos: h[0], len: h[1], stroke: h[2], shift: h[3] || 0 }; });
       (ctx.chords || []).forEach(function (c, k){
@@ -613,7 +723,7 @@
         if (!hits.some(function (h){ return h.pos >= c.pos - 1e-6 && h.pos < e - 1e-6; })) hits.push({ pos: c.pos, len: g.strum || g.hold ? "L" : "S", stroke: g.strum ? "D" : undefined });
       });
       // a pushed chord: the next bar's chord on the last eighth, ringing over the barline; the bar after it starts late
-      var tied = st.pushed, lift = !!(H.lifted && H.lifted(ctx)), lhDone = {}, no5 = {}; st.pushed = false;
+      var tied = st.pushed, lift = !!(H.lifted && H.lifted(ctx)), lhDone = {}, no5 = {}, firstOf = {}; st.pushed = false;
       if (tied) hits = hits.filter(function (h){ return h.pos >= 0.5 - 1e-6; });
       if (H.pushes && H.pushes(ctx) && !g.arp && !g.exact && !g.tune){
         hits = hits.filter(function (h){ return h.pos < 3.5 - 1e-6; }); hits.push({ pos: 3.5, push: true }); st.pushed = true; }
@@ -634,6 +744,14 @@
       var fLen = ctx.length || (ctx.form && ctx.form.length) || 0, anyLift = !!(ctx.opts && ctx.opts.lift && ctx.opts.lift.length), seenP = {};
       var verse = !!g.punk && !ctx.intro && (anyLift ? !lift : (fLen >= 4 && ctx.index < fLen / 2));
       function power(chord, ck){ if (!g.punk || su.inst !== "guitar" || pinOf(su, ck)) return null; var lo = 40 + (((chord.root - 40) % 12) + 12) % 12, f5 = chord.fifth != null ? chord.fifth : 7; return [lo, lo + f5, lo + 12]; }
+      // the waltz's left hand: the root on 1 (an octave on the first bar of four), let go before the chords
+      if (g.waltz && beats === 3 && su.inst === "piano" && !tied){
+        var wc = H.chordAt(ctx.chords, 0), wk = keyAt(ctx.index, ctx.chords, 0);
+        if (wc && !wc.nc && !pinOf(su, wk)){
+          var wlo = 41 + (((wc.bass - 41) % 12) + 12) % 12, wb = (ctx.phrase && ctx.phrase.bar) || 0, wi = ctx.intensity == null ? 0.5 : ctx.intensity;
+          out({ pos: 0, dur: 0.85, midis: wb % 4 === 0 && wlo - 12 >= 36 ? [wlo - 12, wlo] : [wlo], vel: Math.round(clamp(0.54 + 0.08 * wi + [0.05, -0.02, 0.02, -0.03][wb % 4], 0.4, 0.74) * 1000) / 1000, inst: su.inst, of: wk, arp: true, hand: "L" });
+        }
+      }
       hits.forEach(function (h, i){
         if (h.push){
           var nk = (ctx.nextIndex != null ? ctx.nextIndex : ctx.index + 1) + ":0"; pick(ctx.nextChords[0].chord, su, nk); if (!st.prevV.length) return;
@@ -650,14 +768,14 @@
         if (g.arp){                                                     // one note of the voicing, left to ring to the chord change
           var m = v.length, per = Math.max(1, 2 * m - 2), w = slot % per, idx = g.arp === "pair" ? (slot % 2 ? m - 1 : 0) : g.arp === "alberti" ? [0, m - 1, Math.floor(m / 2), m - 1][slot % 4] : (w < m ? w : per - w);
           e = { pos: h.pos, dur: Math.round(Math.max(0.3, Math.min(1.5, changeAt - h.pos - 0.05)) * 1000) / 1000, midis: [v[idx]],
-                vel: Math.round(clamp((on ? 0.58 : 0.52) + (rng() - 0.5) * 0.05, 0.42, 0.68) * 1000) / 1000, inst: su.inst, of: ck, arp: true };
+                vel: Math.round(clamp(spread(ctx, (on ? 0.58 : 0.52) + leanDyn(ctx, h.pos, 0.5), 0.55) + phraseDyn(ctx, h.pos) + (rng() - 0.5) * 0.05, 0.4, 0.72) * 1000) / 1000, inst: su.inst, of: ck, arp: true };
           out(e); return;
         }
         if (g.punk){ var pw = power(chord, ck); if (pw) v = pw;
           if (verse){                                                   // the chug: every eighth a short muted downstroke, the full chord only as it arrives
             var firstP = !seenP[ck]; seenP[ck] = 1;
             e = { pos: h.pos, dur: 0.3, midis: firstP ? v.slice() : v.slice(0, 2), strum: "down", mute: true, inst: su.inst, of: ck,
-                  vel: Math.round(clamp((firstP ? 0.64 : on ? 0.58 : 0.5) + (rng() - 0.5) * 0.04, 0.4, 0.7) * 1000) / 1000 };
+                  vel: Math.round(clamp(spread(ctx, firstP ? 0.64 : on ? 0.58 : 0.5, 0.57) + phraseDyn(ctx, h.pos) + (rng() - 0.5) * 0.04, 0.38, 0.74) * 1000) / 1000 };
             if (!firstP) e.arp = true;
             out(firstP ? grip(e) : e); if (firstP) left(e, h, chord, ck, v, changeAt); return;
           }
@@ -666,15 +784,34 @@
           var up = h.stroke === "U", acc = g.accent ? g.accent.indexOf(h.pos) >= 0 : !up && on && Math.floor(h.pos) % 2 === 1;      // lean on 2 and 4 unless the pattern says otherwise
           var ring = Math.max(0.2, Math.min(nextPos, changeAt) - h.pos - 0.02);
           e = { pos: h.pos, dur: Math.round(ring * 1000) / 1000, midis: up ? v.slice(-Math.min(3, v.length)) : v.slice(), strum: up ? "up" : "down",
-                vel: Math.round(clamp((acc ? (up ? 0.62 : 0.67) : up ? 0.45 : 0.53) + (rng() - 0.5) * 0.04, 0.4, 0.72) * 1000) / 1000, inst: su.inst, of: ck };
+                vel: Math.round(clamp(spread(ctx, acc ? (up ? 0.62 : 0.67) : up ? 0.45 : 0.53, 0.57) + phraseDyn(ctx, h.pos) + (rng() - 0.5) * 0.04, 0.38, 0.76) * 1000) / 1000, inst: su.inst, of: ck };
           if (up) e.arp = true;                                         // (part of the shape: not the chord's voicing for the hand-off)
           out(up ? e : grip(e)); if (!up) left(e, h, chord, ck, v, changeAt); return;
         }
         var room = Math.min(nextPos, changeAt) - h.pos, dur = h.len === "S" ? Math.min(sLen, room - 0.05) : g.hold ? room - 0.04 : Math.min(2.5, room - 0.1);
         var vel = (g.quiet ? (on ? 0.56 : 0.48) : h.len === "L" ? 0.60 : 0.58) + (rng() - 0.5) * 0.06;
+        // the same shaping for the other patterns it suits (not the Latin ones or the tunes' own vamps, whose accents are the pattern)
+        if (g.quiet) vel = spread(ctx, vel + leanDyn(ctx, h.pos), 0.52) + phraseDyn(ctx, h.pos);          // driving eighths, triplets
+        else if (su.grid === "oompah") vel += phraseDyn(ctx, h.pos);                                       // (how hard it is hit is the boom-chick slider's)
+        else if (g.hold) vel += phraseDyn(ctx, h.pos) + leanDyn(ctx, h.pos, 0.5);                          // the hymn
+        // quarter notes are not all alike: the bar leans on its strong beats, the phrase swells towards its third bar and the
+        // last beats of a phrase grow into the next one; how far apart loud and soft are follows how hard the band is playing
+        if (su.grid === "quarters"){
+          var qb = Math.floor(h.pos + 1e-6), qI = ctx.intensity == null ? 0.5 : ctx.intensity, qp = (ctx.phrase && ctx.phrase.bar) || 0;
+          var lean = qb === 0 ? 0.055 : beats === 4 && qb === 2 ? 0.015 : beats % 2 === 0 && qb % 2 ? -0.045 : -0.035;
+          var swell = [0, 0.015, 0.035, 0.005][qp % 4];
+          var grow = qp % 4 === 3 ? 0.05 * (h.pos / Math.max(1, beats - 1)) : 0;
+          vel = 0.54 + 0.10 * qI + lean * (0.8 + 0.6 * qI) + swell + grow + (rng() - 0.5) * 0.04;
+          if (firstOf[ck] == null){ firstOf[ck] = 1; if (qb !== 0) vel += 0.03; }                  // a new chord inside the bar is placed
+        }
+        if (g.waltz && beats === 3){
+          var wp = (ctx.phrase && ctx.phrase.bar) || 0, wI = ctx.intensity == null ? 0.5 : ctx.intensity;
+          vel = (h.pos < 1.5 ? 0.50 : 0.45) + 0.08 * wI + [0.03, -0.02, 0.01, -0.03][wp % 4] + (wp % 4 === 3 && h.pos >= 1.5 ? 0.05 : 0) + (rng() - 0.5) * 0.03;
+          dur = Math.min(dur, ctx.tempo > 150 ? 0.42 : 0.55);
+        }
         // boom-chick strength (opts.boom, 0..1; 0.5 = as written): soft and a little longer, or short and hard
         if (su.grid === "oompah" && ctx.opts && ctx.opts.boom != null){ var bm = Math.max(0, Math.min(1, +ctx.opts.boom)); vel *= 0.72 + 0.56 * bm; dur = Math.min(room - 0.05, dur * (1.7 - 1.4 * bm)); }
-        e = { pos: h.pos, dur: Math.round(Math.max(0.12, dur) * 1000) / 1000, midis: v.slice(), vel: Math.round(clamp(vel, 0.42, 0.7) * 1000) / 1000, inst: su.inst, of: ck };
+        e = { pos: h.pos, dur: Math.round(Math.max(0.12, dur) * 1000) / 1000, midis: v.slice(), vel: Math.round(clamp(vel, su.grid === "quarters" || g.waltz || g.quiet ? 0.36 : 0.42, su.grid === "quarters" ? 0.78 : g.quiet || g.hold || su.grid === "oompah" ? 0.74 : 0.7) * 1000) / 1000, inst: su.inst, of: ck };
         // the piano's plain triads often go without their root or their fifth (opts.variation > 0; settled once for each chord; not in the hymn's four parts)
         var amt5 = Math.max(0, Math.min(1, +(ctx.opts && ctx.opts.variation) || 0));
         if (amt5 > 0 && su.inst === "piano" && su.style === "standard" && v.length === 3 && !g.hold && !h.shift && !pinOf(su, ck)){
@@ -702,5 +839,66 @@
     return { bar: bar, ending: ending, reset: reset };
   }
 
-  global.BandComp = { create: create, FIGURES: FIG, PHRASES: PHRASES, GRID: GRID };
+  // The organist's right foot and left hand: where the swell pedal sits and when the rotary speaker changes speed, bar by
+  // bar (ORGAN.md beside this file gives the reasons and the sources). The organ has no touch: all its dynamics are here.
+  //   organist(ctx, method, st) -> [{ pos (beats), ctl: "swell" | "leslie", value, glide (beats) }]
+  // ctx.opts.organ = { swell: "auto" | 0..1, leslie: "auto" | "slow" | "fast" | "stop" } (unset = both automatic). st is the
+  // caller's to keep between bars. No random numbers.
+  //   Swell: follows how hard the band is playing (about half open when it plays down, nearly open at full), a little more
+  //     in a chorus. The last bar of a four-bar phrase opens through the bar into the next one; the bar after settles back.
+  //     A stop bar is pulled back sharply after its chord. The last chord swells up and is let go.
+  //   Leslie: slow is home. Straight-eighth music: fast through the last bar of a phrase that leads into a chorus or the top
+  //     of the form, or that the band is playing hard; fast for the second half of the last bar of any other four-bar
+  //     phrase when one chord has been held for two bars or more (a flick: fast and straight back, so the horn is still
+  //     slowing as the next phrase starts). Swing: the speaker stays slow (jazz organists mostly leave it alone) except for
+  //     the last two bars of the form on the last chorus. Fast on the final chord.
+  function organist(ctx, method, st){
+    var o = (ctx.opts && ctx.opts.organ) || {}, out = [], beats = ctx.beats || 4, I = ctx.intensity == null ? 0.5 : ctx.intensity, H = global.BandHarmony;
+    var qp = ((ctx.phrase && ctx.phrase.bar) || 0) % 4, lift = !!(H && H.lifted && H.lifted(ctx)), swing = !!(ctx.opts && ctx.opts.feel !== "straight") && !ctx.compound;
+    var nextLift = !!(ctx.opts && ctx.opts.lift && ctx.opts.lift.indexOf && ctx.nextIndex != null && ctx.opts.lift.indexOf(ctx.nextIndex) >= 0 && !lift);
+    var toTop = ctx.nextIndex === 0 && ctx.length > 4 && !ctx.last, base = clamp(0.48 + 0.42 * I + (lift ? 0.07 : 0), 0.3, 0.97);
+    function push(pos, ctl, value, glide){ out.push({ pos: Math.round(pos * 1000) / 1000, ctl: ctl, value: value, glide: glide || 0 }); }
+    // the chord held: how many bars the first chord of this bar has now sounded
+    var c0 = ctx.chords && ctx.chords[0] && ctx.chords[0].chord, one = !!c0 && ctx.chords.length === 1, key = c0 ? c0.key : "";
+    st.held = one && st.heldKey === key ? (st.held || 1) + 1 : 1; st.heldKey = one ? key : "";
+    if (o.swell == null || o.swell === "auto"){
+      if (method === "ending"){ push(0, "swell", clamp(base + 0.15, 0, 1), 1.5); push(Math.min(2, beats - 0.5), "swell", 0.35, 2.5); }
+      else if (ctx.stop){ push(0, "swell", clamp(base + 0.08, 0, 1), 0.1); push(Math.min(0.6, beats / 2), "swell", clamp(base - 0.25, 0.2, 1), 0.3); }
+      else if (qp === 3 || nextLift){ push(0, "swell", base, 0.6); push(beats > 2 ? 1 : 0.5, "swell", clamp(base + (nextLift ? 0.16 : 0.1), 0, 1), beats - 1); }       // opening into the next phrase
+      else push(0, "swell", qp === 0 ? clamp(base - 0.03, 0, 1) : base, qp === 0 ? 1.5 : 1);
+    } else if (!st.swellSet || st.swellSet !== o.swell){ push(0, "swell", clamp(+o.swell || 0, 0, 1), 0.2); st.swellSet = o.swell; }
+    if (o.leslie == null || o.leslie === "auto"){
+      var want = "slow", back = null;
+      if (method === "ending") want = "fast";
+      else if (swing){ if (ctx.finalChorus && ctx.length - ctx.index <= 2) want = "fast"; }
+      else if (ctx.stop) want = "slow";
+      else if ((qp === 3 || nextLift) && (nextLift || toTop || I >= 0.66)) want = "fast";
+      else if (qp === 3 && st.held >= 2 && beats >= 3) back = Math.floor(beats / 2);                 // the flick on a held chord
+      if (back != null){ if (st.leslie !== "slow"){ push(0, "leslie", "slow"); } push(back, "leslie", "fast"); push(Math.min(beats - 0.25, back + 1.5), "leslie", "slow"); st.leslie = "slow"; }
+      else if (st.leslie !== want){ push(0, "leslie", want); st.leslie = want; }
+    } else if (st.leslie !== o.leslie){ push(0, "leslie", o.leslie); st.leslie = o.leslie; }
+    return out;
+  }
+
+  // A second chord player (the player's part "comp2"): another instance of the same part, playing ctx.opts.second
+  // ({ comp: "piano" | "guitar", compSound, compRhythm, voicing, voiceMove? }) on top of the band's other options.
+  // Silent, and drawing no random numbers, while opts.second is unset. It has its own fretting hand, takes no pins,
+  // no blend sliders and no unmarked extensions, and its events carry second:true.
+  function secondOpts(opts){
+    var s = opts && opts.second; if (!s || !s.comp) return null;
+    return Object.assign({}, opts, { voiceMove: "hold" }, s, { second: null, pins: null, rhythmMix: null, voicingMix: null, extend: null, maj6: false });
+  }
+  function createSecond(o){
+    var inner = create(o), H = global.BandHarmony;
+    function run(method, ctx){
+      var so = secondOpts(ctx && ctx.opts); if (!so) return [];
+      var c2 = Object.assign({}, ctx, { opts: so }), go = function (){ return inner[method](c2) || []; };
+      var evs = H && H.withHand ? H.withHand("second", go) : go();
+      evs.forEach(function (e){ if (e) e.second = true; });
+      return evs;
+    }
+    return { bar: function (ctx){ return run("bar", ctx); }, ending: function (ctx){ return run("ending", ctx); }, reset: function (){ inner.reset(); } };
+  }
+
+  global.BandComp = { create: create, organist: organist, createSecond: createSecond, secondOpts: secondOpts, FIGURES: FIG, PHRASES: PHRASES, GRID: GRID };
 })(typeof window !== "undefined" ? window : globalThis);

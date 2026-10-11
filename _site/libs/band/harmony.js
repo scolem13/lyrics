@@ -559,6 +559,12 @@
       var lc = libCands({ root: chord.root, intervals: chord.tones }, style, inst); if (lc.length) return lc; }
     return ownCands(chord, style);                     // (also the guitar's fallback when the library did not load)
   }
+  // A second guitarist has a hand of their own: fn runs with that player's last grip in place, and the first player's is put back after.
+  var hands = {}, curHand = "";
+  function withHand(id, fn){
+    var was = curHand; hands[was] = lastGrip; curHand = id; lastGrip = hands[id] || null;
+    try { return fn(); } finally { hands[id] = lastGrip; curHand = was; lastGrip = hands[was] || null; }
+  }
   function gripFor(prev){ return (prev && prev.length && lastGrip && lastGrip.key === prev.join(",")) ? lastGrip.strings : null; }
   function remember(best){ if (best && best.strings){ lastGrip = { key: best.midis.join(","), strings: best.strings }; grips[lastGrip.key] = best.strings; } }
 
@@ -765,7 +771,9 @@
       var f = ctx && ctx.opts && ctx.opts.timeFeel, who = ctx && ctx.opts && ctx.opts.timeFeelParts;
       // opts.halfBars (form bar indexes, in pairs 1+2, 3+4, ...): those bars are one step slower than the rest, the bass and drums changing and the chords answering
       var hb = ctx && ctx.opts && ctx.opts.halfBars;
-      if (hb && hb.indexOf && !ctx.intro && hb.indexOf(ctx.index) >= 0 && hb.indexOf(ctx.index % 2 ? ctx.index - 1 : ctx.index + 1) >= 0){ if (f === "double") f = "normal"; else if (f !== "half"){ f = "half"; who = "bass drums"; } }
+      var fm = ctx && ctx.form, mate = ctx ? (ctx.index % 2 ? ctx.index - 1 : ctx.index + 1) : 0;
+      function isHalf(k){ return (hb && hb.indexOf && hb.indexOf(k) >= 0) || !!(fm && fm[k] && fm[k].feel === "half"); }      // (or marked "^half time" in the chart)
+      if (ctx && !ctx.intro && isHalf(ctx.index) && isHalf(mate)){ if (f === "double") f = "normal"; else if (f !== "half"){ f = "half"; who = "bass drums"; } }
       var whoL = String(who == null ? "bass drums" : who).split(" "), f0 = f;
       if (name && whoL.indexOf(name) < 0) f = null;
       return { f: f, f0: f0, whoL: whoL, plain: (f !== "double" && f !== "half") || ctx.compound || ctx.stop || !ctx.chords || !ctx.chords.length };
@@ -801,6 +809,10 @@
       : parsed.bars.map(function (_, i){ return i; });
     var mN = parsed.meterN || parsed.beatsPerBar || 4, mD = parsed.meterD || 4;
     var unitL = (mN / mD) / (parsed.unitsPerBar || 1);              // the L: unit, in whole notes
+    // a section's own style: from the bar that names it to the next section (or the next "^style"; "^style none" ends it)
+    var styleAt = [], styleNow = null;
+    (parsed.bars || []).forEach(function (b, k){ if (b.section != null && b.section !== "") styleNow = null;
+      if (b.style) styleNow = /^(none|off|normal)$/i.test(b.style) ? null : b.style; styleAt[k] = styleNow; });
     var cache = {}, carry = null;
     function chordOf(sym){ return cache[sym] || (cache[sym] = parseChord(sym, transpose)); }
     // the notes of the key (K: field; a minor key = its natural minor), for parts that add neighbour notes
@@ -855,6 +867,8 @@
       if (bar.section != null && bar.section !== "") fbar.section = String(bar.section);      // P:Verse in the ABC: a section starts on this bar
       // a written melody for this bar (a page puts it on the parsed bar): [{ pos (beats), dur (beats), midi }]; the player plays it on the comping instrument
       if (bar.melody && bar.melody.length) fbar.melody = bar.melody.map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0) }; });
+      if (styleAt[bi]) fbar.style = styleAt[bi];                                              // "^style bossa" / %%style under a P: line: this section's own style
+      if (bar.feel) fbar.feel = bar.feel;                                                     // "^half time": felt in half time
       if (bar.stop) fbar.stop = true;                                                         // "^stop": stop time on this bar
       if (bar.fill) fbar.fill = bar.fill;                                                     // "^fill": the drummer fills at the end of it
       out.push(fbar);
@@ -934,6 +948,6 @@
     chordAt: chordAt, sameChord: sameChord, noteName: noteName, pcName: pcName, libChord: libChord,
     voicingClass: voicingClass, motion: motion, STYLES: STYLES,
     styleList: styleList, defaultStyle: defaultStyle, openShape: openShape, hasStyle: hasStyle, pinMap: pinMap, asPlayed: asPlayed, roman: roman, meterInfo: meterInfo,
-    candidates: candidates, toward: toward, peek: peek, gripOf: function (midis){ return gripFor(midis); }, sixthOf: sixthOf, asSixth: asSixth, colour: colour, feelPart: feelPart
+    candidates: candidates, toward: toward, peek: peek, gripOf: function (midis){ return gripFor(midis); }, withHand: withHand, sixthOf: sixthOf, asSixth: asSixth, colour: colour, feelPart: feelPart
   };
 })(typeof window !== "undefined" ? window : globalThis);

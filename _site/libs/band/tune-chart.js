@@ -82,10 +82,13 @@
     // A P: line in the body names the section that starts at the next bar (P:Verse, P:Chorus); it is kept as an inline [P:...]
     // field. (A P: line in the header, above K:, is the old "order of parts" field and is left alone.)
     // Every kept line remembers where it starts in the ABC, so a bar can say where it was written (bar.at; setMarks edits there).
-    var inBody = false, mLines = [], lineOff = 0;
+    // A %%style line under a P: line is that section's own style (%%style bossa nova); it is kept as the annotation "^style ...",
+    // which can also be written in a bar by hand. (A %%style line above the first P: is the whole tune's, and is the page's to read.)
+    var inBody = false, mLines = [], lineOff = 0, sawPart = false;
     abc.split("\n").forEach(function(l){ var t = l.trim(), at = lineOff; lineOff += l.length + 1;
       if (/^K:/.test(t)){ inBody = true; return; }
-      if (inBody && /^P:\s*\S/.test(t)){ mLines.push({ text: "[P:" + t.slice(2).trim().replace(/\]/g, "") + "]", at: -1 }); return; }
+      if (inBody && /^P:\s*\S/.test(t)){ sawPart = true; mLines.push({ text: "[P:" + t.slice(2).trim().replace(/\]/g, "") + "]", at: -1 }); return; }
+      if (inBody && sawPart && /^%%\s*style\s+\S/i.test(t)){ mLines.push({ text: '"^style ' + t.replace(/^%%\s*style\s+/i, "").replace(/"/g, "") + '"', at: -1 }); return; }
       if (t && !/^[A-Za-z]:/.test(t) && !/^%/.test(t)) mLines.push({ text: l, at: at }); });
     var music = mLines.map(function(x){ return x.text; }).join("\n").replace(/\\[ \t]*\n/g, function(m){ return new Array(m.length + 1).join(" "); });
     var mStart = [], mo = 0; mLines.forEach(function(x){ mStart.push(mo); mo += x.text.length + 1; });
@@ -125,6 +128,8 @@
         var fm = /^[\^_<>@]\s*(small|short|big|long)?\s*fill$/i.exec(s);                    // an annotation: "^fill", "^small fill", "^big fill"
         if (fm || /^[\^_<>@]\s*stop$/i.test(s)) (cur.marks = cur.marks || []).push({ kind: fm ? "fill" : "stop", from: srcOff(i), to: srcOff(e) + 1 });
         if (fm) cur.fill = !fm[1] ? "medium" : /^(small|short)$/i.test(fm[1]) ? "small" : "large";   // the drummer fills at the end of this bar
+        else if (/^[\^_<>@]\s*half(\s*time)?$/i.test(s)) cur.feel = "half";   // "^half time": this bar is felt in half time (in pairs: bars 1+2, 3+4, ...)
+        else if (/^[\^_<>@]\s*style\b/i.test(s)) cur.style = s.replace(/^[\^_<>@]\s*style\s*:?\s*/i, "").trim() || "none";   // "^style bossa": this bar and the rest of its section in that style
         else if (/^[\^_<>@]\s*stop$/i.test(s)) cur.stop = true;                               // "^stop": stop time on this bar
         else if (/^[A-G]/.test(s)) { cur.chords.push({ sym:s, onset:pos }); content = true; }
         else if (/^n\.?c\.?$/i.test(s)) { cur.chords.push({ sym:"N.C.", onset:pos, nc:true }); content = true; }

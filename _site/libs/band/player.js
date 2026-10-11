@@ -29,7 +29,7 @@
 //   player.setOpts(obj) setCountIn(n) setChoruses(n)
 //   player.setInstruments([names]) // the sample sets to have loaded (the page asks for the ones its menus need)
 //   player.setKitVolume(piece, v)  // fader for one kit piece, 0..1.5 (1 = as mixed); cfg.kit = { piece: v } to start with
-// Sounds: opts.bassSound "electric" plays the bass part on "ebass"; opts.compSound "epiano" plays
+// Sounds: opts.bassSound "electric" plays the bass part on "ebass"; opts.compSound (any sound of the comping instrument's family, BandSounds.family) e.g. "epiano" plays
 // piano comping on "epiano"; opts.rideSound "ride2" swaps the ride cymbal. The parts never know.
 // Stop time: opts.stops = [form bar index, ...]. On those bars ctx.stop is true (the band hits beat 1
 // and only the bass leads back in) and the bar before gets ctx.nextStop, so nothing rings across.
@@ -48,6 +48,10 @@
 //                                  // when there is no room left in this one. Returns "now" | "next" | null (not playing).
 // A melody: a page may put bar.melody = [{ pos, dur, midi }] (beats) on the bars of the parsed chart; it is played on the comping
 // instrument unless opts.melody === false (opts.melodyLevel 0..1).
+// A section's own style: a form bar may carry `style` (a BandCatalog style id or name; "^style bossa" or a %%style line under a
+// P: line in the ABC). Those bars are played with that style's line, rhythm, groove, feel, voicings and sounds in place of the
+// page's (styleOptsFor); everything else in opts still applies. opts.sectionOverrides ({ section index: options })
+// comes before that: a section listed there is played with those options and its style from the chart is not consulted. Its sample sets are loaded with the rest.
 // Fills and stops written in the chart ("^fill", "^stop") arrive on the form bars; see drums.js for opts.fills / opts.fillBars.
 //   BandPlayer.renderOffline({ parsed, tempo, transpose, choruses, countIn, opts, volumes,
 //                              seed, sampleRate, stems }) -> Promise<{ mix, stems? }>
@@ -63,13 +67,13 @@
 //   bass { pos, dur, midi, vel }   comp { pos, dur, midis, vel, inst? }   drums { pos, piece, vel, straight? }
 
 (function (global) {
-  var PARTS = ["bass", "comp", "drums"];
+  var PARTS = ["bass", "comp", "comp2", "drums"];        // comp2 = a second chord player (opts.second; silent without it)
   var LOOKAHEAD = 0.15, LOOKAHEAD_HIDDEN = 1.6;   // seconds scheduled ahead (more when the tab is hidden: timers get throttled)
   var TICK_MS = 25, START_DELAY = 0.12, RING = 3.0, GEN_MARGIN = 0.1;
-  var TRIM   = { bass: 1.0, comp: 1.0, drums: 1.0 };        // default balance at fader = 1 (tuned by measurement)
-  var SEND   = { bass: 0.02, comp: 0.16, drums: 0.11 };     // room-reverb send per part
-  var JITTER = { bass: 0.003, comp: 0.004, drums: 0.002 };  // random timing looseness, seconds
-  var LAY    = { bass: -0.006, comp: 0.008, drums: 0 };     // where each player sits: bass a touch ahead of the ride, comping behind it
+  var TRIM   = { bass: 1.0, comp: 1.0, comp2: 1.0, drums: 1.0 };        // default balance at fader = 1 (tuned by measurement)
+  var SEND   = { bass: 0.02, comp: 0.16, comp2: 0.16, drums: 0.11 };     // room-reverb send per part
+  var JITTER = { bass: 0.003, comp: 0.004, comp2: 0.004, drums: 0.002 };  // random timing looseness, seconds
+  var LAY    = { bass: -0.006, comp: 0.008, comp2: 0.010, drums: 0 };     // where each player sits: bass a touch ahead of the ride, comping behind it
 
   // The conductor: how hard the band is playing this bar (0..1, 0.5 = the plain pattern). It
   // builds over four choruses, lifts through the last four bars of each one, and peaks on a
@@ -84,8 +88,16 @@
     return clamp(0.5 + v * (arc - 0.5), 0, 1);
   }
   var STRUM = 0.010, VEL_JITTER = 0.06, WET = 0.55, MASTER = 1.0;
-  var SEED = { bass: 101, comp: 211, drums: 307, human: 401 };
+  var SEED = { bass: 101, comp: 211, comp2: 257, drums: 307, human: 401 };
 
+  // the options a bar of another style is played with (BandCatalog.sectionOpts): the page's, with that style's own on top
+  function styleOptsFor(name, base){ var C = global.BandCatalog; return C && C.sectionOpts ? C.sectionOpts(name, base) : null; }
+  function styleSounds(form, base){ var out = [], seen = {};
+    (form || []).forEach(function (b){ if (!b.style || seen[b.style]) return; seen[b.style] = 1;
+      var s = styleOptsFor(b.style, base); if (s) s.instruments.forEach(function (n){ if (out.indexOf(n) < 0) out.push(n); }); });
+    return out; }
+  // the sample set the second chord player needs, if there is one
+  function secondSound(opts){ var s = opts && opts.second; return s && s.comp ? (s.compSound || s.comp) : null; }
   function isStop(opts, idx, form){ var s = opts && opts.stops; return !!((form && form[idx] && form[idx].stop) || (s && s.indexOf && s.indexOf(idx) >= 0)); }
   // the chart's sections: a new one starts on every form bar that carries a name; none named = no sections
   function sectionsOf(form){
@@ -184,11 +196,14 @@
     this.tempo = c.tempo; this.spb = 60 / c.tempo; this.anchorL = 0; this.anchorT = 0;
     this.form = buildForm(c.parsed, c.transpose); this.sections = sectionsOf(this.form); this.arcs = sectionArcs(this.sections);
     this.advance = null; this.held = null; this.fillAsk = null; this.jump = null; this.lastInfo = null;   // hold mode and Fill now (see generate)
+    this.organ = {};                                              // the organist's memory, for each chord part played on an organ
     this.human = mulberry32(seed + SEED.human);
+    this.human2 = mulberry32(seed + SEED.human + 17);             // the second chord player's own, so the others are humanized the same with or without it
     this.parts = {};
     var self = this, G = { bass: global.BandBass, comp: global.BandComp, drums: global.BandDrums };
+    if (global.BandComp && global.BandComp.createSecond) G.comp2 = { create: global.BandComp.createSecond };
     var H = global.BandHarmony, wrap = (H && H.feelPart) || function (x){ return x; };                 // half time / double time (opts.timeFeel)
-    PARTS.forEach(function (p){ if (G[p] && G[p].create) self.parts[p] = wrap(G[p].create({ rng: mulberry32(seed + SEED[p]) }), p); });
+    PARTS.forEach(function (p){ if (G[p] && G[p].create) self.parts[p] = wrap(G[p].create({ rng: mulberry32(seed + SEED[p]) }), p === "comp2" ? "comp" : p); });
     this.nextL = 0; this.barNo = 0; this.chorus = 0; this.pass = 0; this.prev = null;
     var r0 = this.range(), sb = c.startBar | 0;
     this.formIdx = (sb < this.form.length && r0.has(sb)) ? sb : r0.from;   // first pass may start part-way in
@@ -271,10 +286,21 @@
     if (!evs) return;
     for (var i = 0; i < evs.length; i++){ var ev = evs[i];
       if (!ev || !(ev.pos >= 0) || ev.pos >= beats + 1e-6) continue;       // also drops NaN
-      this.pending.push({ part: part, ev: ev, L0: L0, compound: !!compound, unit: unit || 1 }); }
+      this.pending.push({ part: part, ev: ev, L0: L0, compound: !!compound, unit: unit || 1, o: this.nowOpts || null }); }
+  };
+  // the options of this bar: the page's, or its section's own style on top of them
+  // A page's own settings for a section come first (opts.sectionOverrides: { section index: options }, laid over the
+  // page's): they replace the section's style from the chart.
+  Session.prototype.barOpts = function (fb, idx){
+    var c = this.c, k = c.optsRev | 0, ov = c.opts && c.opts.sectionOverrides, si = ov && idx != null ? sectionAt(this.sections, idx) : -1;
+    if (!this.styleCache || this.styleCache.rev !== k) this.styleCache = { rev: k, map: {} };
+    var m = this.styleCache.map;
+    if (si >= 0 && ov[si]){ var key = "\u0000section " + si; if (!(key in m)) m[key] = Object.assign({}, c.opts, ov[si], { sectionOverrides: null, sectionStyle: "menus" }); return m[key]; }
+    if (!fb || !fb.style) return c.opts; if (!(fb.style in m)){ var s = styleOptsFor(fb.style, c.opts); m[fb.style] = s ? s.opts : c.opts; }
+    return m[fb.style];
   };
   Session.prototype.callParts = function (method, bctx, L0){
-    var self = this;
+    var self = this; this.nowOpts = bctx.opts && bctx.opts !== this.c.opts ? bctx.opts : null;
     var rec = { bar: bctx.bar, index: bctx.index, chorus: bctx.chorus, length: bctx.length, beats: bctx.beats, tempo: bctx.tempo,
                 meter: bctx.meter, compound: !!bctx.compound,
                 ending: method === "ending", chords: bctx.chords, opts: Object.assign({}, bctx.opts), parts: {} };
@@ -287,6 +313,16 @@
         evs.forEach(function (e){ if (e && e.vel != null) e.vel = Math.round(clamp(e.vel * dyn, 0.03, 1) * 1000) / 1000; });   // louder as the band builds
         rec.parts[p] = evs; self.collect(p, evs, L0, bctx.beats, bctx.compound, bctx.unit); }
       catch (e){ if (global.console) console.error("BandPlayer: " + p + "." + method + " failed", e); } });
+    // An instrument with a pedal and a switch (the tonewheel organ): where the swell sits and when the rotary speaker changes
+    // speed in this bar (BandComp.organist). Kept beside the notes as rec.parts.ctl and scheduled like them.
+    var S = global.BandSounds, C = global.BandComp;
+    if (S && S.getControl && C && C.organist) ["comp", "comp2"].forEach(function (p){
+      var o = bctx.opts || {}, snd = p === "comp" ? (o.compSound || o.comp) : (o.second && (o.second.compSound || o.second.comp));
+      if (!snd || !S.getTonebars(snd) || !rec.parts[p] || tacet.indexOf(p) >= 0) return;
+      var mine = self.organ[p] || (self.organ[p] = {}), cx = p === "comp2" ? Object.assign({}, bctx, { opts: Object.assign({}, o, { organ: (o.second && o.second.organ) || o.organ }) }) : bctx;
+      try { var cs = C.organist(cx, method, mine).map(function (e){ e.sound = snd; e.straight = true; return e; });
+        rec.parts.ctl = (rec.parts.ctl || []).concat(cs); self.collect("ctl", cs, L0, bctx.beats, bctx.compound, bctx.unit); }
+      catch (e){ if (global.console) console.error("BandPlayer: organist failed", e); } });
     if (this.barTap && !bctx.intro) this.barTap(rec);        // (the intro is not part of the log of choruses)                       // onBarEvents: the bar exactly as generated (notation / MIDI export)
     return rec;
   };
@@ -353,11 +389,12 @@
     }
     beats = fb.beats; var u = fb.unit || 1;                  // (u: this bar's beat against the tempo's beat, after a change of meter)
     var bctx = { bar: this.barNo, index: this.formIdx, length: form.length, chorus: this.chorus, beats: beats,
-      chords: fb.chords, nextChords: form[nextIdx].chords, tempo: this.tempo / u, unit: u, last: last, loopEnd: atEnd, opts: c.opts, form: form, nextIndex: nextIdx,
+      chords: fb.chords, nextChords: form[nextIdx].chords, tempo: this.tempo / u, unit: u, last: last, loopEnd: atEnd, opts: this.barOpts(fb, this.formIdx), form: form, nextIndex: nextIdx,
       meter: fb.meter, compound: !!fb.compound, stop: isStop(c.opts, this.formIdx, form), nextStop: !last && isStop(c.opts, nextIdx, form),
       fill: this.takeFill(), sectionEnd: sectionEnd,
       intensity: this.level(sec && c.opts.build !== false ? this.sectionLevel(si, this.formIdx, nextIdx) : intensityFor(cp, r.len, this.chorus, c.choruses, c.opts && c.opts.variation)),
       phrase: { bar: cp % 4, turnaround: r.len - 1 - cp < 2, top: this.formIdx === r.from } };
+    bctx.finalChorus = c.choruses > 0 && this.chorus >= c.choruses - 1;
     gi.ctx = bctx; gi.beats = beats; gi.unit = u; gi.compound = !!fb.compound;
     gi.rec = this.callParts("bar", bctx, L0);
     // The tune, where the chart's bar has one written out (fb.melody): on the comping instrument, through the comping fader.
@@ -415,10 +452,11 @@
   };
   // Hand one event to the sample bank: swing is already in L; add the human touches here.
   Session.prototype.fire = function (p, L){
-    var ev = p.ev, h = this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, dest = this.bus.ins[p.part];
+    if (p.part === "ctl"){ if (this.bank.control) this.bank.control(p.ev.sound, p.ev.ctl, p.ev.value, this.timeOf(L), (p.ev.glide || 0) * this.spb * (p.unit || 1)); return; }
+    var ev = p.ev, h = p.part === "comp2" ? this.human2 : this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, dest = this.bus.ins[p.part];
     var t = this.timeOf(L) + (LAY[p.part] + (h() + h() - 1) * JITTER[p.part]) * hz;
     var vel = clamp((ev.vel == null ? 0.7 : ev.vel) * (1 + (h() * 2 - 1) * VEL_JITTER * hz), 0, 1);
-    var o = this.c.opts || {};
+    var o = p.o || this.c.opts || {};
     if (ev.choke){ if (this.bank.choke) this.bank.choke(ev.choke, this.timeOf(L)); return; }
     if (p.part === "drums"){
       var piece = (ev.piece === "ride" && o.rideSound === "ride2") ? "ride2" : ev.piece, kv = this.c.kit && this.c.kit[ev.piece];
@@ -428,8 +466,9 @@
     else {
       var ms = (ev.midis || []).slice().sort(function (a, b){ return a - b; }), n = ms.length;
       var spread = h() * STRUM * hz, dur = (ev.dur || 0.4) * this.spb * (p.unit || 1);     // chords are rolled very slightly, low to high
-      var sound = ev.inst || "piano"; if (sound === "piano" && (o.compSound === "epiano" || o.compSound === "organ")) sound = o.compSound;
-      if (sound === "guitar" && (o.compSound === "aguitar" || o.compSound === "cguitar" || o.compSound === "dguitar")) sound = o.compSound;       // the guitar's voicings, another sound
+      var sound = ev.inst || "piano", S = global.BandSounds;
+      if (p.part === "comp2") o = Object.assign({}, o, { compSound: (o.second && o.second.compSound) || sound });        // the second player's own sound
+      if (o.compSound && o.compSound !== sound && S && S.family && S.family(o.compSound) === sound) sound = o.compSound;      // the same voicings on another sound of that family
       // a strum is a slower roll: low string first on a downstroke, high string first on an upstroke
       if (ev.strum){ spread = Math.min(0.028, 0.12 * this.spb) * (ev.strum === "up" ? 0.6 : 1) * hz; if (ev.strum === "up") ms.reverse(); }
       for (var i = 0; i < n; i++) this.bank.play(sound, ev.mute ? { midi: ms[i], vel: vel, dur: dur, cutoff: 1100 } : { midi: ms[i], vel: vel, dur: dur }, t + (n > 1 ? spread * i / (n - 1) : 0), dest);
@@ -443,9 +482,10 @@
     while (!this.done && this.nextL <= far) this.generate();
     if (hL > this.firedL) this.firedL = hL;
     var straight = this.c.opts && this.c.opts.feel === "straight";                 // straight eighths: no warp
-    var s = straight ? 0.5 : swingFor(this.tempo), keep = [];
+    var sw = swingFor(this.tempo), keep = [];
     for (var i = 0; i < this.pending.length; i++){
-      var p = this.pending[i], L = p.L0 + (p.ev.straight ? p.ev.pos : warp(p.ev.pos, p.compound ? 2 / 3 : s)) * (p.unit || 1);
+      var p = this.pending[i], s = (p.o ? p.o.feel === "straight" : straight) ? 0.5 : sw;      // (a bar in its section's own style has its own feel)
+      var L = p.L0 + (p.ev.straight ? p.ev.pos : warp(p.ev.pos, p.compound ? 2 / 3 : s)) * (p.unit || 1);
       if (L <= hL) this.fire(p, L); else keep.push(p);
     }
     this.pending = keep;
@@ -476,7 +516,7 @@
     return { parsed: cfg.parsed || null, tempo: clamp(+cfg.tempo || 120, 30, 400), transpose: cfg.transpose | 0,
       countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 2), choruses: Math.max(0, cfg.choruses | 0),
       opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, cfg.kit),
-      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, drums: v.drums == null ? 1 : v.drums },
+      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, drums: v.drums == null ? 1 : v.drums },
       intro: cfg.intro || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
       instruments: cfg.instruments || ["bass", "piano", "kit"], ahead: !!cfg.ahead };
   }
@@ -495,10 +535,14 @@
     function setState(s){ if (s === state) return; state = s; if (cfg.onState) cfg.onState(s); }
     function hidden(){ return typeof document !== "undefined" && document.hidden; }
 
+    // the sample sets to have: the page's, and those of any section played in a style of its own
+    function needed(){ var out = c.instruments.slice(), f = [], s2 = secondSound(c.opts); if (s2 && out.indexOf(s2) < 0) out.push(s2);
+      try { f = session ? session.form : global.BandHarmony.buildForm(c.parsed, c.transpose | 0); } catch (e){}
+      styleSounds(f, c.opts).forEach(function (n){ if (out.indexOf(n) < 0) out.push(n); }); return out; }
     function load(){                                            // the bank skips what it already has
-      var a = audio(), key = c.instruments.join(",");
+      var a = audio(), need = needed(), key = need.join(",");
       if (!loadP || loadP.key !== key){
-        loadP = a.bank.load(c.instruments, cfg.onLoadProgress).catch(function (e){ loadP = null; throw e; });
+        loadP = a.bank.load(need, cfg.onLoadProgress).catch(function (e){ loadP = null; throw e; });
         loadP.key = key;
       }
       return loadP;
@@ -555,7 +599,7 @@
       var a, my = ++token;
       try { a = audio(); } catch (e){ return Promise.reject(e); }
       if (a.ctx.state === "suspended") a.ctx.resume();          // inside the user gesture
-      if (!c.instruments.every(function (n){ return a.bank.has(n); })) setState("loading");
+      if (!needed().every(function (n){ return a.bank.has(n); })) setState("loading");
       return load().then(function (){ if (my !== token) return; begin(); },
                          function (e){ if (my === token) setState("idle"); throw e; });
     }
@@ -582,7 +626,7 @@
       setTranspose: function (n){ c.transpose = n | 0; if (session) session.refreshForm(); redo(); },
       setChart: function (parsed){ c.parsed = parsed; if (session) session.refreshForm(); redo(); },
       setVolume: function (part, v){ if (!(part in c.volumes)) return; c.volumes[part] = v; if (bus) bus.setVolume(part, v); },
-      setOpts: function (o){ Object.assign(c.opts, o); redo(); },
+      setOpts: function (o){ Object.assign(c.opts, o); c.optsRev = (c.optsRev | 0) + 1; redo(); },
       // Write the music a pass of the form ahead of the playing (cfg.ahead), so it can be shown before it sounds.
       // cfg.onRewind(barNo) says that the bars from barNo on were discarded and will come again through onBarEvents.
       setAhead: function (on){ c.ahead = !!on; },
@@ -624,7 +668,9 @@
     function one(volumes, tap){
       var ctx = new OAC(2, Math.ceil(seconds * rate), rate), bank = global.BandSounds.create(ctx);
       var cc = Object.assign({}, c, { volumes: volumes });
-      return bank.load(c.instruments).then(function (){
+      var need = c.instruments.slice(), s2 = secondSound(c.opts); if (s2 && need.indexOf(s2) < 0) need.push(s2);
+      try { styleSounds(global.BandHarmony.buildForm(c.parsed, c.transpose | 0), c.opts).forEach(function (n){ if (need.indexOf(n) < 0) need.push(n); }); } catch (e){}
+      return bank.load(need).then(function (){
         var s = new Session(ctx, bank, makeBus(ctx, volumes), cc, seed, tap);
         s.start(START_DELAY); s.pump(Infinity);
         return ctx.startRendering();
@@ -635,8 +681,8 @@
       result.mix = mix;
       if (!o.stems) return result;
       result.stems = {};
-      return PARTS.reduce(function (chain, p){
-        return chain.then(function (){ var solo = { bass: 0, comp: 0, drums: 0 }; solo[p] = c.volumes[p];
+      return PARTS.filter(function (p){ return p !== "comp2" || secondSound(c.opts); }).reduce(function (chain, p){
+        return chain.then(function (){ var solo = { bass: 0, comp: 0, comp2: 0, drums: 0 }; solo[p] = c.volumes[p];
           return one(solo).then(function (buf){ result.stems[p] = buf; }); });
       }, Promise.resolve()).then(function (){ return result; });
     });
@@ -653,7 +699,7 @@
     if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
     if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
     return a.bank.load([inst]).then(function (){
-      var t = a.ctx.currentTime + 0.03, roll = o.roll != null ? o.roll : (inst === "guitar" ? 0.045 : 0.012);
+      var t = a.ctx.currentTime + 0.03, roll = o.roll != null ? o.roll : (inst === "guitar" || (global.BandSounds.family && global.BandSounds.family(inst) === "guitar") ? 0.045 : 0.012);
       ms.forEach(function (m, i){ a.bank.play(inst, { midi: m, vel: o.vel == null ? 0.66 : o.vel, dur: o.dur || 1.6 }, t + (n > 1 ? roll * i / (n - 1) : 0), chordOut); });
     });
   }

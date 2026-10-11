@@ -58,7 +58,9 @@ format:
     include-after-body:
       - sidebar-toggle.html
       - nav-current.html
+      - teacher.html
       - keys.html
       - abc.html
       - midi.html
       - band.html
+      - tap.html

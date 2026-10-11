@@ -27,6 +27,10 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="nb"><span class="cw"><span class="ch">C</span>Je</span><span class="cw"><span class="ch">C7</span>sus </span></span><span class="cw">Lord </span><span class="cw"><span class="ch">F</span>at </span><span class="cw"><span class="ch">Dm</span>thy </span><span class="cw"><span class="ch">F</span>birth, </span><span class="cw"><span class="ch">C</span>Jesus </span><span class="cw"><span class="ch">F</span>Lord at thy birth.</span></span>
 :::
 
+```{=html}
+<script type="application/json" id="band-source">{"slug": "silent-night", "title": "Silent Night", "cho": "{title: Silent Night}\n\n{start_of_verse: Verse 1}\n[F]Silent night, Holy [C]night, [C7]All is [F]calm all is bright\n[A#]Round yon [F]virgin mother and [A#]child, Holy [F]infant so tender and mild\n[C]Sleep [C7]in heav[F]en[Dm]ly [F]peace, [C]sleep in [F]heavenly peace.\n{end_of_verse}\n\n{start_of_verse: Verse 2}\n[F]Silent night, Holy [C]night, [C7]Shepherds [F]quake at the sight\n[A#]Glories stream [F]from Heaven [A#]afar, heavenly [F]hosts sing Hallelujah\n[C]Christ [C7]the Sav[F]iour [Dm]is [F]born, [C]Christ the [F]Saviour is born.\n{end_of_verse}\n\n{start_of_verse: Verse 3}\n[F]Silent night, Holy [C]night, [C7]Son of [F]God love’s pure light\n[A#]Radiant beams [F]from thy holy [A#]face, With the [F]dawn of redeeming grace\n[C]Je[C7]sus Lord [F]at [Dm]thy [F]birth, [C]Jesus [F]Lord at thy birth.\n{end_of_verse}\n"}</script>
+```
+
 ::: {.songnav}
 [&larr; Programme](../index.qmd){.nav-prev}
 :::

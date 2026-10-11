@@ -66,6 +66,10 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="nb"><span class="cw"><span class="ch">G</span>(Goodbye, goodbye)</span><span class="cw bare"><span class="ch">N.C.</span></span></span></span>
 :::
 
+```{=html}
+<script type="application/json" id="band-source">{"slug": "end-of-beginning", "title": "End of Beginning", "cho": "{title: End of Beginning}\n\n{comment: Intro}\n[|][N.C.][|]\n\n{comment: Verse 1}\n[D] Just one more tear to cry\nOne teardrop from my [Bm]eye\nYou better [A]save it for\n[D] The middle of the night\nWhen things aren't black and... [Bm]white\n[Em] Enter, [A]Troubadour: \"[Em]Remember [A]24?\"\n\n{comment: Chorus}\n[Gmaj7] And when I'm [D]back in Chi[A]cago, I [Gmaj7]feel it\nAnother [Bm]version of [A]me, I was in [Gmaj7]it\nI wave good[D]bye to the [A]end of be[G]ginning\n\n{comment: Verse 2}\n[D] This song has started now\nAnd you're just finding[Bm] out\nNow isn't [A]that a laugh?\n[D] A major sacrifice, but clueless at the [Bm]time\n[Em] Enter, [A]Caroline: \"Just trust me, you'll be fine\"\n\n{comment: Chorus}\n[Gmaj7] And when I'm [D]back in Chi[A]cago, I [Gmaj7]feel it\nAnother [Bm]version of [A]me, I was in [Gmaj7]it\nI wave good[D]bye to the [A]end of be[G]ginning\n[G](Goodbye, goodbye)\n[G](Goodbye, goodbye)\n\n{comment: Bridge}\n[A] You take the man out of the city, not the ci[Bm]ty out the man\n[A] You take the man out of the city, not the ci[Bm]ty out the man\n[A] You take the man out of the city, not the ci[Bm]ty out the man\n[N.C.]You take the man out of the\n\n{comment: Chorus}\n[G] And when I'm [D]back in Chi[A]cago, I [G]feel it\nAnother [Bm]version of [A]me, I was [F#m7]in [G]it\nI wave good[D]bye to the [A]end of be[G]ginning\n[G](Goodbye, goodbye)[N.C.]\n"}</script>
+```
+
 ::: {.songnav}
 [&larr; Programme](../index.qmd){.nav-prev}
 [Viva la Vida &rarr;](viva-la-vida.qmd){.nav-next}

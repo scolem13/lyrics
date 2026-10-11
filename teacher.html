@@ -1,0 +1,28 @@
+<script>
+// Teacher view and student view, on one site. A student sees each song as it
+// is written. A teacher also gets what is marked `teacher-only`: the other
+// versions of a song's changes, and tapping in the bars.
+//
+// Nothing is secret -- this hides, it does not lock. The view is kept by the
+// browser: open any page with ?teacher=1 once to turn it on there, ?teacher=0
+// to turn it off. On this machine (localhost) it is on unless turned off.
+(function () {
+  var KEY = 'carols-teacher', kept = null;
+  var asked = /[?&]teacher(?:=([^&]*))?/.exec(location.search);
+  try {
+    if (asked) localStorage.setItem(KEY, /^(0|off|no)$/i.test(asked[1] || '') ? 'off' : 'on');
+    kept = localStorage.getItem(KEY);
+  } catch (e) {}
+  var local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var teacher = kept === 'on' || (kept !== 'off' && local);
+  document.documentElement.classList.toggle('teacher', teacher);
+  window.carolTeacher = teacher;
+  if (!teacher) return;
+  var link = document.createElement('a');
+  link.className = 'teacher-flag';
+  link.href = location.pathname + '?teacher=0';
+  link.textContent = 'Teacher view';
+  link.title = 'Students do not see the other versions or the tapping panel. Click to see the page as they do; add ?teacher=1 to any address to come back.';
+  document.body.appendChild(link);
+})();
+</script>

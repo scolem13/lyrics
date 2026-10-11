@@ -1,6 +1,12 @@
 {title: We Wish You a Merry Christmas}
+{tempo: 146}
+{time: 3/4}
 
 {start_of_verse: Verse 1}
+{start_of_grid}
+| Eb | Ab | F | Bb |
+| G7 | Cm | Ab . Bb | Eb |
+{end_of_grid}
 We [Eb]wish you a Merry [Ab]Christmas
 We [F]wish you a Merry [Bb]Christmas
 We [G7]wish you a Merry [Cm]Christmas
@@ -8,6 +14,10 @@ And a [Ab]Happy [Bb]New [Eb]Year!
 {end_of_verse}
 
 {start_of_chorus: Chorus}
+{start_of_grid}
+| Eb | Bb | Cm | Bb |
+| Eb | Gm | Ab . Bb | Eb |
+{end_of_grid}
 Good [Eb]tidings we [Bb]bring to [Cm]you and your [Bb]kin.
 We [Eb]wish you a merry [Gm]Christmas
 And a [Ab]Happy [Bb]New [Eb]Year!

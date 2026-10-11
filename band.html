@@ -12,6 +12,12 @@
 //             the band does.
 // Only the window where Play is pressed makes a sound; a linked window
 // follows the sections as it always has.
+//
+// A song may carry other versions of its changes (chart.versions, from the
+// {start_of_version} blocks of its file). In the teacher view they can be
+// chosen here, with v or in the Backing Track window; the band plays them and
+// the chords over the words are relabelled to match, as they are when the ABC
+// is edited in that window. A page always opens on the song as written.
 (function () {
   var data = document.getElementById('band-chart');
   var sidebar = document.getElementById('quarto-margin-sidebar');
@@ -54,7 +60,8 @@
   var meterN = +meter[1], meterD = +meter[2];
 
   function mark(bar) {
-    return (bar.stop ? '"^stop"' : '')
+    return (bar.feel === 'half' ? '"^half time"' : '')
+         + (bar.stop ? '"^stop"' : '')
          + (bar.fill ? '"^' + (bar.fill === 'small' ? 'small fill'
                              : bar.fill === 'large' ? 'big fill' : 'fill') + '"'
                      : '');
@@ -121,7 +128,7 @@
   var missing = [];
   var melodies = [];             // for each bar of the chart, its tune or null
 
-  function buildAbc() {
+  function buildAbc(version) {
     var heading = document.querySelector('h1.title');
     var lines = ['X:1', 'T:' + (heading ? heading.textContent.trim() : document.title), 'M:' + meterN + '/' + meterD,
                  'L:1/8', 'K:' + (chart.key || 'C')];
@@ -130,11 +137,21 @@
     melodies = [];
     stops.forEach(function (stop) {
       var part = chart.sections[stop.head], bars = [];
-      if (part && part.bars && part.bars.length) {
-        bars = part.bars.map(function (b) {
+      var other = version && version.sections[stop.head];
+      if (other || (part && part.bars && part.bars.length)) {
+        bars = (other || part.bars).map(function (b) {
           var m = barMeter(b);
           return { text: gridBar(b), n: m.n, d: m.d };
         });
+        // Another version's chords under the tune the section has written out.
+        if (other && part && part.abc) {
+          try {
+            var sung = tuneBars(part.abc);
+            if (sung.length === bars.length) {
+              bars.forEach(function (b, k) { b.melody = sung[k].melody; });
+            }
+          } catch (e) {}
+        }
       } else if (part && part.abc) {
         try { bars = tuneBars(part.abc); } catch (e) { bars = []; }
       }
@@ -144,6 +161,8 @@
         return;
       }
       lines.push('P:' + (part.name || 'Section'));
+      // A section's own style ({style: ...} under its heading in the song file).
+      if (part.style) lines.push('%%style ' + String(part.style).replace(/[\r\n]/g, ' '));
       // Four bars to a line: the Backing Track's chart draws a row for each.
       var texts = bars.map(function (b) {
         var change = '';
@@ -216,6 +235,21 @@
   var status = document.createElement('div');
   status.className = 'midi-status';
   panel.appendChild(status);
+
+  // Other versions of the changes: for the teacher only.
+  var versions = chart.versions || [], versionNow = null;
+  var versionWrap = document.createElement('label');
+  versionWrap.className = 'band-version teacher-only';
+  versionWrap.appendChild(document.createTextNode('Changes (v)'));
+  var versionBox = select([['', 'As written']].concat(versions.map(function (v) {
+    return [v.name, v.name];
+  })).concat([['*', 'Edited in the other window']]), '');
+  versionBox.lastChild.hidden = true;
+  versionWrap.appendChild(versionBox);
+  var versionNote = document.createElement('div');
+  versionNote.className = 'band-version-note';
+  versionWrap.appendChild(versionNote);
+  if (versions.length) panel.appendChild(versionWrap);
 
   var tempoBox = document.createElement('input');
   tempoBox.type = 'number';
@@ -298,7 +332,26 @@
   }
 
   function styleSetup() {
-    return window.BandCatalog.styleOpts(styleBox.value);
+    var so = window.BandCatalog.styleOpts(styleBox.value);
+    // the sounds of any section the setup gives settings of its own
+    sectionSetup().sounds.forEach(function (n) { if (so.instruments.indexOf(n) < 0) so.instruments.push(n); });
+    return so;
+  }
+  // What the setup keeps for single sections (set section by section on the
+  // Backing Track page): put on the sections of this chart that have those
+  // names, as the Backing Track itself does. Only while the setup's own
+  // style is the one chosen here.
+  function sectionSetup() {
+    var out = { map: {}, sounds: [] }, C = window.BandCatalog;
+    if (!setup || !Array.isArray(setup.sections) || styleBox.value !== setup.style || !C.placeSections || !form) return out;
+    var names = [];
+    form.forEach(function (b) { if (b.section != null || !names.length) names.push(b.section || ''); });
+    var put = C.placeSections(setup.sections, names);
+    Object.keys(put).forEach(function (k) {
+      out.map[k] = put[k].opts;
+      (put[k].sounds || []).forEach(function (n) { if (out.sounds.indexOf(n) < 0) out.sounds.push(n); });
+    });
+    return out;
   }
   // The setup saved on the Backing Track page and kept beside the song. The
   // band on this page takes what it understands of it; the Backing Track
@@ -313,6 +366,7 @@
       if (setup.rhythm) o.compRhythm = setup.rhythm;
       if (setup.voicing) o.voicing = setup.voicing;
     }
+    o.sectionOverrides = sectionSetup().map;
     o.fills = fillsBox.value;
     o.variation = 0.6;
     o.melody = tune;
@@ -351,7 +405,6 @@
           + '. Give each a {start_of_grid} in the song file.');
       return;
     }
-    var setup = styleSetup();
     var parsed = window.TuneChart.parse(abc);
     hasTune = melodies.some(function (m) { return m; });
     if (parsed.bars.length === melodies.length) {
@@ -361,6 +414,8 @@
     form = window.BandHarmony.buildForm(parsed, 0);
     starts = [];
     form.forEach(function (bar, i) { if (bar.section != null) starts.push(i); });
+    findSpots();
+    writtenAbc = abc;
     handlers = {
       onState: function (s) {
         playing = s === 'playing';
@@ -388,7 +443,7 @@
         tell();
       }
     };
-    var setup = styleSetup();
+    var sounds = styleSetup();
     here = window.BandPlayer.create({
       parsed: parsed,
       tempo: tempo(),
@@ -396,7 +451,7 @@
       choruses: 1,
       hold: hold,
       sectionLead: 1,
-      instruments: setup.instruments,
+      instruments: sounds.instruments,
       opts: bandOpts(),
       // The sampled cymbals ring loudly; this is the Backing Track's default.
       kit: { ride: 0.53, rideBell: 0.53, crash: 0.53 },
@@ -453,6 +508,14 @@
   function same(a, b) { return plain(a) === plain(b); }
   function writtenIn(stopIndex) {
     var stop = stops[stopIndex], box = stop ? song.section(stop.head) : null;
+    // The Twelve Days page has one verse for all its days: the day's chords
+    // are those of the opening and of the gifts sung so far.
+    if (stop && document.body.classList.contains('day-reveal')) {
+      return Array.prototype.filter.call(document.querySelectorAll('#verse .ch'), function (el) {
+        var gift = el.closest('.gift');
+        return !gift || +gift.getAttribute('data-day') <= stop.head + 1;
+      });
+    }
     return box ? Array.prototype.slice.call(box.querySelectorAll('.ch')) : [];
   }
   // The band strikes a chord: which written one is that? The next one only --
@@ -486,7 +549,27 @@
       barChords(i).forEach(function (c) { strike(c.chord.sym); });
     }
   }
+  // Under another version the names no longer tell the two lists apart (a
+  // held chord is written several times), so the place does: the written
+  // chord that falls in this bar at this chord's turn, or on this beat.
+  var changed = false;
+  function spotsAt(stopIndex, index) {
+    var head = stops[stopIndex] ? stops[stopIndex].head : -1, rel = index - starts[stopIndex];
+    return spots.filter(function (s) { return s.head === head && s.rel === rel; });
+  }
   function chordBeat(beat) {
+    if (nowBar && changed) {
+      var mine = spotsAt(nowBar.section, nowBar.index), now = barChords(nowBar.index);
+      now.forEach(function (c, k) {
+        if (c.pos !== beat) return;
+        var hit = null;
+        mine.forEach(function (s) {
+          if (now.length === s.count ? s.order === k : Math.abs(s.pos - beat) < 1e-6) hit = hit || s;
+        });
+        if (hit) light(hit.el);
+      });
+      return;
+    }
     if (!nowBar || !written.length) return;
     barChords(nowBar.index).forEach(function (c) {
       if (c.pos !== beat) return;
@@ -497,6 +580,10 @@
   // The bar of the band's chart in which a chord written over the words is
   // struck: the same matching, run silently from the top of its section.
   function barOf(el, stopIndex) {
+    if (changed) {
+      var at = spots.filter(function (s) { return s.el === el; })[0];
+      return starts[stopIndex] + (at ? at.rel : 0);
+    }
     var keep = [written, writtenAt, missed], found = -1;
     written = writtenIn(stopIndex); writtenAt = 0; missed = 0;
     var end = stopIndex + 1 < starts.length ? starts[stopIndex + 1] : form.length;
@@ -508,6 +595,135 @@
     written = keep[0]; writtenAt = keep[1]; missed = keep[2];
     return found < 0 ? starts[stopIndex] : found;
   }
+  // ---- other versions of the changes ----
+  // Where each written chord falls in the band's chart as written: its bar,
+  // and which chord of that bar it is. Another set of changes with the same
+  // bars is then shown over the words by putting, on each written chord, the
+  // chord it has in that place.
+  var spots = [], writtenAbc = null;
+  function findSpots() {
+    spots = [];
+    if (document.body.classList.contains('day-reveal')) return;
+    var seen = {}, keep = [written, writtenAt, missed];
+    stops.forEach(function (stop, k) {
+      if (seen[stop.head]) return;
+      seen[stop.head] = true;
+      written = writtenIn(k); writtenAt = 0; missed = 0;
+      var all = written;
+      var end = k + 1 < starts.length ? starts[k + 1] : form.length;
+      for (var i = starts[k]; i < end; i++) {
+        barChords(i).forEach(function (c, order, inBar) {
+          var el = strike(c.chord.sym);
+          if (el) spots.push({ el: el, text: el.textContent, head: stop.head,
+                               n: all.indexOf(el), bar: i, rel: i - starts[k], pos: c.pos,
+                               order: order, count: inBar.length, sym: c.chord.sym });
+        });
+      }
+    });
+    written = keep[0]; writtenAt = keep[1]; missed = keep[2];
+  }
+  // A written chord that the version turns into the chord before it is
+  // dimmed: nothing changes there.
+  function relabel() {
+    var list = [], last = null;
+    spots.forEach(function (s) {
+      var inBar = barChords(s.bar), to = null;
+      if (inBar.length === s.count) to = inBar[s.order];
+      else {
+        inBar.forEach(function (c) { if (c.pos <= s.pos + 1e-6) to = c; });
+        for (var i = s.bar - 1; !to && i >= 0; i--) {
+          var before = barChords(i);
+          if (before.length) to = before[before.length - 1];
+        }
+      }
+      var text = !to || to.chord.sym === s.sym ? s.text : to.chord.sym;
+      var held = text !== s.text && last && last.head === s.head && last.text === text;
+      last = { head: s.head, text: text };
+      if (s.el.textContent !== text) s.el.textContent = text;
+      s.el.classList.toggle('alt', text !== s.text);
+      s.el.classList.toggle('held', held);
+      list.push([s.head, s.n, text, text !== s.text, held]);
+    });
+    if (song.send) song.send({ kind: 'chords', list: list });
+  }
+  // Take a new set of changes for the same bars: the band here plays them and
+  // the chords over the words follow. False when the bars are not the same.
+  function adopt(abc) {
+    var parsed, next;
+    try {
+      parsed = window.TuneChart.parse(abc);
+      next = window.BandHarmony.buildForm(parsed, 0);
+    } catch (e) { return false; }
+    var begin = [];
+    next.forEach(function (bar, i) { if (bar.section != null) begin.push(i); });
+    if (next.length !== form.length || begin.join() !== starts.join()) {
+      say('Those changes do not have the same bars as the song: the chords over the words are left as they were.');
+      return false;
+    }
+    if (parsed.bars.length === melodies.length) {
+      parsed.bars.forEach(function (b, k) { if (melodies[k]) b.melody = melodies[k]; });
+    }
+    form = next;
+    here.setChart(parsed);
+    window.carolBandAbc = abc;
+    window.carolBandChart = parsed;
+    light(null);
+    relabel();
+    changed = abc !== writtenAbc;
+    return true;
+  }
+  var own = null;
+  function showVersion() {
+    versionBox.value = versionNow ? versionNow.name : '';
+    var v = versionNow, bits = [];
+    if (v && v.note) bits.push(v.note);
+    if (v && v.source) bits.push('Source: ' + v.source);
+    versionNote.textContent = bits.join('\n');
+  }
+  // `fromAway`: the Backing Track window chose it and is already playing it.
+  function pickVersion(name, fromAway) {
+    if (!ready) return;
+    versionNow = null;
+    versions.forEach(function (v) { if (v.name === name) versionNow = v; });
+    var abc = buildAbc(versionNow);
+    if (!adopt(abc)) { versionNow = null; adopt(buildAbc(null)); }
+    showVersion();
+    var v = versionNow;
+    // A version may name a tempo and a style; the song's own come back after.
+    if (own) { tempoBox.value = own.tempo; styleBox.value = own.style; own = null; }
+    if (v && (v.tempo || v.style)) own = { tempo: tempoBox.value, style: styleBox.value };
+    if (v && v.tempo && parseInt(v.tempo, 10) >= 40) tempoBox.value = parseInt(v.tempo, 10);
+    if (v && v.style) {
+      var named = v.style.trim().toLowerCase();
+      window.BandCatalog.styles.forEach(function (st) {
+        if (st.id === named || st.label.toLowerCase() === named) styleBox.value = st.id;
+      });
+    }
+    here.setTempo(tempo());
+    here.setInstruments(styleSetup().instruments);
+    here.setOpts(bandOpts());
+    if (away && !fromAway) {
+      post({ type: 'bt-chart', abc: window.carolBandAbc, melody: melodies,
+             version: versionNow ? versionNow.name : '',
+             style: styleBox.value, tempo: tempo() });
+    }
+  }
+  function nextVersion() {
+    if (!versions.length || !window.carolTeacher) return;
+    var at = versionNow ? versions.indexOf(versionNow) : -1;
+    pickVersion(at + 1 < versions.length ? versions[at + 1].name : '');
+  }
+  versionBox.addEventListener('change', function () {
+    pickVersion(versionBox.value);
+    versionBox.blur();
+  });
+  // Every version as the band reads it, for the Backing Track window's menu.
+  function versionAbcs() {
+    var out = versions.map(function (v) { return { name: v.name, abc: buildAbc(v) }; });
+    buildAbc(versionNow);              // (leaves the tune as it is being played)
+    return out;
+  }
+
   // The stop of the road that shows this section of the page.
   function stopFor(head) {
     if (nowStop >= 0 && stops[nowStop].head === head) return nowStop;
@@ -642,7 +858,10 @@
     if (!away || e.source !== away || !m || typeof m.type !== 'string') return;
     if (m.type === 'bt-ready') {
       awayOrigin = e.origin;
+      var others = window.carolTeacher ? versionAbcs() : [];
       post({ type: 'bt-load', abc: window.carolBandAbc, melody: melodies,
+             versions: others, version: versionNow ? versionNow.name : '',
+             written: others.length ? buildAbc(null) : null,
              tempo: tempo(), style: styleBox.value, hold: hold, setup: setup,
              fills: fillsBox.value, countIn: parseInt(countBox.value, 10),
              title: (document.querySelector('h1.title') || {}).textContent || '' });
@@ -655,6 +874,17 @@
     } else if (m.type === 'bt-bar') handlers.onBar(m.info);
     else if (m.type === 'bt-beat') handlers.onBeat(m);
     else if (m.type === 'bt-section') handlers.onSection(m);
+    else if (m.type === 'bt-abc' && typeof m.abc === 'string') {
+      // That window changed its changes: a version from its menu, or the ABC
+      // edited by hand. Where the bars are the same, the words follow.
+      if (m.version != null && window.carolTeacher) {
+        if ((versionNow ? versionNow.name : '') !== m.version || m.abc !== window.carolBandAbc) pickVersion(m.version, true);
+      } else if (m.abc !== window.carolBandAbc && adopt(m.abc)) {
+        versionNow = null;
+        showVersion();
+        versionBox.value = '*';
+      }
+    }
   });
   showWindow();
 
@@ -687,6 +917,17 @@
     },
     playing: function () { return playing; },
     // The window that is playing lit a chord; light the same one here.
+    // The window that is playing took other changes: show the same chords.
+    labels: function (list) {
+      (list || []).forEach(function (one) {
+        var box = song.section(one[0]);
+        var el = box ? box.querySelectorAll('.ch')[one[1]] : null;
+        if (!el) return;
+        if (el.textContent !== one[2]) el.textContent = one[2];
+        el.classList.toggle('alt', !!one[3]);
+        el.classList.toggle('held', !!one[4]);
+      });
+    },
     lightAt: function (head, n) {
       var box = song.section(head);
       var el = box ? box.querySelectorAll('.ch')[n] : null;
@@ -702,6 +943,7 @@
     else if (k === 'w') toggleWindow();
     else if (k === 'h') toggleHold();
     else if (k === 'm' && hasTune) toggleTune();
+    else if (k === 'v' && versions.length && window.carolTeacher) nextVersion();
     else if (k === 'd') fillNow();       // (f, s and / belong to the site search)
     else return;
     e.preventDefault();

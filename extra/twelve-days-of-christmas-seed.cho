@@ -1,7 +1,32 @@
 # The day-reveal page is hand-built markup, not generated from this file --
 # the build skips *-seed.cho. This is the editable source of that verse;
 # tools/twelve-days.py folds it back into site/songs/twelve-days-of-christmas.qmd.
+#
+# The band: the chords are written once. The grid has one row for each line of
+# the verse, in the same order, and each day is played as the two opening rows
+# and then the rows of the gifts sung that day. Every row names its own meter,
+# since the rows are put together differently each day.
+{tempo: 120}
+{time: 4/4}
+{key: D}
+{style: carol}
 {comment: The verse}
+{start_of_grid}
+| 4/4 D . Bm . |
+| 4/4 Em A D . |
+| 3/4 A |
+| 3/4 A |
+| 3/4 A |
+| 3/4 A |
+| 3/4 A |
+| 3/4 A |
+| 3/4 A |
+| 4/4 D . E . | A |
+| 3/4 D |
+| 3/4 Bm |
+| 4/4 E . A . |
+| 4/4 D/F# G D/A A | D |
+{end_of_grid}
 On the [D]first day of [Bm]Christmas,
 My [Em]true love [A]sent to [D]me
 [A]Twelve drummers drumming,

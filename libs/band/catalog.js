@@ -108,6 +108,8 @@
       desc:"For 5/4, grouped 3 + 2: a held chord on 1, a short one on the and of 2, then short chords on 4 and 5.", hits:[[0,"L"],[1.5,"S"],[3,"S"],[4,"S"]] },
     { id:"oompah", label:"Boom-chick / oom-pah-pah", feel:"any", group:"Folk, rock and pop", tags:["Folk","Country","Polka","Waltz"],
       desc:"Short chords on the beats the bass leaves free: 2 and 4 in 4/4, 2 and 3 in a waltz. Goes with the Root and fifth bass line.", hits:[[1,"S"],[3,"S"]] },
+    { id:"waltz", label:"Waltz in one", feel:"any", group:"Folk, rock and pop", tags:["Waltz","Carol","Folk"],
+      desc:"For a quick 3/4. The root on 1 and light, short chords on 2 and 3, the third beat the lighter. The bars go in fours: the first leans, the third a little, and the fourth grows into the next phrase. In 4/4 it is boom-chick.", hits:[[1,"S"],[2,"S"]] },
     { id:"hymn", label:"Hymn: four parts", feel:"any", group:"Hymns and carols", tags:["Hymn","Carol","Chorale"],
       desc:"Every chord played once and held until the next one. On the piano or organ it is four parts: the root in the left hand and three voices above it that move as little as possible from chord to chord. It follows the chart's chords, so a carol written with a chord on every beat sounds like the hymnal.", hits:[[0,"L"]] },
     { id:"ballRock", label:"Ballad: rocking", feel:"any", group:"Folk, rock and pop", tags:["Ballad","Pop"],
@@ -160,6 +162,10 @@
       desc:"The D, D-U, U-D-U strum with the weight moved to beat 1, the and of 2 and beat 4, the 3+3+2 grouping under a great many pop songs.", hits:[[0,"L"],[1,"L"],[1.5,"L"],[2.5,"L"],[3,"L"],[3.5,"L"]] },
     { id:"strum16", label:"Strum: sixteenths", feel:"straight", group:"Folk, rock and pop", tags:["Pop","Rock","Funk"],
       desc:"The D, D-U, U-D-U strum at double speed, twice in the bar. For slow and medium tempos.", hits:null },
+    { id:"prine", label:"Fingerpicking: thumb, pinch-and", feel:"any", group:"Folk, rock and pop", tags:["Folk","Country"],
+      desc:"Thumb and fingers, after John Prine. The thumb plays every beat on the low strings: the root, an inner string, the alternate bass, the inner string again. The fingers pinch a treble string with the thumb on 2 and 4 and add the string below it on the and after. In 3/4 the pinches are on 2 and 3." },
+    { id:"travis", label:"Fingerpicking: Travis pattern", feel:"any", group:"Folk, rock and pop", tags:["Folk","Country"],
+      desc:"The same thumb on every beat: root, inner string, alternate bass, inner string. The fingers pinch with it on beat 1, then play between the thumb's notes: the and of 2, the and of 3, the and of 4." },
     { id:"arp", label:"Arpeggio, up and down", feel:"any", group:"Folk, rock and pop", tags:["Ballad","Pop"],
       desc:"The notes of the voicing one at a time in eighth notes, up to the top and back down, each left to ring.", hits:[[0,"S"],[0.5,"S"],[1,"S"],[1.5,"S"],[2,"S"],[2.5,"S"],[3,"S"],[3.5,"S"]] },
     { id:"arp2", label:"Arpeggio, low and high", feel:"any", group:"Folk, rock and pop", tags:["Ballad","Pop","Folk"],
@@ -190,6 +196,8 @@
       desc:"Kick on 1 and 3, cross-stick on the and of 2 and on 4, and cymbal eighths that lean on the off-beats." },
     { id:"onedrop", label:"Reggae one-drop", feel:"straight", group:"Caribbean", tags:["Reggae","Ska"],
       desc:"Nothing on beat 1. Kick and cross-stick together on beat 3, with cymbal eighths that lean on the off-beats." },
+    { id:"waltz", label:"Waltz in one", feel:"any", group:"Folk, rock and pop", tags:["Waltz","Carol","Folk"],
+      desc:"For a quick 3/4: kick on 1, a brushed snare on 2 and 3. Four bars make one phrase: the kick leans on the first and third, the snare answers in the second and fourth, and the fourth leads back in. In 4/4 it is the two-beat.", three:true },
     { id:"boomchick", label:"Two-beat", feel:"any", group:"Folk, rock and pop", tags:["Folk","Country","Polka","Waltz"],
       desc:"Kick with the bass on 1 and 3, a soft snare with the chords on 2 and 4. In 3/4: kick on 1, snare on 2 and 3." },
     { id:"rock", label:"Rock backbeat", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop"],
@@ -216,17 +224,17 @@
 
   // which styles each entry belongs in
   var FITS = {
-    bass: { walk:"swing ballad", two:"swing ballad", riff:"boogaloo", riffwalk:"boogaloo", roots:"rock pop folk reggae strum hymn carol emo", alt:"folk calypso reggae train strum carol", held:"hymn carol pop", halves:"carol hymn pop strum", eighths:"rock emo", dotted:"strum pop rock emo", octaves:"dance", motown:"motown", twelve8:"doowop",
+    bass: { walk:"swing ballad", two:"swing ballad", riff:"boogaloo", riffwalk:"boogaloo", roots:"rock pop folk reggae strum hymn carol emo", alt:"folk calypso reggae train strum carol waltz prine", held:"hymn carol pop", halves:"carol hymn pop strum", eighths:"rock emo", dotted:"strum pop rock emo", octaves:"dance", motown:"motown", twelve8:"doowop",
             bossa:"bossa", tango:"tango", tumbao:"montuno chacha", chacha:"chacha", tresillo:"dance rock reggaeton",
             sowhat:"swing", killerjoe:"swing boogaloo", songfather:"bossa", footprints:"swing", allblues:"swing", chameleon:"boogaloo rock", maiden:"boogaloo bossa", takefive:"swing" },
     comp: { auto:"swing ballad boogaloo", charleston:"swing ballad", reverse:"swing", garland:"swing", offbeats:"swing", four:"swing", stabs:"boogaloo",
-            pad:"swing ballad boogaloo bossa tango pop folk rock reggaeton strum dance doowop hymn carol emo", oompah:"folk train motown carol", eighths:"rock", hymn:"hymn carol pop", ballRock:"pop strum carol hymn doowop", ballBroken:"pop strum carol hymn", ballSync:"pop strum carol",  quarters:"pop rock strum motown hymn carol emo", triplets:"doowop",
+            pad:"swing ballad boogaloo bossa tango pop folk rock reggaeton strum dance doowop hymn carol emo prine", oompah:"folk train motown carol", waltz:"waltz folk carol hymn", eighths:"rock", hymn:"hymn carol pop", ballRock:"pop strum carol hymn doowop", ballBroken:"pop strum carol hymn", ballSync:"pop strum carol",  quarters:"pop rock strum motown hymn carol emo", triplets:"doowop",
             strumCamp:"strum rock folk carol", strumFolk:"carol folk strum train", strumEights:"rock strum emo", strumPunk:"emo rock", strumQuarters:"strum rock folk pop carol emo", strum332:"strum rock dance", strum16:"strum rock dance", upbeats:"calypso reggae", bossa:"bossa", tango:"tango",
-            montuno:"montuno", chacha:"chacha", arp:"pop ballad folk strum doowop hymn carol", arp2:"pop folk strum carol emo", alberti:"pop folk", tresillo:"dance rock reggaeton", clave32:"rock", barbara:"motown rock", g333322:"rock dance", g33433:"dance reggaeton", g3x8:"dance rock", sowhat:"swing", maiden:"boogaloo bossa", takefive:"swing" },
+            montuno:"montuno", chacha:"chacha", arp:"pop ballad folk strum doowop hymn carol", arp2:"pop folk strum carol emo prine", prine:"prine folk strum carol train", travis:"prine folk strum carol train", alberti:"pop folk", tresillo:"dance rock reggaeton", clave32:"rock", barbara:"motown rock", g333322:"rock dance", g33433:"dance reggaeton", g3x8:"dance rock", sowhat:"swing", maiden:"boogaloo bossa", takefive:"swing" },
     drums: { auto:"swing ballad boogaloo", funk:"boogaloo rock", bossa:"bossa", clave:"montuno", clave32:"montuno", bodiddley:"rock", dembow:"reggaeton dance", chacha:"chacha", tango:"tango", calypso:"calypso",
-             onedrop:"reggae", none:"hymn carol pop folk strum", brushes:"carol strum folk pop", boomchick:"folk train carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo" }
+             onedrop:"reggae", none:"hymn carol pop folk strum prine", brushes:"carol strum folk pop", boomchick:"folk train carol", waltz:"waltz folk carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo" }
   };
-  var JAZZ = "swing ballad boogaloo", POP = "folk rock emo pop strum dance motown doowop train hymn carol", PLAIN = POP + " calypso reggae reggaeton tango montuno chacha";
+  var JAZZ = "swing ballad boogaloo", POP = "folk rock emo pop strum dance motown doowop train prine hymn carol waltz", PLAIN = POP + " calypso reggae reggaeton tango montuno chacha";
   var VOICE = {
     piano: { standard:[PLAIN, "Folk, rock, pop, Latin"], shell:[JAZZ + " bossa", "Jazz, bossa nova"], guide:[JAZZ, "Jazz"], rootless:[JAZZ + " bossa", "Jazz, bossa nova"], sowhat:[JAZZ + " bossa", "Modal jazz"],
              drop2:["swing ballad bossa tango montuno chacha", "Jazz, Latin"], drop3:["swing ballad bossa", "Jazz, bossa nova"], bh:["swing ballad", "Bebop"], auto:[JAZZ, "Jazz"] },
@@ -265,10 +273,10 @@
     // part, the sounds that go with them and whether chords are pushed. (Ids "rock", "pop" and "folk" are kept
     // from the three generic styles they replace: saved setups and links name them.)
     { id:"rock", label:"Straight-eighth rock", group:"Folk, rock and pop", genres:"Rock, pop-rock, new wave", feel:"straight", bass:"eighths", rhythm:"strumEights", drums:"rock", voicing:STRUMV, push:true,
-      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"cguitar" },
+      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"clguitar" },
       desc:"Root eighths on the bass, down-up eighths on the chords and a backbeat whose kick changes from bar to bar." },
     { id:"emo", label:"Emo / pop-punk", group:"Folk, rock and pop", genres:"Emo, pop-punk, alternative rock", feel:"straight", bass:"eighths", rhythm:"strumPunk", drums:"rock", voicing:STRUMV, push:true,
-      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"dguitar", lead:"guitar" },
+      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"odguitar", lead:"guitar" },
       desc:"A distorted guitar chugging muted power chords in the verse and opening up in the Chorus bars, over root eighths and a rock backbeat. Set Half-time bars for a half-time chorus or breakdown." },
     { id:"strum", label:"Acoustic strum", group:"Folk, rock and pop", genres:"Folk-pop, singer-songwriter, campfire songs", feel:"straight", bass:"dotted", rhythm:"strumCamp", drums:"strum", voicing:STRUMV, push:true,
       sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
@@ -277,22 +285,29 @@
       sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"piano", kit:{ hat:53 } },       // kit = Backing Track kit faders (0-150; 53 = 35% of the travel): the hi-hat well down
       desc:"Left-hand octaves and a first-inversion right hand broken three ways (rocking, half-broken, syncopated), in four-bar spans, over a half-time bass and drums: a quiet kick and a cross-stick on 3." },
     { id:"dance", label:"Dance pop", group:"Folk, rock and pop", genres:"Disco, dance pop, four on the floor", feel:"straight", bass:"octaves", rhythm:"tresillo", drums:"dance", voicing:PLAINV,
-      sound:{ bass:"electric", cymbal:"hat", piano:"epiano", guitar:"cguitar" },
+      sound:{ bass:"electric", cymbal:"hat", piano:"epiano", guitar:"clguitar" },
       desc:"Kick on every beat, the open hi-hat and the bass octave on every off-beat, chords on a 3+3+2." },
     { id:"motown", label:"Motown / soul", group:"Folk, rock and pop", genres:"Motown, 60s soul, Northern soul", feel:"straight", bass:"motown", rhythm:"barbara", drums:"motown", voicing:PLAINV,
-      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"cguitar" },
+      sound:{ bass:"electric", cymbal:"hat", piano:"piano", guitar:"clguitar" },
       desc:"The snare on all four beats with a tambourine on 2 and 4, a bass line through root, fifth and octave, and the two-bar chord rhythm of You Can't Hurry Love." },
     { id:"doowop", label:"12/8 doo-wop", group:"Folk, rock and pop", genres:"Doo-wop, 50s ballads, slow blues ballads", feel:"swing", bass:"twelve8", rhythm:"triplets", drums:"twelve8", voicing:PLAINV,
-      sound:{ bass:"upright", cymbal:"ride", piano:"piano", guitar:"cguitar", lead:"piano" },
+      sound:{ bass:"upright", cymbal:"ride", piano:"piano", guitar:"clguitar", lead:"piano" },
       desc:"Triplet piano chords over a slow backbeat. Works on a chart in 12/8 and, as triplets, on one in 4/4." },
     { id:"train", label:"Country train beat", group:"Folk, rock and pop", genres:"Country, rockabilly, bluegrass-style songs", feel:"straight", bass:"alt", rhythm:"strumFolk", drums:"train", voicing:STRUMV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
       desc:"Root-and-fifth bass, a boom-chicka strum and the snare on every eighth note." },
     { id:"folk", label:"Boom-chick", group:"Folk, rock and pop", genres:"Folk, polka, old-time; waltzes in 3/4", feel:"straight", bass:"alt", rhythm:"oompah", drums:"boomchick", voicing:STRUMV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar" },
-      desc:"Bass on 1 and 3, chords on 2 and 4. In 3/4 it is oom-pah-pah." }
+      desc:"Bass on 1 and 3, chords on 2 and 4. In 3/4 it is oom-pah-pah." },
+    // The thumb-and-fingers patterns are comp "prine" and "travis" (pickBar in comp.js); the bass doubles the thumb's root and alternate bass.
+    { id:"prine", label:"John Prine Fingerpicking", group:"Folk, rock and pop", genres:"Fingerpicked folk and country songs", feel:"straight", bass:"alt", rhythm:"prine", drums:"none", voicing:STRUMV,
+      sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
+      desc:"A steel-string guitar picked with the thumb and fingers: the thumb alternates bass strings on every beat, the fingers pinch on 2 and 4. An upright bass on the root and fifth, no drums." }
   ];
   styles.push(
+    { id:"waltz", label:"Waltz (in one)", group:"Hymns and carols", genres:"Quick waltzes and carols in 3/4", feel:"straight", bass:"alt", rhythm:"waltz", drums:"waltz", voicing:PLAINV,
+      sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"piano" },
+      desc:"A quick 3/4 felt one to the bar: the bass on 1, light chords on 2 and 3, brushes. The bars are phrased in fours." },
     { id:"hymn", label:"Hymn (four parts)", group:"Hymns and carols", genres:"Hymns, chorales, traditional carols", feel:"straight", bass:"held", rhythm:"hymn", drums:"none", voicing:PLAINV,
       sound:{ bass:"upright", cymbal:"ride", piano:"piano", guitar:"aguitar", lead:"piano" },
       desc:"No drums. Every chord is held until the next: three voices over the root on the piano, with the bass doubling the root. Choose Church organ as the instrument for the other obvious sound." },
@@ -301,8 +316,8 @@
       desc:"A strummed steel-string guitar, upright bass on 1 and 3 and very light time, for Deck the Halls or God Rest Ye Merry, Gentlemen played by a folk-rock band." });
   // The sounds a style is played on. Jazz and Latin styles: upright bass, ride cymbal, the plain piano or
   // jazz guitar. lead = the instrument the style is built around, which the pages switch to when it is chosen.
-  var ELECTRIC = { reggae: 1, reggaeton: 1 }, HAT = { reggae: 1, reggaeton: 1, calypso: 1 };
-  styles.forEach(function (s){ if (!s.sound) s.sound = { bass: ELECTRIC[s.id] ? "electric" : "upright", cymbal: HAT[s.id] ? "hat" : "ride", piano: "piano", guitar: "guitar" }; });
+  var ELECTRIC = { reggae: 1, reggaeton: 1 }, HAT = { reggae: 1, reggaeton: 1, calypso: 1 }, NYLON = { bossa: 1 };       // (the bossa nova guitar is a nylon-string)
+  styles.forEach(function (s){ if (!s.sound) s.sound = { bass: ELECTRIC[s.id] ? "electric" : "upright", cymbal: HAT[s.id] ? "hat" : "ride", piano: "piano", guitar: NYLON[s.id] ? "nguitar" : "guitar" }; });
   // Everything a page needs to play a style: band options for BandPlayer plus the sample sets to load.
   // family = "piano" | "guitar" (the comping instrument to use; default the style's lead, else piano).
   function styleOpts(id, family){
@@ -310,6 +325,69 @@
     return { opts: { comp: fam, compSound: snd, bassSound: s.sound.bass, ride: s.sound.cymbal, push: !!s.push, feel: s.feel, bassFeel: s.bass, compRhythm: s.rhythm, groove: s.drums,
                      voicing: (s.voicing && s.voicing[fam]) || undefined, timeFeel: s.time ? s.time.feel : "normal", timeFeelParts: s.time ? s.time.parts : undefined },
              instruments: [s.sound.bass === "electric" ? "ebass" : "bass", snd, "kit"] };
+  }
+  // A section in a style of its own (a form bar's `style`: an id, a name from the menu, or part of one). The options its bars
+  // are played with: `base` (the page's) with this style's line, rhythm, groove, feel, voicings and sounds on top. The comping
+  // goes to the instrument the style is built around (a strummed guitar, the ballad's piano); a style with no such instrument
+  // leaves it where it is. null when no style has that name.
+  // After the name, single parts may be named too, each after a semicolon: "Swing; voicing drop2; rhythm charleston; bass two;
+  // drums funk; feel straight" (ids from the bass, comp, drums and voicing lists).
+  var SECTION_KEYS = { voicing: "voicing", voicings: "voicing", rhythm: "compRhythm", comp: "compRhythm", bass: "bassFeel", drums: "groove", groove: "groove", feel: "feel" };
+  function sectionOpts(name, base){
+    var bits = String(name || "").split(";"), want = bits[0].trim().toLowerCase(), st = null;
+    if (!want) return null;
+    styles.forEach(function (x){ if (!st && (x.id.toLowerCase() === want || x.label.toLowerCase() === want)) st = x; });
+    if (!st) styles.forEach(function (x){ if (!st && x.label.toLowerCase().indexOf(want) >= 0) st = x; });
+    if (!st) return null;
+    var so = styleOpts(st.id, st.sound.lead || (base && base.comp === "guitar" ? "guitar" : "piano")), o = Object.assign({}, base);
+    Object.keys(so.opts).forEach(function (k){ if (so.opts[k] !== undefined) o[k] = so.opts[k]; });
+    if (so.opts.voicing === undefined) delete o.voicing;
+    bits.slice(1).forEach(function (b){ var m = /^\s*([a-z]+)\s*[:=]?\s*(\S+)\s*$/i.exec(b), k = m && SECTION_KEYS[m[1].toLowerCase()]; if (k) o[k] = m[2]; });
+    o.rhythmMix = null; o.voicingMix = null; o.walk = undefined; o.sectionStyle = st.id;
+    return { opts: o, instruments: so.instruments };
+  }
+  // A second chord instrument (opts.second) beside the comping: what it plays in each style so that the two stay out of
+  // each other's way, by the family of its sound. Where a style says nothing it holds long chords. First guesses, unheard.
+  var SECOND = {
+    swing:  { guitar: ["four", "shell3"], piano: ["pad", "guide"] },                // Freddie Green beside the piano
+    ballad: { guitar: ["pad", "guide2"], piano: ["pad", "guide"] },
+    boogaloo: { guitar: ["upbeats", "top3"], piano: ["pad", "guide"] },
+    bossa:  { guitar: ["bossa", "shell3"], piano: ["pad", "rootless"] },            // the nylon guitar keeps the pattern, the piano colours
+    rock:   { guitar: ["quarters", "triad3"], piano: ["pad", "standard"] },         // (an organ pad behind the guitar)
+    emo:    { guitar: ["strumEights", "triad3"], piano: ["pad", "standard"] },
+    strum:  { guitar: ["arp2", "triad3"], piano: ["pad", "standard"] },
+    pop:    { guitar: ["prine", "open"], piano: ["pad", "standard"] },              // a fingerpicked guitar under the ballad piano
+    dance:  { guitar: ["upbeats", "triad3"], piano: ["pad", "standard"] },
+    motown: { guitar: ["upbeats", "triad3"], piano: ["quarters", "standard"] },     // the backbeat chop
+    train:  { guitar: ["oompah", "triad3"], piano: ["oompah", "standard"] },
+    folk:   { guitar: ["arp2", "triad3"], piano: ["pad", "standard"] },
+    prine:  { guitar: ["travis", "triad3"], piano: ["pad", "standard"] },
+    carol:  { guitar: ["arp2", "triad3"], piano: ["hymn", "standard"] },
+    reggae: { guitar: ["upbeats", "top3"], piano: ["pad", "standard"] }
+  };
+  // -> { comp, compSound, compRhythm, voicing } for sound `soundId` (a comping sound id from BandSounds) in style `styleId`
+  function secondFor(styleId, soundId){
+    var S = global.BandSounds, fam = (S && S.family && S.family(soundId)) || (/guitar/.test(soundId) ? "guitar" : "piano"); if (fam !== "guitar") fam = "piano";
+    var st = byId(styles, styleId) || styles[0], x = (SECOND[st.id] || {})[fam] || ["pad", (st.voicing && st.voicing[fam]) || undefined];
+    return { comp: fam, compSound: soundId, compRhythm: x[0], voicing: x[1] };
+  }
+  // Settings kept for a chart's sections go by the section's NAME, so they survive a chart whose sections are reordered,
+  // or the same song arriving from another page. nameSections: the chart's section names in order -> [{ name, nth }]
+  // (nth = which of the sections with that name, from 0). placeSections(saved, names): saved = [{ name, nth, ... }] ->
+  // { section index: saved entry }. A section whose own nth was not saved takes that name's settings only when every
+  // saved section of the name has the same ones (it was applied to all of them).
+  function secKey(name){ return String(name == null ? "" : name).trim().toLowerCase(); }
+  function nameSections(names){ var seen = {}; return (names || []).map(function (n){ var k = secKey(n), nth = seen[k] | 0; seen[k] = nth + 1; return { name: String(n == null ? "" : n), nth: nth }; }); }
+  function placeSections(saved, names){
+    var out = {}, by = {};
+    (saved || []).forEach(function (e){ if (!e || !e.opts) return; var k = secKey(e.name); (by[k] = by[k] || []).push(e); });
+    nameSections(names).forEach(function (sc, i){
+      var list = by[secKey(sc.name)]; if (!list || !secKey(sc.name)) return;
+      var hit = list.filter(function (e){ return (e.nth | 0) === sc.nth; })[0];
+      if (!hit && list.every(function (e){ return JSON.stringify(e.opts) === JSON.stringify(list[0].opts); })) hit = list[0];
+      if (hit) out[i] = hit;
+    });
+    return out;
   }
   function fits(entry, styleId){ return !!(entry && entry.fits && entry.fits.indexOf(styleId) >= 0); }
 
@@ -330,5 +408,5 @@
   }
   function byId(list, id){ for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
 
-  global.BandCatalog = { bass: bass, comp: comp, drums: drums, voicings: voicings, styles: styles, styleOpts: styleOpts, fits: fits, feels: feels, cymbals: cymbals, url: url, byId: byId };
+  global.BandCatalog = { bass: bass, comp: comp, drums: drums, voicings: voicings, styles: styles, styleOpts: styleOpts, sectionOpts: sectionOpts, secondFor: secondFor, nameSections: nameSections, placeSections: placeSections, fits: fits, feels: feels, cymbals: cymbals, url: url, byId: byId };
 })(typeof window !== "undefined" ? window : globalThis);

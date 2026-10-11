@@ -1,0 +1,479 @@
+<script>
+// Tapping in the bars. The words of a song carry its chords in order but not
+// how long each lasts. Here the drummer plays, the space bar is pressed where
+// each written chord falls, and the page writes the bars out -- as chord grids
+// in the song's own ChordPro file, and as ABC.
+//
+// It is the Record of the music site's "Enter chords from MIDI" page with the
+// space bar for the keyboard: the same drummer (libs/band), the same grid that
+// snaps what was played to the beat (ChordEntry.grid, libs/band/chord-entry.js),
+// and the chord is the next one written over the words instead of the one
+// heard. The song file rides along in the page (#band-source, tools/chordpro.py).
+//
+//   t          start, and stop
+//   space      the next written chord falls here
+//   backspace  take the last one back
+(function () {
+  var data = document.getElementById('band-source');
+  var sidebar = document.getElementById('quarto-margin-sidebar');
+  var song = window.carolSong;
+  if (!data || !sidebar || !song || !window.carolTeacher) return;
+  var src;
+  try { src = JSON.parse(data.textContent); } catch (e) { return; }
+  if (!src || !src.cho) return;
+
+  var FILES = ['tune-chart.js', 'voicings.js', 'chord-entry.js', 'harmony.js',
+               'bass.js', 'comp.js', 'presets.js', 'catalog.js', 'drums.js',
+               'sounds.js', 'player.js'];
+  var depth = location.pathname.indexOf('/songs/') > -1 ? '../' : '';
+
+  // ---- the written chords, in the order of the page ----
+  function symbol(el) {
+    return el.textContent.trim().replace(/♭/g, 'b').replace(/♯/g, '#')
+             .replace(/\*+$/, '');
+  }
+  function written() {
+    var out = [];
+    for (var n = 0; n < song.count(); n++) {
+      var box = song.section(n);
+      if (!box) continue;
+      Array.prototype.forEach.call(box.querySelectorAll('.ch'), function (el) {
+        var sym = symbol(el);
+        if (/^[A-G]/.test(sym)) out.push({ el: el, sym: sym, head: n });
+      });
+    }
+    return out;
+  }
+
+  // ---- the panel ----
+  var panel = document.createElement('div');
+  panel.className = 'section-buttons band-panel tap-panel';
+  var title = document.createElement('div');
+  title.className = 'section-buttons-title';
+  title.textContent = 'Tap in the bars';
+  panel.appendChild(title);
+  function button(text, key, action) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.appendChild(document.createTextNode(text + ' '));
+    if (key) {
+      var k = document.createElement('span');
+      k.className = 'key';
+      k.textContent = key;
+      b.appendChild(k);
+    }
+    b.addEventListener('click', function () { action(); b.blur(); });
+    return b;
+  }
+  var goButton = button('Tap the chords', 't', toggle);
+  panel.appendChild(goButton);
+  var status = document.createElement('div');
+  status.className = 'midi-status';
+  panel.appendChild(status);
+  var more = document.createElement('details');
+  more.className = 'band-more';
+  var moreTitle = document.createElement('summary');
+  moreTitle.textContent = 'Tempo, meter, snap';
+  more.appendChild(moreTitle);
+  function label(text, control) {
+    var l = document.createElement('label');
+    l.className = 'band-field';
+    l.appendChild(document.createTextNode(text));
+    l.appendChild(control);
+    more.appendChild(l);
+    return control;
+  }
+  function select(options, value) {
+    var s = document.createElement('select');
+    options.forEach(function (o) {
+      var el = document.createElement('option');
+      el.value = o[0];
+      el.textContent = o[1];
+      s.appendChild(el);
+    });
+    s.value = value;
+    if (s.selectedIndex < 0) s.selectedIndex = 0;
+    return s;
+  }
+  var tempoBox = document.createElement('input');
+  tempoBox.type = 'number';
+  tempoBox.min = 40; tempoBox.max = 260; tempoBox.step = 1;
+  tempoBox.value = parseInt(src.tempo, 10) || 100;
+  label('Tempo', tempoBox);
+  var meterBox = label('Meter', select([
+    ['4/4', '4/4'], ['3/4', '3/4'], ['2/4', '2/4'], ['6/8', '6/8'], ['12/8', '12/8']],
+    (src.time || '4/4').replace(/\s/g, '')));
+  var snapBox = label('Snap to', select([
+    ['bar', 'Bar'], ['half', 'Half bar'], ['beat', 'Beat'], ['eighth', 'Eighth note']],
+    'beat'));
+  var soundBox = label('With', select([['drums', 'Drums'], ['click', 'A click']], 'drums'));
+  var countBox = label('Count-in', select([['1', '1 bar'], ['2', '2 bars']], '1'));
+  panel.appendChild(more);
+  var below = sidebar.querySelector('.type-panel') || sidebar.querySelector('.midi-panel');
+  if (below) sidebar.insertBefore(panel, below); else sidebar.appendChild(panel);
+  if (song.folds) song.folds(panel, 'tap');      // rarely wanted: folded until asked for
+
+  function say(text) { status.textContent = text; }
+
+  // ---- the take ----
+  var loaded = false, player = null, state = 'idle', grid = null;
+  var list = [], at = 0, taps = [], lit = null, nowBar = 0, hadChords = true, result = null, swung = false;
+
+  function load(done) {
+    if (loaded) { done(); return; }
+    var k = 0;
+    (function next() {
+      if (k >= FILES.length) { loaded = true; done(); return; }
+      var s = document.createElement('script');
+      s.src = depth + 'libs/band/' + FILES[k++];
+      s.onload = next;
+      s.onerror = function () { say('The band is not installed here. Run tools/build.sh.'); };
+      document.head.appendChild(s);
+    })();
+  }
+  function meter() {
+    var m = meterBox.value.split('/');
+    return { n: +m[0], d: +m[1] };
+  }
+  function tempo() {
+    var t = parseInt(tempoBox.value, 10);
+    return t >= 40 && t <= 260 ? t : 100;
+  }
+  function styleId() {
+    var named = String(src.style || '').trim().toLowerCase(), id = 'rock';
+    window.BandCatalog.styles.forEach(function (st) {
+      if (st.id === named || st.label.toLowerCase() === named) id = st.id;
+    });
+    return id;
+  }
+  function light(el) {
+    if (lit) lit.classList.remove('now');
+    lit = el;
+    if (!lit) return;
+    lit.classList.add('now');
+    lit.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+  function upNext() {
+    var next = list[at];
+    say(next ? 'Bar ' + (nowBar + 1) + ' · next: ' + next.sym
+             : 'Bar ' + (nowBar + 1) + ' · that was the last chord: t to finish');
+  }
+  function showSection(head) {
+    var stop = null;
+    song.road().some(function (s) { if (s.head === head) { stop = s; return true; } return false; });
+    if (stop) song.show(stop);
+  }
+
+  function begin() {
+    list = written();
+    if (!list.length) { say('There are no chords written over these words.'); return; }
+    var m = meter(), setup = window.BandCatalog.styleOpts(styleId(), 'piano');
+    var opts = setup.opts;
+    opts.fills = 'none'; opts.build = false; opts.variation = 0;
+    swung = opts.feel === 'swing';
+    if (soundBox.value === 'click') opts.groove = 'click';
+    var rest = 'z' + (m.n * 8 / m.d);
+    var parsed = window.TuneChart.parse('X:1\nM:' + m.n + '/' + m.d + '\nL:1/8\nK:C\n'
+                                        + [rest, rest, rest, rest].join(' | ') + ' |');
+    if (!player) {
+      player = window.BandPlayer.create({
+        parsed: parsed, tempo: tempo(), countIn: 1, choruses: 0,
+        instruments: setup.instruments, opts: opts,
+        kit: { ride: 0.53, rideBell: 0.53, crash: 0.53 },
+        onState: function (s) {
+          var was = state;
+          state = s;
+          if (s === 'loading') say('Loading sounds…');
+          if (s === 'idle' && was !== 'idle') finish();
+          showState();
+        },
+        onLoadProgress: function (d, t) { if (state === 'loading') say('Loading sounds ' + d + ' of ' + t); },
+        onBar: function (info) {
+          if (info.countIn) { say('Count-in · first chord: ' + list[0].sym); return; }
+          nowBar = info.bar;
+          upNext();
+        }
+      });
+    }
+    grid = window.ChordEntry.grid(m);
+    taps = []; at = 0; nowBar = 0; result = null;
+    closeResult();
+    hadChords = document.body.classList.contains('chords');
+    document.body.classList.add('chords', 'tapping');
+    showSection(list[0].head);
+    player.setChart(parsed);
+    player.setTempo(tempo());
+    player.setCountIn(parseInt(countBox.value, 10));
+    player.setChoruses(0);
+    player.setInstruments(setup.instruments);
+    player.setOpts(opts);
+    player.setVolume('bass', 0);
+    player.setVolume('comp', 0);
+    player.play().catch(function () {
+      say('The sounds could not be loaded. They come from the internet.');
+      document.body.classList.remove('tapping');
+    });
+  }
+  function showState() {
+    goButton.firstChild.nodeValue = state === 'idle' ? 'Tap the chords ' : 'Finish ';
+    goButton.setAttribute('aria-pressed', state === 'idle' ? 'false' : 'true');
+  }
+  function toggle() {
+    if (state !== 'idle') { player.stop(); return; }
+    load(begin);
+  }
+
+  // Where a moment falls: the bar, counted from the first after the count-in,
+  // and the beats into it.
+  function where(stamp) {
+    var ctx = player && player.context();
+    if (!ctx) return null;
+    var w = player.where(ctx.currentTime - (performance.now() - stamp) / 1000);
+    if (!w || w.info.ending || w.info.intro) return null;
+    if (w.info.countIn) return w.info.bar === -1 ? { bar: -1, pos: w.pos, beats: w.beats } : { bar: 0, pos: 0, beats: w.beats };
+    return { bar: w.info.bar, pos: w.pos, beats: w.beats };
+  }
+  function tap(stamp) {
+    var next = list[at];
+    if (!next) return;
+    var w = where(stamp);
+    if (!w) return;
+    var pos = w.pos;
+    if (w.bar < 0 && pos < w.beats - 0.5) { w.bar = 0; pos = 0; }     // well inside the count-in: bar 1
+    if (swung && !grid.compound) pos = window.ChordEntry.unswing(pos, window.BandPlayer.swingFor(tempo()));
+    grid.setLength(Math.max(grid.length(), w.bar + 3));
+    var hit = grid.place(next.sym, w.bar, pos, snapBox.value);
+    if (!hit) { grid.setLength(Math.max(grid.length(), 1)); hit = grid.place(next.sym, 0, 0, snapBox.value); }
+    var last = taps[taps.length - 1];
+    if (last && (hit.bar < last.bar || (hit.bar === last.bar && hit.pos <= last.pos))) {
+      // Two taps inside one snap: the second goes a step on, not on top.
+      var per = grid.unitsPerBar, step = grid.span(snapBox.value);
+      var u = last.bar * per + last.pos + step;
+      hit = { bar: Math.floor(u / per), pos: u % per };
+      grid.setLength(Math.max(grid.length(), hit.bar + 1));
+      grid.bars()[hit.bar][hit.pos] = next.sym;
+    }
+    taps.push({ bar: hit.bar, pos: hit.pos, head: next.head, sym: next.sym });
+    if (!last || last.head !== next.head) showSection(next.head);
+    light(next.el);
+    at++;
+    upNext();
+  }
+  function back() {
+    var last = taps.pop();
+    if (!last) return;
+    delete grid.bars()[last.bar][last.pos];
+    at--;
+    light(taps.length ? list[at - 1].el : null);
+    upNext();
+  }
+
+  // ---- what was tapped, written out ----
+  // One bar of the grid as the song file writes it: its chords in as few
+  // places as will hold them, a dot for a place that holds what came before.
+  function cell(bar, per, first) {
+    var ps = Object.keys(bar).map(Number).sort(function (a, b) { return a - b; });
+    if (!ps.length) return first ? 'N.C.' : '%';
+    var places = per;
+    [1, 2, 3, 4, 6, 8, 12].some(function (n) {
+      if (per % n) return false;
+      if (ps.every(function (p) { return p % (per / n) === 0; })) { places = n; return true; }
+      return false;
+    });
+    var out = [];
+    for (var k = 0; k < places; k++) out.push(bar[k * per / places] || '.');
+    return out.join(' ');
+  }
+  function abcBar(bar, per) {
+    var ps = Object.keys(bar).map(Number).sort(function (a, b) { return a - b; });
+    if (!ps.length) return 'z' + per;
+    var out = ps[0] > 0 ? ['z' + ps[0]] : [];
+    ps.forEach(function (p, i) {
+      out.push('"' + bar[p] + '"z' + ((i + 1 < ps.length ? ps[i + 1] : per) - p));
+    });
+    return out.join(' ');
+  }
+  function baseName(name) { return name.replace(/\s+\d+$/, '').trim().toLowerCase(); }
+
+  // The song file's sections, as tools/chordpro.py counts them: where each
+  // heading is, so a grid can go under it.
+  var STARTS = /^(start_of_(verse|chorus|bridge|tab|part)|so[vcbt]|comment|c|comment_italic|ci)$/;
+  function sourceSections(lines) {
+    var out = [], open = false, skip = null;
+    lines.forEach(function (line, i) {
+      var text = line.trim(), m = /^\{\s*([a-z_]+)\s*(?::\s*(.*?))?\s*\}$/i.exec(text);
+      var name = m ? m[1].toLowerCase() : '';
+      if (skip) { if (m && skip.test(name)) skip = null; return; }
+      if (!text || text.charAt(0) === '#') return;
+      if (name === 'start_of_grid' || name === 'sog') {
+        if (!open) { out.push({ line: i - 1, name: (m[2] || 'Lyrics') }); open = true; }
+        skip = /^(end_of_grid|eog)$/; return;
+      }
+      if (name === 'start_of_abc') {
+        var band = (m[2] || '').toLowerCase() === 'band';
+        if (!band && !open) { out.push({ line: i - 1, name: 'Tune' }); open = true; }
+        skip = /^end_of_abc$/; return;
+      }
+      if (m) {
+        if (STARTS.test(name)) { out.push({ line: i, name: m[2] || '' }); open = true; }
+        else if (name === 'chorus' || name === 'recall') { out.push({ line: -1, name: m[2] || 'Chorus', copy: true }); open = false; }
+        else if (/^(end_of_|eo[vcbt]$)/.test(name)) open = false;
+        return;
+      }
+      if (!open) { out.push({ line: i - 1, name: 'Lyrics' }); open = true; }
+    });
+    return out;
+  }
+
+  function finish() {
+    document.body.classList.remove('tapping');
+    if (!hadChords) document.body.classList.remove('chords');
+    light(null);
+    if (!taps.length) { say('Nothing was tapped.'); return; }
+    var m = meter(), per = grid.unitsPerBar, bars = grid.bars();
+    var end = Math.max(taps[taps.length - 1].bar + 1, nowBar + 1);
+    // Each section runs from the bar of its first chord to the next one's.
+    var parts = [];
+    taps.forEach(function (t) {
+      var last = parts[parts.length - 1];
+      if (last && last.head === t.head) return;
+      parts.push({ head: t.head, start: last ? Math.max(t.bar, last.start + 1) : 0 });
+    });
+    parts.forEach(function (p, k) {
+      p.end = k + 1 < parts.length ? parts[k + 1].start : end;
+      p.bars = [];
+      for (var i = p.start; i < p.end; i++) p.bars.push(bars[i] || {});
+      p.rows = [];
+      for (var r = 0; r < p.bars.length; r += 4) {
+        p.rows.push('| ' + p.bars.slice(r, r + 4).map(function (b, j) {
+          return cell(b, per, r + j === 0);
+        }).join(' | ') + ' |');
+      }
+    });
+
+    var lines = src.cho.split('\n'), secs = sourceSections(lines);
+    var names = {}, heads = song.count();
+    var matched = secs.length === heads;
+    parts.forEach(function (p) {
+      var box = song.section(p.head), h = box && box.querySelector('h2');
+      p.name = matched && secs[p.head].name ? secs[p.head].name
+             : h ? h.textContent.replace(/\s+/g, ' ').trim() : 'Section ' + (p.head + 1);
+    });
+
+    // ABC: one tune, a P: line for each section.
+    var abc = ['X:1', 'T:' + (src.title || document.title), 'M:' + m.n + '/' + m.d, 'L:1/8',
+               'Q:1/4=' + tempo(), 'K:' + (src.key || 'C')];
+    parts.forEach(function (p) {
+      abc.push('P:' + p.name);
+      for (var r = 0; r < p.bars.length; r += 4) {
+        abc.push(p.bars.slice(r, r + 4).map(function (b) { return abcBar(b, per); }).join(' | ') + ' |');
+      }
+    });
+
+    // ChordPro: the song file again, each grid under its section's heading.
+    // A section that plays the bars of the one before it of the same kind is
+    // left without, as the song file allows.
+    var cho;
+    var latest = {};
+    parts.forEach(function (p) {
+      var key = baseName(p.name), text = p.rows.join('\n');
+      p.same = latest[key] === text;
+      latest[key] = text;
+    });
+    if (matched) {
+      var under = {};
+      parts.forEach(function (p) {
+        var s = secs[p.head];
+        if (!s.copy && !p.same) under[s.line] = ['{start_of_grid}'].concat(p.rows, ['{end_of_grid}']);
+      });
+      var out = [], inGrid = false, hasTempo = /\{\s*tempo\s*:/i.test(src.cho), hasTime = /\{\s*time\s*:/i.test(src.cho);
+      var top = [];
+      if (!hasTempo) top.push('{tempo: ' + tempo() + '}');
+      if (!hasTime) top.push('{time: ' + m.n + '/' + m.d + '}');
+      var placed = false;
+      if (under[-1]) out = out.concat(under[-1]);
+      lines.forEach(function (line, i) {
+        var text = line.trim();
+        if (/^\{\s*(start_of_grid|sog)\b/i.test(text)) { inGrid = true; return; }
+        if (inGrid) { if (/^\{\s*(end_of_grid|eog)\s*\}/i.test(text)) inGrid = false; return; }
+        out.push(line);
+        if (!placed && /^\{\s*title\s*:/i.test(text)) { out = out.concat(top); placed = true; }
+        if (under[i]) out = out.concat(under[i]);
+      });
+      if (!placed) out = top.concat(out);
+      cho = out.join('\n');
+    } else {
+      cho = ['# The sections of the page and of the song file could not be matched;',
+             '# paste each grid under its heading.', '{tempo: ' + tempo() + '}',
+             '{time: ' + m.n + '/' + m.d + '}', ''].concat(parts.reduce(function (acc, p) {
+        return acc.concat(['{comment: ' + p.name + '}', '{start_of_grid}'], p.rows, ['{end_of_grid}', '']);
+      }, [])).join('\n');
+    }
+    result = { cho: cho, abc: abc.join('\n'), bars: end, chords: taps.length, left: list.length - taps.length };
+    window.carolTap = result;
+    say(taps.length + ' chords over ' + end + ' bars'
+        + (result.left ? ' · ' + result.left + ' not reached' : '') + '.');
+    openResult();
+  }
+
+  // ---- the result: a sheet along the bottom ----
+  var sheet = null, shown = 'cho';
+  function closeResult() { if (sheet) { sheet.remove(); sheet = null; } }
+  function openResult() {
+    closeResult();
+    sheet = document.createElement('div');
+    sheet.className = 'tap-sheet';
+    var bar = document.createElement('div');
+    bar.className = 'tap-sheet-bar';
+    var text = document.createElement('textarea');
+    text.spellcheck = false;
+    function show(kind) {
+      shown = kind;
+      text.value = result[kind];
+      choB.setAttribute('aria-pressed', kind === 'cho');
+      abcB.setAttribute('aria-pressed', kind === 'abc');
+    }
+    var choB = button('ChordPro', '', function () { show('cho'); });
+    var abcB = button('ABC', '', function () { show('abc'); });
+    var note = document.createElement('span');
+    note.className = 'tap-sheet-note';
+    var copy = button('Copy', '', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text.value).then(function () { note.textContent = 'Copied.'; },
+          function () { note.textContent = 'The browser would not copy it; use Download.'; });
+      } else { text.select(); note.textContent = 'Select all and copy.'; }
+    });
+    var down = button('Download', '', function () {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text.value + '\n'], { type: 'text/plain' }));
+      a.download = (src.slug || 'song') + (shown === 'cho' ? '.cho' : '.abc');
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      note.textContent = shown === 'cho' ? 'Put it in site/extra in place of the old one, then tools/build.sh ' + (src.slug || '') + '.' : 'Downloaded.';
+    });
+    var shut = button('Close', '', closeResult);
+    [choB, abcB, copy, down, shut, note].forEach(function (el) { bar.appendChild(el); });
+    sheet.appendChild(bar);
+    sheet.appendChild(text);
+    document.body.appendChild(sheet);
+    show('cho');
+  }
+
+  // The space bar belongs to the take while one is running. Capturing, so the
+  // page's own keys (and the browser's scroll) do not get it first.
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.matches && e.target.matches('input, textarea, select, [contenteditable]')) return;
+    var k = e.key;
+    if (state === 'playing' && (k === ' ' || k === 'Spacebar')) {
+      if (!e.repeat) tap(e.timeStamp || performance.now());
+    } else if (state === 'playing' && k === 'Backspace') {
+      back();
+    } else if ((k === 't' || k === 'T') && !e.repeat) {
+      toggle();
+    } else return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+})();
+</script>

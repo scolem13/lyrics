@@ -163,6 +163,14 @@
     tango:   { bars: [ cymBeats(0.36).concat([[0, "kick", 0.50], [1.5, "kick", 0.38], [2, "kick", 0.46], [3, "kick", 0.42]]) ] },
     calypso: { bars: [ cymEighths(0.40, 0.52).concat([[0, "kick", 0.52], [2, "kick", 0.50], [1.5, "rim", 0.54], [3, "rim", 0.54]]) ] },
     onedrop: { bars: [ cymEighths(0.36, 0.52).concat([[2, "kick", 0.60], [2, "rim", 0.58]]) ] },
+    // The waltz in one. Its bars go in fours as the beats of a bar of 12/8 do: the kick leans on bars 1 and 3, the brushed
+    // snare on 2 and 3 answers a little more in bars 2 and 4, and the fourth bar leads back in. In four it is the two-beat.
+    waltz:   { bars: [ [[0, "kick", 0.54], [2, "kick", 0.50], [1, "snare", 0.40], [3, "snare", 0.40], [1, "hatFoot", 0.40], [3, "hatFoot", 0.40]] ],
+               threeBars: [ [[0, "kick", 0.58], [1, "snare", 0.30], [2, "snare", 0.27], [1, "hatFoot", 0.38], [2, "hatFoot", 0.34]],
+                            [[0, "kick", 0.44], [1, "snare", 0.35], [2, "snare", 0.31], [1, "hatFoot", 0.38], [2, "hatFoot", 0.34]],
+                            [[0, "kick", 0.52], [1, "snare", 0.31], [2, "snare", 0.28], [1, "hatFoot", 0.38], [2, "hatFoot", 0.34]],
+                            [[0, "kick", 0.44], [1, "snare", 0.35], [2, "snare", 0.38], [1, "hatFoot", 0.38], [2, "hatFoot", 0.36], [2.5, "snare", 0.24]] ],
+               three: [[0, "kick", 0.54], [1, "snare", 0.32], [2, "snare", 0.30], [1, "hatFoot", 0.38], [2, "hatFoot", 0.34]], fills: "light" },
     boomchick: { bars: [ [[0, "kick", 0.54], [2, "kick", 0.50], [1, "snare", 0.40], [3, "snare", 0.40], [1, "hatFoot", 0.40], [3, "hatFoot", 0.40]] ],
                  three: [[0, "kick", 0.54], [1, "snare", 0.36], [2, "snare", 0.38], [1, "hatFoot", 0.38], [2, "hatFoot", 0.38]], fills: "light" },
     // The rock and pop grooves are four bars long, so the kick changes from bar to bar, and each kick
@@ -340,7 +348,7 @@
       var H = global.BandHarmony, tied = pushedIn, push = !fill && !!(H && H.pushes && H.pushes(ctx)); pushedIn = push;
       if (push) ev.push({ pos:3.5, piece:"kick", vel:0.62 });
       opening(ev, landing);
-      var pat = beats === 3 ? g.three : g.bars[ctx.index % g.bars.length];
+      var pat = beats === 3 ? (g.threeBars ? g.threeBars[(ctx.phrase ? ctx.phrase.bar : ctx.index) % g.threeBars.length] : g.three) : g.bars[ctx.index % g.bars.length];
       // boom-chick strength (opts.boom, 0..1; 0.5 = as written). Subtle: the hi-hat foot and a soft kick on 1.
       // Polka power: everything harder, the cymbal on every beat and a kick into the next bar.
       var bm = g === GROOVES.boomchick && ctx.opts && ctx.opts.boom != null ? Math.max(0, Math.min(1, +ctx.opts.boom)) : null;

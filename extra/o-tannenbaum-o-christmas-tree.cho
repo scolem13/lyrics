@@ -1,26 +1,48 @@
 {title: O Tannenbaum (O Christmas Tree )}
+{tempo: 100}
+{time: 3/4}
 
 {comment: Verse 1}
+{start_of_grid}
+| D . A7 | D | Em A7 . | A D . |
+| D . A7 | D | Em A7 . | A D . |
+{end_of_grid}
 O [D]Tannenbaum, [A7]o [D]Tannenbaum
 Wie [Em]treu sind [A7]deine [A]Blät[D]ter
 O [D]Tannenbaum, [A7]o [D]Tannenbaum
 Wie [Em]treu sind [A7]deine [A]Blät[D]ter
 
 {comment: Verse 2}
+{start_of_grid}
+| D G . | A7 . . . . Em | . A7 . | D |
+| D . A7 | D | Em A7 . | A D . |
+{end_of_grid}
 [D]Du grünst nicht [G]nur zur [A7]Sommerzeit
 [Em]Nein auch im [A7]Winter, [D]wenn es schneit
 O [D]Tannenbaum, [A7]o [D]Tannenbaum
 Wie [Em]treu sind [A7]deine [A]Blät[D]ter
 
 {comment: Interlude}
+{start_of_grid}
+| D . A7 | D | Em A7 . | A D . |
+| D . A7 | D | Em A7 . | A D . |
+{end_of_grid}
 
 {comment: Verse 3}
+{start_of_grid}
+| D . A7 | D | Em A7 . | A D . |
+| D . A7 | D | Em A7 . | A D . |
+{end_of_grid}
 O [D]Christmas tree, [A7]O [D]Christmas tree
 You [Em]stand in [A7]splendid [A]beau[D]ty
 O [D]Christmas tree, [A7]O [D]Christmas tree
 You [Em]stand in [A7]splendid [A]beau[D]ty
 
 {comment: Verse 4}
+{start_of_grid}
+| D G . | A7 . . . . Em | . A7 . | D |
+| D . A7 | D | Em A7 . | A D . |
+{end_of_grid}
 [D]Your branches [G]green in [A7]summer’s glow
 [Em]And ever[A7]green in [D]winter’s snow
 O [D]Christmas tree, [A7]O [D]Christmas tree

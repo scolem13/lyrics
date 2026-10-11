@@ -198,7 +198,7 @@
   function create(o){
     var rng = (o && o.rng) || Math.random;
     var st;
-    function reset(){ st = { prev: null, prev2: null, pending: null, offRoot: false, walk2: false }; }
+    function reset(){ st = { prev: null, prev2: null, pending: null, offRoot: false, walk2: false, walkOn: null }; }
     // "riffwalk": is this one of the bars that walks?
     function walksNow(ctx){
       var ph = ctx.phrase || { bar: ctx.index % 4 };
@@ -522,6 +522,16 @@
       if (AFTER[feel] && ctx.opts.figures === "head" && ctx.chorus > 0) feel = AFTER[feel];      // the tune's line was for the head
       if (feel === "riff") return riff(ctx);
       if (feel && LINES.hasOwnProperty(feel)) return setLine(ctx, feel);
+      // How much it walks (opts.walk, 0..1; unset = as the line says): the share of two-bar spans that walk, the rest being in two.
+      // The band's level leans it: more walking when it is playing up. 0 and 1 are absolute.
+      var w = ctx.opts && ctx.opts.walk;
+      if (w != null && (feel === "two" || feel === "walk" || !feel)){
+        w = Math.max(0, Math.min(1, +w || 0));
+        if (w > 0 && w < 1){ var ph = ctx.phrase ? ctx.phrase.bar : ctx.index;
+          if (st.walkOn == null || ph % 2 === 0) st.walkOn = rng() < Math.max(0.05, Math.min(0.95, w + ((ctx.intensity == null ? 0.5 : ctx.intensity) - 0.5) * 0.5));
+          return st.walkOn ? walk(ctx) : two(ctx); }
+        st.walkOn = null; return w >= 1 ? walk(ctx) : two(ctx);
+      }
       // playing well down (the first chorus when the band is allowed to build), a walking line starts in two
       return (feel === "two" || (ctx.intensity < 0.36 && !AFTER[ctx.opts && ctx.opts.bassFeel])) ? two(ctx) : walk(ctx);
     }

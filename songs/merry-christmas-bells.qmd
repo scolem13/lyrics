@@ -54,6 +54,10 @@ body-classes: lyrics has-chords
 <span class="ln"><span class="cw">Ding Dong!</span></span>
 :::
 
+```{=html}
+<script type="application/json" id="band-source">{"slug": "merry-christmas-bells", "title": "Merry Christmas Bells", "cho": "{title: Merry Christmas Bells}\n\n{comment: Intro}\n[C][G][G7]\n\n{comment: Verse}\nOh, the [C]bells are [C/E]ringing [F]out to[G]day\nIn a [C]joyous [C/E]Christmas [F]kind of [G]way.\nThey’re [C]ringing, [C/E]ringing!\n[F]Ding dong [F/E]ding dong!\n[Dm]Merry Christmas [G]Bells![G7]\n\n{comment: Verse}\nOh, the [C]sound they [C/E]make is [F]sweet to[G]day,\nAnd I [C]hope that [C/E]you can [F]hear them [G]play.\nThey’re [C]ringing, [C/E]ringing!\n[F]Ding dong [F/E]ding dong!\n[Dm]Merry [G7]Christmas [C]Bells!\n\n{comment: Chorus}\nThey [F]ring, they [C]sing, they [F]jingle\nThey [Am]ding [Dm]dong[G] ding\nThey [F]ring, they [C]sing, they [F]jingle, [Dm]jingle\n[G]Ding Dong\n[G7]Ding Dong\n\n{comment: D.C. al Coda}\n\n{comment: Coda}\nThey’re ringing, ringing!\nDing dong ding dong!\nMe….rry Christmas Bells…!\nDing Dong!\n"}</script>
+```
+
 ::: {.songnav}
 [&larr; La Navidad](la-navidad.qmd){.nav-prev}
 [O Tannenbaum (O Christmas Tree ) &rarr;](o-tannenbaum-o-christmas-tree.qmd){.nav-next}

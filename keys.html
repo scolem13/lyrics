@@ -219,6 +219,13 @@
       }
       return;
     }
+    if (message.kind === 'chords' && message.path === location.pathname) {
+      // Another version of the changes was chosen in the other window.
+      if (window.carolBand && window.carolBand.labels) {
+        window.carolBand.labels(message.list);
+      }
+      return;
+    }
     if (message.kind !== 'section' || message.path !== location.pathname) return;
     applying = true;
     showFollowing();
@@ -356,6 +363,7 @@
   window.carolSong = {
     road: road,
     count: function () { return heads.length; },
+    folds: function (box, name) { folds(box, name); },
     send: function (message) { send(message); },
     section: function (n) { return heads[n] ? heads[n].section : null; },
     at: function () { return at; },
