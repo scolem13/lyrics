@@ -8,16 +8,18 @@
 //       hits = [[beat, "L" | "S"], ...] for a fixed one-bar figure (x.5 = the off-beat eighth,
 //       L = held, S = short stab), or null when the rhythm is not one fixed bar.
 //   BandCatalog.drums  -> [{ id, label, feel, desc, tags }]       id = ctx.opts.groove
+//   BandCatalog.congas -> [{ id, label, feel, desc, tags }]       id = ctx.opts.congas; the first, "none", is no congas (congas.js has the others in PATTERNS)
 //   BandCatalog.voicings -> { piano: { <style id>: { fits, tags } }, guitar: { ... } }  (names live in BandHarmony.styleList)
 //   Every entry carries group (the menu heading: "Jazz" | "Latin" | "Caribbean" | "Folk, rock and pop")
 //   and fits = the ids of the styles it belongs in. The Backing Track page offers only what fits the
 //   chosen style unless its Unlock box is ticked.
-//   BandCatalog.styles -> [{ id, label, group, genres, desc, feel, bass, rhythm, drums, voicing:{ piano, guitar } }]
+//   BandCatalog.styles -> [{ id, label, group, genres, desc, feel, bass, rhythm, drums, congas?, voicing:{ piano, guitar } }]
+//       (congas = a congas entry id; left out = no congas)
 //       (ext:true = a style where players add unmarked 9ths, 13ths and 6ths)
 //       a genre and its defaults: the feel, bass line, comping rhythm, drum groove and voicings that belong together.
 //   BandCatalog.fits(entry, styleId) -> does that entry belong in that style
 //   BandCatalog.feels / .cymbals -> [{ id, label, desc }]         ids = opts.feel / opts.ride
-//   BandCatalog.url({ bass, rhythm, feel, comp }) -> link that opens the Backing Track
+//   BandCatalog.url({ style, bass, rhythm, drums, feel, comp, congas }) -> link that opens the Backing Track
 //       page with those choices preselected (it reads the same query names).
 // tune on a bass / comp entry = the tune the figure comes from (group "From tunes"); after = what the
 // band plays instead once the head is over, when the page's "Figure from the tune" says first chorus only.
@@ -30,6 +32,8 @@
   var bass = [
     { id:"walk", label:"Walking", feel:"swing", tags:["Jazz","Swing","Blues"],
       desc:"One note on every beat (four quarter notes in 4/4, three in 3/4, dotted quarters in 12/8): the root on beat 1 when the chord changes, chord tones and scale steps in between, and an approach note on beat 4 that leads into the next bar." },
+    { id:"arp", label:"Chord tones (learning to walk)", feel:"any", tags:["Jazz","Swing","Blues"],
+      desc:"The chord spelled out, one note on every beat: root, 3rd, 5th, 7th, the same in every bar. When a bar has two chords, each gets its root and one more note. A step between playing roots and walking." },
     { id:"two", label:"Two-feel", feel:"swing", tags:["Jazz","Swing"],
       desc:"Half notes on beats 1 and 3, root then fifth, with an occasional pickup into the next bar. The lighter feel a band often plays on the head before the bass starts to walk." },
     { id:"riff", label:"Boogaloo riff", feel:"straight", tags:["Boogaloo","Soul jazz","Rock"],
@@ -56,6 +60,8 @@
       desc:"The root of the chord on every beat and nothing else. The plainest line there is, under driving eighths or a strummed song." },
     { id:"alt", label:"Root and fifth", feel:"any", group:"Folk, rock and pop", tags:["Folk","Country","Polka","Waltz","Calypso"],
       desc:"The boom of boom-chick: the root on beat 1 and the fifth on beat 3, short, the same every bar. In 3/4 it is one note a bar, root one bar and fifth the next." },
+    { id:"polka", label:"Root and fifth on every beat", feel:"straight", group:"Folk, rock and pop", tags:["Polka","Klezmer","Folk"],
+      desc:"Root, fifth, root, fifth: a note on every beat, short. Now and then, mostly at the end of a four-bar phrase, the last three eighth notes of the bar run up the scale (5-6-7) into the next bar's root. In 3/4 it is root, fifth, fifth." },
     { id:"tresillo", label:"3+3+2 (tresillo)", feel:"straight", group:"Folk, rock and pop", tags:["Pop","Rock","Reggaeton"],
       desc:"The root on beat 1 and on the and of 2, the fifth on beat 4: eight eighth notes grouped 3+3+2." },
     { id:"eighths", label:"Root eighths", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Punk"],
@@ -176,12 +182,18 @@
   var drums = [
     { id:"auto", label:"Jazz time", feel:"any", group:"Jazz", tags:["Jazz","Swing","Boogaloo"],
       desc:"Follows the Feel menu. Swing: the ride pattern, hi-hat foot on 2 and 4, a feathered kick and a little snare. Straight eighths: eighths on the cymbal, kick on 1 and 3, cross-stick on 2 and 4." },
+    { id:"quarters", label:"Quarter notes (learning swing, 1)", feel:"swing", group:"Jazz", tags:["Jazz","Swing","Blues"],
+      desc:"Only the beat: the cymbal on 1, 2, 3 and 4 and the hi-hat foot on 2 and 4. No kick, no snare, no fills. The first thing to play on a blues." },
+    { id:"ridetime", label:"Ride pattern (learning swing, 2)", feel:"swing", group:"Jazz", tags:["Jazz","Swing","Blues"],
+      desc:"The swing ride pattern and nothing else: the cymbal on every beat with a skip note before 3 and before 1 (ding, ding-a, ding, ding-a), and the hi-hat foot on 2 and 4." },
+    { id:"shuffle", label:"Blues shuffle", feel:"swing", group:"Jazz", tags:["Blues","Shuffle","Swing"],
+      desc:"Swung eighths all the way through on the cymbal, kick on 1 and 3 and a full snare on 2 and 4. The Chicago blues beat." },
     { id:"funk", label:"Funk", feel:"straight", group:"Jazz", tags:["Funk","Boogaloo","Soul jazz"],
       desc:"Snare on 2 and 4 with a syncopated kick: beat 1, the and of 2 and the and of 3. Eighths on the cymbal." },
     { id:"bossa", label:"Bossa nova", feel:"straight", group:"Latin", tags:["Bossa nova"],
       desc:"Eighths on the cymbal, the kick on 1 and 3 with an eighth-note pickup before each, and the two-bar bossa clave on the cross-stick." },
     { id:"clave", label:"Son clave (2-3)", feel:"straight", group:"Latin", tags:["Son montuno","Salsa","Mambo"],
-      desc:"The 2-3 son clave on the cross-stick over two bars, a bell pattern on the cymbal and a light kick with the tumbao bass. A drum-kit stand-in for the congas, timbales and clave of a real section." },
+      desc:"The 2-3 son clave on the cross-stick over two bars, a bell pattern on the cymbal and a light kick with the tumbao bass. A drum-kit part for the clave and timbales of a real section; the congas are a player of their own." },
     { id:"clave32", label:"Son clave (3-2)", feel:"straight", group:"Latin", tags:["Son montuno","Salsa","Mambo"],
       desc:"The same groove as the 2-3 clave with its bars the other way round: three cross-stick notes in the first bar, two in the second." },
     { id:"bodiddley", label:"Bo Diddley beat", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop"],
@@ -222,19 +234,37 @@
       desc:"The backbeat at half speed: kick on 1 and the and of 2, one snare on beat 3." }
   ];
 
+  // The conga player (congas.js). "none" first: a style without congas, and every style may have none.
+  var congas = [
+    { id:"none", label:"No congas", feel:"any", group:"Latin", tags:[], desc:"No conga player." },
+    { id:"tumbao", label:"Tumbao", feel:"straight", group:"Latin", tags:["Son montuno","Cha-cha","Boogaloo","Latin"],
+      desc:"The basic conga part, on one drum with the hands alternating: left-hand heel on 1, left-hand toe on the and of 1, a right-hand slap on 2, left toe on the and of 2, left heel on 3, left toe on the and of 3, then two right-hand open tones on 4 and the and of 4. Heel and toe are quiet; slap and open tones carry." },
+    { id:"tumbao2", label:"Tumbao, two drums", feel:"straight", group:"Latin", tags:["Son montuno","Salsa","Latin"],
+      desc:"The tumbao in the first bar. In the second, the right hand plays two open tones on the lower drum, on the and of 2 and on 3, in place of the toe and the heel; then the left-hand toe and the two open tones of beat 4 on the higher drum. The low drum belongs to the bar with three clave notes, which is the second bar of the 2-3 clave." },
+    { id:"opens", label:"Open tones only (learning the tumbao, 1)", feel:"straight", group:"Latin", tags:["Son montuno","Cha-cha","Boogaloo","Latin"],
+      desc:"Only the two right-hand open tones of the tumbao, on 4 and the and of 4. The first thing to play." },
+    { id:"slapopen", label:"Right hand alone (learning the tumbao, 2)", feel:"straight", group:"Latin", tags:["Son montuno","Cha-cha","Boogaloo","Latin"],
+      desc:"The right hand of the tumbao by itself: a slap on 2, then open tones on 4 and the and of 4." },
+    { id:"heeltoe", label:"Left hand alone (learning the tumbao, 3)", feel:"straight", group:"Latin", tags:["Son montuno","Cha-cha","Boogaloo","Latin"],
+      desc:"The left hand of the tumbao by itself: heel on 1, toe on the and of 1, toe on the and of 2, heel on 3, toe on the and of 3." },
+    { id:"steady", label:"Steady congas", feel:"any", group:"Folk, rock and pop", tags:["Rock","Pop","Folk","Any music"],
+      desc:"A quiet part that suits any music: open tones on 4 and the and of 4, a slap on 2, and a light heel and toe between. In 3/4: heel toe on 1, slap toe on 2, two open tones on 3. In 6/8, 9/8 and 12/8: heel, toe, toe on each beat, the slap on beat 2 and two open tones to finish the bar." }
+  ];
+
   // which styles each entry belongs in
   var FITS = {
-    bass: { walk:"swing ballad", two:"swing ballad", riff:"boogaloo", riffwalk:"boogaloo", roots:"rock pop folk reggae strum hymn carol emo", alt:"folk calypso reggae train strum carol waltz prine", held:"hymn carol pop", halves:"carol hymn pop strum", eighths:"rock emo", dotted:"strum pop rock emo", octaves:"dance", motown:"motown", twelve8:"doowop",
+    congas: { tumbao:"montuno chacha boogaloo", tumbao2:"montuno chacha boogaloo", opens:"montuno chacha boogaloo", slapopen:"montuno chacha boogaloo", heeltoe:"montuno chacha boogaloo" },
+    bass: { walk:"swing ballad", arp:"swing ballad boogaloo", two:"swing ballad", riff:"boogaloo", riffwalk:"boogaloo", roots:"rock pop folk reggae strum hymn carol emo", alt:"folk calypso reggae train strum carol waltz prine", polka:"freylekhs folk", held:"hymn carol pop", halves:"carol hymn pop strum", eighths:"rock emo", dotted:"strum pop rock emo", octaves:"dance", motown:"motown", twelve8:"doowop",
             bossa:"bossa", tango:"tango", tumbao:"montuno chacha", chacha:"chacha", tresillo:"dance rock reggaeton",
             sowhat:"swing", killerjoe:"swing boogaloo", songfather:"bossa", footprints:"swing", allblues:"swing", chameleon:"boogaloo rock", maiden:"boogaloo bossa", takefive:"swing" },
     comp: { auto:"swing ballad boogaloo", charleston:"swing ballad", reverse:"swing", garland:"swing", offbeats:"swing", four:"swing", stabs:"boogaloo",
             pad:"swing ballad boogaloo bossa tango pop folk rock reggaeton strum dance doowop hymn carol emo prine", oompah:"folk train motown carol", waltz:"waltz folk carol hymn", eighths:"rock", hymn:"hymn carol pop", ballRock:"pop strum carol hymn doowop", ballBroken:"pop strum carol hymn", ballSync:"pop strum carol",  quarters:"pop rock strum motown hymn carol emo", triplets:"doowop",
-            strumCamp:"strum rock folk carol", strumFolk:"carol folk strum train", strumEights:"rock strum emo", strumPunk:"emo rock", strumQuarters:"strum rock folk pop carol emo", strum332:"strum rock dance", strum16:"strum rock dance", upbeats:"calypso reggae", bossa:"bossa", tango:"tango",
+            strumCamp:"strum rock folk carol", strumFolk:"carol folk strum train", strumEights:"rock strum emo", strumPunk:"emo rock", strumQuarters:"strum rock folk pop carol emo", strum332:"strum rock dance", strum16:"strum rock dance", upbeats:"calypso reggae freylekhs", bossa:"bossa", tango:"tango",
             montuno:"montuno", chacha:"chacha", arp:"pop ballad folk strum doowop hymn carol", arp2:"pop folk strum carol emo prine", prine:"prine folk strum carol train", travis:"prine folk strum carol train", alberti:"pop folk", tresillo:"dance rock reggaeton", clave32:"rock", barbara:"motown rock", g333322:"rock dance", g33433:"dance reggaeton", g3x8:"dance rock", sowhat:"swing", maiden:"boogaloo bossa", takefive:"swing" },
-    drums: { auto:"swing ballad boogaloo", funk:"boogaloo rock", bossa:"bossa", clave:"montuno", clave32:"montuno", bodiddley:"rock", dembow:"reggaeton dance", chacha:"chacha", tango:"tango", calypso:"calypso",
-             onedrop:"reggae", none:"hymn carol pop folk strum prine", brushes:"carol strum folk pop", boomchick:"folk train carol", waltz:"waltz folk carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo" }
+    drums: { auto:"swing ballad boogaloo", quarters:"swing ballad", ridetime:"swing ballad", shuffle:"swing doowop", funk:"boogaloo rock", bossa:"bossa", clave:"montuno", clave32:"montuno", bodiddley:"rock", dembow:"reggaeton dance", chacha:"chacha", tango:"tango", calypso:"calypso",
+             onedrop:"reggae", none:"hymn carol pop folk strum prine", brushes:"carol strum folk pop", boomchick:"folk train carol freylekhs", waltz:"waltz folk carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo" }
   };
-  var JAZZ = "swing ballad boogaloo", POP = "folk rock emo pop strum dance motown doowop train prine hymn carol waltz", PLAIN = POP + " calypso reggae reggaeton tango montuno chacha";
+  var JAZZ = "swing ballad boogaloo", POP = "folk freylekhs rock emo pop strum dance motown doowop train prine hymn carol waltz", PLAIN = POP + " calypso reggae reggaeton tango montuno chacha";
   var VOICE = {
     piano: { standard:[PLAIN, "Folk, rock, pop, Latin"], shell:[JAZZ + " bossa", "Jazz, bossa nova"], guide:[JAZZ, "Jazz"], rootless:[JAZZ + " bossa", "Jazz, bossa nova"], sowhat:[JAZZ + " bossa", "Modal jazz"],
              drop2:["swing ballad bossa tango montuno chacha", "Jazz, Latin"], drop3:["swing ballad bossa", "Jazz, bossa nova"], bh:["swing ballad", "Bebop"], auto:[JAZZ, "Jazz"] },
@@ -253,14 +283,14 @@
       desc:"Walking bass, the ride cymbal and syncopated comping." },
     { id:"ballad", label:"Jazz ballad", ext:true, group:"Jazz", genres:"Ballads, slow standards", feel:"swing", bass:"two", rhythm:"pad", drums:"auto", voicing:JAZZV,
       desc:"Bass in two, long chords, quiet time." },
-    { id:"boogaloo", label:"Boogaloo", ext:true, group:"Jazz", genres:"Boogaloo, soul jazz, funky blues", feel:"straight", bass:"riff", rhythm:"stabs", drums:"auto", voicing:JAZZV,
-      desc:"A straight-eighths bass riff with chord stabs locked to it, as in Watermelon Man." },
+    { id:"boogaloo", label:"Boogaloo", ext:true, group:"Jazz", genres:"Boogaloo, soul jazz, funky blues", feel:"straight", bass:"riff", rhythm:"stabs", drums:"auto", congas:"tumbao", voicing:JAZZV,
+      desc:"A straight-eighths bass riff with chord stabs locked to it, as in Watermelon Man, and a conga tumbao under it." },
     { id:"bossa", label:"Bossa nova", ext:true, group:"Latin", genres:"Bossa nova, slow samba", feel:"straight", bass:"bossa", rhythm:"bossa", drums:"bossa", voicing:JAZZV,
       desc:"Root-and-fifth bass with pickups, a two-bar comping pattern and the bossa clave on the cross-stick." },
-    { id:"montuno", label:"Son montuno", group:"Latin", genres:"Son, salsa, mambo", feel:"straight", bass:"tumbao", rhythm:"montuno", drums:"clave", voicing:PLAINV,
-      desc:"Tumbao bass that anticipates each bar, the two-bar montuno rhythm and 2-3 son clave." },
-    { id:"chacha", label:"Cha-cha", group:"Latin", genres:"Cha-cha-ch\u00e1", feel:"straight", bass:"chacha", rhythm:"chacha", drums:"chacha", voicing:PLAINV,
-      desc:"A steady bell on the beats with the cha-cha-cha on 3, the and of 3, and 4." },
+    { id:"montuno", label:"Son montuno", group:"Latin", genres:"Son, salsa, mambo", feel:"straight", bass:"tumbao", rhythm:"montuno", drums:"clave", congas:"tumbao2", voicing:PLAINV,
+      desc:"Tumbao bass that anticipates each bar, the two-bar montuno rhythm, 2-3 son clave and a conga tumbao that moves to the second drum every other bar." },
+    { id:"chacha", label:"Cha-cha", group:"Latin", genres:"Cha-cha-ch\u00e1", feel:"straight", bass:"chacha", rhythm:"chacha", drums:"chacha", congas:"tumbao", voicing:PLAINV,
+      desc:"A steady bell on the beats with the cha-cha-cha on 3, the and of 3, and 4, over a conga tumbao." },
     { id:"tango", label:"Tango", group:"Latin", genres:"Tango, habanera", feel:"straight", bass:"tango", rhythm:"tango", drums:"tango", voicing:PLAINV,
       desc:"The habanera rhythm in the bass and chords." },
     { id:"calypso", label:"Calypso", group:"Caribbean", genres:"Calypso, mento, soca", feel:"straight", bass:"alt", rhythm:"upbeats", drums:"calypso", voicing:PLAINV,
@@ -299,6 +329,9 @@
     { id:"folk", label:"Boom-chick", group:"Folk, rock and pop", genres:"Folk, polka, old-time; waltzes in 3/4", feel:"straight", bass:"alt", rhythm:"oompah", drums:"boomchick", voicing:STRUMV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar" },
       desc:"Bass on 1 and 3, chords on 2 and 4. In 3/4 it is oom-pah-pah." },
+    { id:"freylekhs", label:"Freylekhs / polka", group:"Folk, rock and pop", genres:"Klezmer dance tunes, polkas, Hanukkah songs", feel:"straight", bass:"polka", rhythm:"upbeats", drums:"boomchick", voicing:PLAINV, full:true, halfRhythm:"ballRock+ballBroken+ballSync",      // (off-beat chords mean nothing over a half-time backbeat: the ballad piano there)
+      sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar" },
+      desc:"Bass on every beat, root and fifth in turn, with a run up into the next bar now and then; the whole chord on the and of every beat. In bars marked half time the piano plays ballad patterns instead." },
     // The thumb-and-fingers patterns are comp "prine" and "travis" (pickBar in comp.js); the bass doubles the thumb's root and alternate bass.
     { id:"prine", label:"John Prine Fingerpicking", group:"Folk, rock and pop", genres:"Fingerpicked folk and country songs", feel:"straight", bass:"alt", rhythm:"prine", drums:"none", voicing:STRUMV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
@@ -314,6 +347,10 @@
     { id:"carol", label:"Folk carol", group:"Hymns and carols", genres:"Carols and folk hymns with a band: between a hymn and acoustic rock", feel:"straight", bass:"halves", rhythm:"strumFolk", drums:"brushes", voicing:STRUMV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
       desc:"A strummed steel-string guitar, upright bass on 1 and 3 and very light time, for Deck the Halls or God Rest Ye Merry, Gentlemen played by a folk-rock band." });
+  // the steady congas fit every style, and so does "none"
+  FITS.congas.steady = FITS.congas.none = styles.map(function (s){ return s.id; }).join(" ");
+  congas.forEach(function (e){ e.fits = (FITS.congas[e.id] || "").split(" ").filter(Boolean); });
+
   // The sounds a style is played on. Jazz and Latin styles: upright bass, ride cymbal, the plain piano or
   // jazz guitar. lead = the instrument the style is built around, which the pages switch to when it is chosen.
   var ELECTRIC = { reggae: 1, reggaeton: 1 }, HAT = { reggae: 1, reggaeton: 1, calypso: 1 }, NYLON = { bossa: 1 };       // (the bossa nova guitar is a nylon-string)
@@ -322,17 +359,17 @@
   // family = "piano" | "guitar" (the comping instrument to use; default the style's lead, else piano).
   function styleOpts(id, family){
     var s = byId(styles, id) || styles[0], fam = family || s.sound.lead || "piano", snd = s.sound[fam] || fam;
-    return { opts: { comp: fam, compSound: snd, bassSound: s.sound.bass, ride: s.sound.cymbal, push: !!s.push, feel: s.feel, bassFeel: s.bass, compRhythm: s.rhythm, groove: s.drums,
+    return { opts: { comp: fam, compSound: snd, bassSound: s.sound.bass, ride: s.sound.cymbal, push: !!s.push, full: !!s.full, halfRhythm: s.halfRhythm || null, feel: s.feel, congas: s.congas || "none", bassFeel: s.bass, compRhythm: s.rhythm, groove: s.drums,
                      voicing: (s.voicing && s.voicing[fam]) || undefined, timeFeel: s.time ? s.time.feel : "normal", timeFeelParts: s.time ? s.time.parts : undefined },
-             instruments: [s.sound.bass === "electric" ? "ebass" : "bass", snd, "kit"] };
+             instruments: [s.sound.bass === "electric" ? "ebass" : "bass", snd, "kit"].concat(s.congas && s.congas !== "none" ? ["congas"] : []) };
   }
   // A section in a style of its own (a form bar's `style`: an id, a name from the menu, or part of one). The options its bars
   // are played with: `base` (the page's) with this style's line, rhythm, groove, feel, voicings and sounds on top. The comping
   // goes to the instrument the style is built around (a strummed guitar, the ballad's piano); a style with no such instrument
   // leaves it where it is. null when no style has that name.
   // After the name, single parts may be named too, each after a semicolon: "Swing; voicing drop2; rhythm charleston; bass two;
-  // drums funk; feel straight" (ids from the bass, comp, drums and voicing lists).
-  var SECTION_KEYS = { voicing: "voicing", voicings: "voicing", rhythm: "compRhythm", comp: "compRhythm", bass: "bassFeel", drums: "groove", groove: "groove", feel: "feel" };
+  // drums funk; congas tumbao; feel straight" (ids from the bass, comp, drums, congas and voicing lists).
+  var SECTION_KEYS = { voicing: "voicing", voicings: "voicing", rhythm: "compRhythm", comp: "compRhythm", bass: "bassFeel", drums: "groove", groove: "groove", congas: "congas", feel: "feel" };
   function sectionOpts(name, base){
     var bits = String(name || "").split(";"), want = bits[0].trim().toLowerCase(), st = null;
     if (!want) return null;
@@ -344,7 +381,8 @@
     if (so.opts.voicing === undefined) delete o.voicing;
     bits.slice(1).forEach(function (b){ var m = /^\s*([a-z]+)\s*[:=]?\s*(\S+)\s*$/i.exec(b), k = m && SECTION_KEYS[m[1].toLowerCase()]; if (k) o[k] = m[2]; });
     o.rhythmMix = null; o.voicingMix = null; o.walk = undefined; o.sectionStyle = st.id;
-    return { opts: o, instruments: so.instruments };
+    var inst = so.instruments; if (o.congas && o.congas !== "none" && inst.indexOf("congas") < 0) inst = inst.concat("congas");      // (also when the section named them)
+    return { opts: o, instruments: inst };
   }
   // A second chord instrument (opts.second) beside the comping: what it plays in each style so that the two stay out of
   // each other's way, by the family of its sound. Where a style says nothing it holds long chords. First guesses, unheard.
@@ -403,10 +441,10 @@
 
   function url(o){
     o = o || {}; var q = [];
-    ["style", "bass", "rhythm", "drums", "feel", "comp"].forEach(function (k){ if (o[k]) q.push(k + "=" + encodeURIComponent(o[k])); });
+    ["style", "bass", "rhythm", "drums", "feel", "comp", "congas"].forEach(function (k){ if (o[k]) q.push(k + "=" + encodeURIComponent(o[k])); });
     return "/tools/backing-track.html" + (q.length ? "?" + q.join("&") : "");
   }
   function byId(list, id){ for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
 
-  global.BandCatalog = { bass: bass, comp: comp, drums: drums, voicings: voicings, styles: styles, styleOpts: styleOpts, sectionOpts: sectionOpts, secondFor: secondFor, nameSections: nameSections, placeSections: placeSections, fits: fits, feels: feels, cymbals: cymbals, url: url, byId: byId };
+  global.BandCatalog = { bass: bass, comp: comp, drums: drums, congas: congas, voicings: voicings, styles: styles, styleOpts: styleOpts, sectionOpts: sectionOpts, secondFor: secondFor, nameSections: nameSections, placeSections: placeSections, fits: fits, feels: feels, cymbals: cymbals, url: url, byId: byId };
 })(typeof window !== "undefined" ? window : globalThis);

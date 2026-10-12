@@ -14,6 +14,7 @@
 //   bank.load(["bass","piano","kit"], onProgress)      -> Promise (idempotent; onProgress(done,total))
 //   bank.play("bass",  { midi:41, vel:0.8, dur:0.45 }, when, destNode)
 //   bank.play("kit",   { piece:"ride", vel:0.6 },      when, destNode)
+//   bank.play("congas", { piece:"congaSlap", vel:0.6 }, when, destNode)   // the congas are a kit of their own (pieces: see the definition)
 //   bank.choke("cymbals", when)                        // damp ringing cymbals (a stop-time hit)
 //   bank.stopAll()                                     // fade + cut everything sounding or scheduled
 //   bank.has(name)                                     // loaded and playable?
@@ -25,7 +26,7 @@
 // Alternatives the player can swap in: "ebass" for "bass", any sound of the same family for the comping
 // instrument (BandSounds.family: "epiano" and "organ" for "piano", the other guitars for "guitar"), and the
 // kit piece "ride2" (a second ride cymbal) for "ride".
-//   BandSounds.family(name)   -> "piano" | "guitar" | "bass" | "kit" | null
+//   BandSounds.family(name)   -> "piano" | "guitar" | "bass" | "kit" | "congas" | null
 //   BandSounds.sounds(family) -> [{ id, label }] in menu order: what a page offers for that instrument
 //
 //   BandSounds.setEQ(name, bands | null)  the mixer's EQ for one instrument: up to five bands, each
@@ -160,7 +161,16 @@
                 pieces: { kick:{ gain:0.56 }, snare:{ gain:0.80 }, clap:{ gain:0.70 }, tamb:{ gain:0.90 }, rim:{ gain:1.15 }, sticks:{ gain:0.50 },
                           ride:{ gain:1.95, group:"cymbals" }, ride2:{ gain:2.4, group:"cymbals" }, rideBell:{ gain:1.5, group:"cymbals" }, crash:{ gain:1.9, group:"cymbals" },
                           hatClosed:{ gain:1.6, chokes:"hat" }, hatFoot:{ gain:1.6, chokes:"hat" }, hatOpen:{ gain:1.4, group:"hat" },
-                          tomHi:{ gain:0.95 }, tomMid:{ gain:0.95 }, tomLo:{ gain:0.95 } } }
+                          tomHi:{ gain:0.95 }, tomMid:{ gain:0.95 }, tomLo:{ gain:0.95 } } },
+      // Congas. General MIDI has only three conga sounds (62 mute high, 63 open high, 64 low), so heel, toe, slap and the bass tone are
+      // stand-ins made from them: the same file at another level (and, for the toe and the bass, another pitch). The pieces share
+      // files, which are fetched once. A first guess, not yet listened to. The conga is the higher drum, the tumba the lower.
+      congas: { family: "congas", gain: 1.3,
+                zones: soundfontKit(sf, { congaOpen:63, congaSlap:62, congaMute:62, congaHeel:62, congaToe:62, congaBass:64,
+                                          tumbaOpen:64, tumbaMute:64, tumbaBass:64 }),
+                pieces: { congaOpen:{ gain:0.95 }, congaSlap:{ gain:1.0 }, congaMute:{ gain:0.60 },
+                          congaHeel:{ gain:0.30, rate:0.90 }, congaToe:{ gain:0.40, rate:1.12 }, congaBass:{ gain:0.50, rate:0.90 },
+                          tumbaOpen:{ gain:0.95 }, tumbaMute:{ gain:0.50 }, tumbaBass:{ gain:0.50, rate:0.88 } } }
     };
   }
 
@@ -501,6 +511,7 @@
       var t = Math.max(when || 0, ctx.currentTime);
 
       var src = ctx.createBufferSource(); src.buffer = z.buffer;
+      if (pc.rate) src.playbackRate.value = pc.rate;       // a piece played from another piece's sample, a little higher or lower
       if (spec.midi != null && z.midi != null) src.playbackRate.value = Math.pow(2, (spec.midi - z.midi) / 12);
       var g = ctx.createGain(), tail = src; g.gain.value = 0;
       if (def.tone || spec.cutoff){                         // softer notes are darker (one sample layer, many dynamics); spec.cutoff = a fixed low-pass in Hz (a palm mute)

@@ -1,6 +1,17 @@
 {title: O Hanukkah}
+{tempo: 148}
+{time: 2/4}
+{style: freylekhs}
 
 {start_of_verse: Verse 1}
+{start_of_grid}
+| Am | % | % | % |
+| Am | % |
+| G | C |
+| Am | % |
+| G | C |
+| Am | % | E7 | Am |
+{end_of_grid}
 [Am]Hanukkah, Oh Hanukkah
 Come light the menorah
 [Am]Let’s have a party
@@ -11,6 +22,14 @@ We’ll [C]give you a [C/B]treat.
 {end_of_verse}
 
 {start_of_verse: Verse 2}
+{start_of_grid}
+| half Am | Am | % | % |
+| C | G | C | E7 |
+| normal Am | Dm | Am | Dm |
+| Am | Dm | Am | % |
+| Am | Dm | Am | Dm |
+| Am | E7 | Am | % |
+{end_of_grid}
 And [Am]while we are [Am]playing,
 The [C]candles are [G]burning [C]low. [E7]
 [Am]One for each [Dm]night, they [Am]shed a sweet [Dm]light
@@ -20,6 +39,10 @@ To re[Am]mind us of [E7]days long a[Am]go.
 {end_of_verse}
 
 {start_of_chorus: Chorus}
+{start_of_grid}
+| half Am | % | Dm | % | G | % | C | % |
+| Am | % | Dm | % | E7 | % | normal Am | % |
+{end_of_grid}
 *[Am]O Hanukkah! Hanukkah*
 *[Am]O Hanukkah! Hanukkah*
 {end_of_chorus}
@@ -27,6 +50,9 @@ To re[Am]mind us of [E7]days long a[Am]go.
 {comment: Fine}
 
 {comment: Interlude}
+{start_of_grid}
+|: Am | Dm | Am | Dm | Am | E7 | Am | Am :|
+{end_of_grid}
 [Am] [Dm] [Am] [Dm] [Am] [E7] [Am] [x2]
 
 {comment: D.C. al Fine}

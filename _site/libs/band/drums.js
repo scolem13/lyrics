@@ -196,6 +196,12 @@
                three: cymEighths(0.34, 0.24).slice(0, 6).concat([[0, "kick", 0.46], [1, "rim", 0.32], [2, "rim", 0.36]]), fills: false },
     // 12/8 time (a slow doo-wop or blues ballad), also played as triplets over a bar of 4/4: see compoundBar
     twelve8: { triplet: true },
+    // Three steps toward swing time, for someone learning it: the beat alone, the ride pattern alone, and the blues shuffle
+    // (every eighth on the cymbal, swung by the player, under a backbeat). The first two play no fills.
+    quarters: { bars: [ cymBeats(0.56).concat([[1, "hatFoot", 0.46], [3, "hatFoot", 0.46]]) ], three: [[0, "cym", 0.56], [1, "cym", 0.56], [2, "cym", 0.56], [1, "hatFoot", 0.44], [2, "hatFoot", 0.44]], fills: false },
+    ridetime: { bars: [ cymBeats(0.58).concat([[1.5, "cymOff", 0.42], [3.5, "cymOff", 0.42], [1, "hatFoot", 0.46], [3, "hatFoot", 0.46]]) ],
+                three: [[0, "cym", 0.58], [1, "cym", 0.58], [1.5, "cymOff", 0.42], [2, "cym", 0.58], [1, "hatFoot", 0.44], [2, "hatFoot", 0.44]], fills: false },
+    shuffle:  { bars: [ cymEighths(0.56, 0.38).concat([[0, "kick", 0.58], [2, "kick", 0.54], [1, "snare", 0.62], [3, "snare", 0.62]]) ], fills: true },
     halftime:{ bars: [ cymEighths(0.54, 0.40).concat([[0, "kick", 0.60], [1.5, "kick", 0.46], [2, "snare", 0.68]]) ], fills: "light" },
     funk:    { bars: [ cymEighths(0.54, 0.44).concat([[0, "kick", 0.62], [1.5, "kick", 0.50], [2.5, "kick", 0.52], [1, "snare", 0.66], [3, "snare", 0.66]]) ], fills: true }
   };

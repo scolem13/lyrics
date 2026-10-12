@@ -812,9 +812,10 @@
         // boom-chick strength (opts.boom, 0..1; 0.5 = as written): soft and a little longer, or short and hard
         if (su.grid === "oompah" && ctx.opts && ctx.opts.boom != null){ var bm = Math.max(0, Math.min(1, +ctx.opts.boom)); vel *= 0.72 + 0.56 * bm; dur = Math.min(room - 0.05, dur * (1.7 - 1.4 * bm)); }
         e = { pos: h.pos, dur: Math.round(Math.max(0.12, dur) * 1000) / 1000, midis: v.slice(), vel: Math.round(clamp(vel, su.grid === "quarters" || g.waltz || g.quiet ? 0.36 : 0.42, su.grid === "quarters" ? 0.78 : g.quiet || g.hold || su.grid === "oompah" ? 0.74 : 0.7) * 1000) / 1000, inst: su.inst, of: ck };
-        // the piano's plain triads often go without their root or their fifth (opts.variation > 0; settled once for each chord; not in the hymn's four parts)
+        // the piano's plain triads often go without their root or their fifth (opts.variation > 0; settled once for each chord; not in the hymn's four parts,
+        // nor in a style that asks for the whole chord every time: opts.full)
         var amt5 = Math.max(0, Math.min(1, +(ctx.opts && ctx.opts.variation) || 0));
-        if (amt5 > 0 && su.inst === "piano" && su.style === "standard" && v.length === 3 && !g.hold && !h.shift && !pinOf(su, ck)){
+        if (amt5 > 0 && su.inst === "piano" && su.style === "standard" && v.length === 3 && !g.hold && !h.shift && !pinOf(su, ck) && !(ctx.opts && ctx.opts.full)){
           if (no5[ck] == null){ var rd = rng(); no5[ck] = rd < 0.3 * amt5 && chord.seventh == null ? "root" : rd < 0.6 * amt5 ? "fifth" : ""; }       // the root (the left hand has it) or the fifth
           var f5pc = (((chord.root + (no5[ck] === "root" ? 0 : chord.fifth != null ? chord.fifth : 7)) % 12) + 12) % 12, kept = v.filter(function (m){ return ((m % 12) + 12) % 12 !== f5pc; });
           if (no5[ck] && kept.length === 2){ e.midis = kept; e.arp = true; out(e); left(e, h, chord, ck, v, changeAt); return; }
@@ -834,7 +835,7 @@
       if (su.style === "auto") su.style = H.hasStyle(su.inst, "drop2") ? "drop2" : H.defaultStyle(su.inst);   // a full chord to finish on
       st.lastKey = null; var v = pick(c, su, ck);                       // (always re-voiced for the last hit)
       st.antic = false; st.plan = null;
-      return v.length ? [{ pos: 0, dur: 4, midis: v.slice(), vel: 0.62, inst: su.inst, of: ck }] : [];
+      return v.length ? [{ pos: 0, dur: Math.max(4, ctx.hold || 0), midis: v.slice(), vel: 0.62, inst: su.inst, of: ck }] : [];
     }
     return { bar: bar, ending: ending, reset: reset };
   }

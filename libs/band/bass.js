@@ -12,7 +12,7 @@
 // 6/8, 9/8, 12/8) a beat is a dotted quarter, the line walks one note per beat with some pickup
 // eighths (written x.5 = the beat's third eighth), and the riff becomes a shuffle figure.
 //
-// Set lines (ctx.opts.bassFeel = a LINES id: roots, alt, bossa, tango, tumbao, chacha): a fixed
+// Set lines (ctx.opts.bassFeel = a LINES id: roots, alt, polka, bossa, tango, tumbao, chacha): a fixed
 // rhythm of roots and fifths, the same every bar, for the Latin and dance styles.
 //
 //   var bass = BandBass.create({ rng });   // rng() -> [0,1); all randomness goes through it
@@ -159,6 +159,8 @@
   var LINES = {
     roots:  function (beats){ var l = []; for (var b = 0; b < beats; b++) l.push([b, 0.9, "R"]); return l; },
     alt:    function (beats){ return beats % 2 ? [[0, 0.9, "R"]] : beats === 2 ? [[0, 0.9, "R"], [1, 0.9, "5"]] : [[0, 0.9, "R"], [2, 0.9, "5"]]; },
+    // root and fifth turn about on every beat (1-5-1-5); in three, root-fifth-fifth. Its run-ups are in setLine.
+    polka:  function (beats){ var l = []; for (var b = 0; b < beats; b++) l.push([b, 0.9, b && (b % 2 || beats % 2) ? "5" : "R"]); return l; },
     bossa:  [[0, 1.4, "R"], [1.5, 0.45, "5"], [2, 1.4, "5"], [3.5, 0.45, "N"]],
     tango:  [[0, 1.4, "R"], [1.5, 0.45, "5"], [2, 0.9, "8"], [3, 0.9, "5"]],
     tumbao: [[1.5, 1.4, "5"], [3, 0.95, "N"]],
@@ -172,6 +174,8 @@
     motown:  { rise: true, top: 12, bars: [ [[0, 1.4, "R"], [1.5, 0.45, "R"], [2, 0.9, "5"], [3, 0.45, "8"], [3.5, 0.45, "5"]],
                                             [[0, 1.4, "R"], [1.5, 0.45, "R"], [2, 0.9, "5"], [3, 0.45, "5"], [3.5, 0.45, "N"]] ] },
     // Hymns and carols. hold: each note lasts until the next one, or to the end of its chord or bar.
+    // the chord spelled out, one note a beat: root, 3rd, 5th, 7th. For learning the chord tones before walking.
+    arp:     { rise: true, top: 12, arp: true, bars: [ [[0, 0.9, "R"], [1, 0.9, "3"], [2, 0.9, "5"], [3, 0.9, "7"]] ] },
     held:    { hold: true, bars: [ [[0, 8, "R"]] ] },                                                   // the bass voice: the root of each chord, sustained
     halves:  function (beats){ return beats % 2 ? [[0, beats - 0.2, "R"]] : beats === 2 ? [[0, 1.8, "R"]] : [[0, 1.8, "R"], [2, 1.8, "R"]]; },   // the root on 1 and 3
     // 12/8 (or triplets over 4/4): long notes on 1 and 3, each set up by the last eighth of the beat before
@@ -211,6 +215,14 @@
 
     function vel(base){ return Math.round((base + (rng() - 0.5) * 0.07) * 1000) / 1000; }
     function vary(ctx){ var v = ctx.opts && +ctx.opts.variation; return v > 0 ? Math.min(1, v) : 0; }
+    // "polka": is this one of the bars that runs up into the next? The last bar of a four-bar phrase more often than not
+    // (always, with no variation asked for), the second bar now and then, never the others. In 2/4 the phrases come
+    // round twice as fast, so it runs less often and only at the end of one.
+    function runsNow(ctx){
+      var ph = ctx.phrase || { bar: ctx.index % 4 }, vr = vary(ctx), two = ctx.beats === 2;
+      if (ph.bar === 3 || ph.turnaround) return !vr || rng() < (two ? 0.4 : 0.7);
+      return !!vr && !two && ph.bar === 1 && rng() < 0.2 * vr;
+    }
     function heat(ctx){ return ctx.intensity == null ? 0.5 : ctx.intensity; }
     // Walking embellishments (simple meters): one skip note before a beat, or beats 1-2 held as a half note.
     function ornaments(ev, ctx, v){
@@ -451,6 +463,16 @@
       if (tied) list = list.filter(function (e){ return e.pos >= 0.5 - 1e-6; });
       if (H.pushes && H.pushes(ctx) && !AFTER[id] && id !== "tumbao"){
         list = list.filter(function (e){ return e.pos < 3.5 - 1e-6; }); list.push({ pos: 3.5, dur: 1.4, deg: "N" }); st.pushed = true; }
+      // the polka's run-up: the fifth, sixth and seventh under the next bar's root (5-6-7-1) on the last three eighths,
+      // in place of the fifth on the last beat (in 2/4 the bar is then its root and the run). Only in four or two, under
+      // one chord, and where the run has room below that root.
+      if (id === "polka" && (beats === 4 || beats === 2) && !ctx.compound && (!ctx.nextStop || ctx.finalNext) && !st.pushed && next && ctx.chords.length === 1){
+        var to = rootOf(next);
+        if (to != null && inRange(to - 5) && (ctx.finalNext || runsNow(ctx))){                         // (always into the last chord of the tune)
+          list = list.filter(function (e){ return e.pos < beats - 1.5 - 1e-6; });
+          [[1.5, 5], [1, 3], [0.5, 1]].forEach(function (q){ list.push({ pos: beats - q[0], dur: 0.45, deg: "run", midi: to - q[1] }); });
+        }
+      }
       list.sort(function (a, b){ return a.pos - b.pos; });
       var segs = segmentsOf(ctx), lift = !!(ctx.opts && ctx.opts.lift && ctx.opts.lift.indexOf(ctx.index) >= 0 && !ctx.intro);
       // the first note a chord gets is its root, whatever the pattern has there (a fifth under a chord that has just arrived is a wrong note)
@@ -460,15 +482,16 @@
       }
       list.forEach(function (e, k){
         var c = H.chordAt(ctx.chords, e.pos), deg = e.deg; if (!c) return;
-        if ((deg === "5" || deg === "8") && id !== "tumbao" && !AFTER[id] && opens(e, k)) deg = "R";
+        if ((deg === "5" || deg === "8" || def.arp) && id !== "tumbao" && !AFTER[id] && opens(e, k)) deg = "R";
         if (id === "alt" && beats % 2 && ctx.index % 2 && e.pos === 0 && firstChord(ctx.chords) && ctx.chords.length === 1) deg = "5";
         var n;
-        if (deg === "N"){
+        if (e.midi != null) n = e.midi;
+        else if (deg === "N"){
           var after = H.chordAt(ctx.chords, Math.floor(e.pos) + 1), tc = Math.floor(e.pos) + 1 >= beats ? next : after;
           n = rootOf(tc || c);
         } else if (def.rise || def.below){
           var r0 = rootOf(c), f5 = c.fifth != null ? c.fifth : 7;
-          if (def.rise) n = r0 + (deg === "5" ? f5 : deg === "6" ? 9 : deg === "7" ? (c.seventh != null ? c.seventh : 10) : deg === "8" ? 12 : deg === "9" ? 14 : deg === "10" ? 12 + (c.third != null ? c.third : 4) : 0);
+          if (def.rise) n = r0 + (deg === "3" ? (c.third != null ? c.third : 4) : deg === "5" ? f5 : deg === "6" ? 9 : deg === "7" ? (c.seventh != null ? c.seventh : 10) : deg === "8" ? 12 : deg === "9" ? 14 : deg === "10" ? 12 + (c.third != null ? c.third : 4) : 0);
           else if (deg === "L" || deg === "L2"){ var nr = next ? rootOf(next) : r0, dn = deg === "L" ? 1 : 2; n = inRange(nr - 2) ? nr - dn : nr + 12 - dn; }
           else { var up = deg === "5" ? f5 : deg === "6" ? 9 : 0; n = up && inRange(r0 + up - 12) ? r0 + up - 12 : r0 + up; }
           low = r0;
@@ -540,7 +563,7 @@
       if (!c) return [];
       var n = withPc(c.bass)[0];                                       // the root, low, left to ring
       st.prev2 = st.prev; st.prev = n; st.pending = null;
-      return [{ pos: 0, dur: 4, midi: n, vel: 0.86 }];
+      return [{ pos: 0, dur: Math.max(4, ctx.hold || 0), midi: n, vel: 0.86 }];                    // (ctx.hold: the beats left when the band lands inside the form)
     }
     return { bar: bar, ending: ending, reset: reset };
   }

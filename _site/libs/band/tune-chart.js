@@ -128,7 +128,9 @@
         var fm = /^[\^_<>@]\s*(small|short|big|long)?\s*fill$/i.exec(s);                    // an annotation: "^fill", "^small fill", "^big fill"
         if (fm || /^[\^_<>@]\s*stop$/i.test(s)) (cur.marks = cur.marks || []).push({ kind: fm ? "fill" : "stop", from: srcOff(i), to: srcOff(e) + 1 });
         if (fm) cur.fill = !fm[1] ? "medium" : /^(small|short)$/i.test(fm[1]) ? "small" : "large";   // the drummer fills at the end of this bar
-        else if (/^[\^_<>@]\s*half(\s*time)?$/i.test(s)) cur.feel = "half";   // "^half time": this bar is felt in half time (in pairs: bars 1+2, 3+4, ...)
+        else if (/^[\^_<>@]\s*half(\s*time)?(\s+ballad)?$/i.test(s)){ cur.feel = "half";   // "^half time": this bar is felt in half time (in pairs: bars 1+2, 3+4, ...)
+          if (/ballad$/i.test(s)) cur.halfComp = "ballad"; }                               // "^half time ballad": and the chords go over to the ballad patterns
+        else if (/^[\^_<>@]\s*rit(\.|ard\.?|ardando)?$/i.test(s)) cur.rit = true;           // "^rit.": the last time through, slow down from this bar into the ending
         else if (/^[\^_<>@]\s*style\b/i.test(s)) cur.style = s.replace(/^[\^_<>@]\s*style\s*:?\s*/i, "").trim() || "none";   // "^style bossa": this bar and the rest of its section in that style
         else if (/^[\^_<>@]\s*stop$/i.test(s)) cur.stop = true;                               // "^stop": stop time on this bar
         else if (/^[A-G]/.test(s)) { cur.chords.push({ sym:s, onset:pos }); content = true; }
@@ -453,6 +455,14 @@
     + '.tune-chart .tc-meter.tc-courtesy{left:auto;right:2px;top:2px;color:var(--tc-faint)}'
     + '.tune-chart .tc-mn,.tune-chart .tc-md{display:block;font-size:.6rem;line-height:1.15}'
     + '.tune-chart .tc-mn{border-bottom:1px solid currentColor;padding-bottom:1px}'
+    // letters AND numerals in a bar that also shows a time signature: three bands down the bar, the top fifth for the signature and two
+    // fifths each for the chord symbol and its numeral, which are then the same size
+    + '.tune-chart.tc-roman-both .tc-bar.tc-sig{min-height:76px}'
+    + '.tune-chart.tc-roman-both .tc-sig .tc-meter.tc-own{top:0;height:20%;align-items:center;padding-top:2px}'
+    + '.tune-chart.tc-roman-both .tc-sig .tc-chord{top:20%;bottom:0;transform:none;display:grid;grid-template-rows:1fr 1fr;align-items:center;gap:0;padding:1px 0 3px}'
+    + '.tune-chart.tc-roman-both .tc-sig .tc-lt,.tune-chart.tc-roman-both .tc-sig .tc-lt .tc-rt,.tune-chart.tc-roman-both .tc-sig .tc-rn{font-size:1.15rem;line-height:1}'
+    + '.tune-chart.tc-roman-both .tc-sig .tc-q{font-size:.72rem;top:-.4em}'
+    + '.tune-chart.tc-roman-both .tc-sig .tc-bass{font-size:.8rem}'
     + '.tune-chart .tc-bar.tc-live{background:var(--tc-live-soft)}'
     + '.tune-chart .tc-bar.tc-live::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--tc-live)}'
     + '.tune-chart .tc-bar.tc-live .tc-chord{color:#0c5a52}'
@@ -584,7 +594,7 @@
               var sigHtml = '<span class="tc-mn">'+bm.n+'</span><span class="tc-md">'+bm.d+'</span>';
               var mt = document.createElement("div"); mt.className = "tc-meter tc-own"; mt.innerHTML = sigHtml;
               if (bar.ending) mt.style.left = "1.7rem";              // (clear of the ending bracket)
-              cell.appendChild(mt); lastMeter = { n:bm.n, d:bm.d };
+              cell.appendChild(mt); cell.classList.add("tc-sig"); lastMeter = { n:bm.n, d:bm.d };
               if (c === 0 && prevCell){                               // over a line break: warn at the end of the row above
                 var ct = document.createElement("div"); ct.className = "tc-meter tc-courtesy"; ct.innerHTML = sigHtml;
                 ct.setAttribute("title", "Next bar: " + bm.n + "/" + bm.d); prevCell.appendChild(ct); }

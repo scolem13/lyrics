@@ -1612,7 +1612,8 @@ window.carolTypeChoice = function () {
   var meterN = +meter[1], meterD = +meter[2];
 
   function mark(bar) {
-    return (bar.feel === 'half' ? '"^half time"' : '')
+    return (bar.feel === 'half' ? '"^half time' + (bar.half === 'ballad' ? ' ballad' : '') + '"' : '')
+         + (bar.rit ? '"^rit."' : '')
          + (bar.stop ? '"^stop"' : '')
          + (bar.fill ? '"^' + (bar.fill === 'small' ? 'small fill'
                              : bar.fill === 'large' ? 'big fill' : 'fill') + '"'

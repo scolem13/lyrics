@@ -9,12 +9,20 @@
 //     parsed,                      // TuneChart.parse output (or setChart later)
 //     tempo: 120, transpose: 0,
 //     countIn: 1,                  // bars of stick clicks: 0, 1 or 2 (2 = "1 . 2 . | 1 2 3 4")
-//     choruses: 0,                 // 0 = loop until stopped; N = N choruses, the ending hit, then onEnd
+//     choruses: 0,                 // 0 = loop until stopped; N = N choruses, the ending, then onEnd
+//                                  // The ending (BandHarmony.endingPlan): a tune that comes to rest is ended inside its own last bars.
+//                                  // The bar before its last chord is a set-up (a fill, nothing pushed or left ringing: ctx.nextStop and
+//                                  // ctx.finalNext), the bar where that chord arrives is the parts' ending() (ctx.final, ctx.hold = the
+//                                  // beats it rings) and any bar after it is left empty; onBar gets final:true for those. A tune that ends
+//                                  // on a turnaround, and hold mode when the end is not known in time, get one more bar instead: a hit on
+//                                  // the top chord (onBar: ending:true).
+//                                  // opts.ritard (true, or how much: 0.5 = the default, the beat half as long again by the landing) slows
+//                                  // the two bars before the landing; a bar marked "^rit." in the chart starts it there instead. Last pass only.
 //     intro: null,                 // { bars: 4, kind: "vamp" (the first chord) | "last" (the last bars of the form), tacet: "drums" }
 //                                  // played once after the count-in when starting from the top; onBar gets intro:true,
 //                                  // introBar / introBars, index -1. Stops and pins do not apply to it. player.setIntro(o)
 //     opts: {},                    // handed to the parts untouched, as ctx.opts
-//     volumes: { bass:1, comp:1, drums:1 },   // faders, 0..1.5 (1 = the default balance)
+//     volumes: { bass:1, comp:1, drums:1 },   // (and comp2, congas)   // faders, 0..1.5 (1 = the default balance)
 //     seed,                        // optional int → the same performance every time
 //     onState(s),                  // "idle" | "loading" | "playing"
 //     onLoadProgress(done, total),
@@ -31,6 +39,7 @@
 //   player.setKitVolume(piece, v)  // fader for one kit piece, 0..1.5 (1 = as mixed); cfg.kit = { piece: v } to start with
 // Sounds: opts.bassSound "electric" plays the bass part on "ebass"; opts.compSound (any sound of the comping instrument's family, BandSounds.family) e.g. "epiano" plays
 // piano comping on "epiano"; opts.rideSound "ride2" swaps the ride cymbal. The parts never know.
+// Octaves: opts.octave = { bass: -1, comp: 1, comp2: 0 } moves a player's notes by whole octaves (sound, notation and MIDI alike).
 // Stop time: opts.stops = [form bar index, ...]. On those bars ctx.stop is true (the band hits beat 1
 // and only the bass leads back in) and the bar before gets ctx.nextStop, so nothing rings across.
 //   player.setStartBar(i)          // form bar the next play() starts on (after the count-in)
@@ -65,15 +74,16 @@
 // HERE — in a compound meter x.5 is the beat's THIRD eighth; straight:true events — triplets,
 // a compound beat's second eighth at x.333 — are left where they are):
 //   bass { pos, dur, midi, vel }   comp { pos, dur, midis, vel, inst? }   drums { pos, piece, vel, straight? }
+//   congas { pos, piece, vel, stroke, hand, straight? }   (congas.js; silent unless opts.congas names a pattern)
 
 (function (global) {
-  var PARTS = ["bass", "comp", "comp2", "drums"];        // comp2 = a second chord player (opts.second; silent without it)
+  var PARTS = ["bass", "comp", "comp2", "drums", "congas"];        // comp2 = a second chord player (opts.second; silent without it); congas = opts.congas, same
   var LOOKAHEAD = 0.15, LOOKAHEAD_HIDDEN = 1.6;   // seconds scheduled ahead (more when the tab is hidden: timers get throttled)
   var TICK_MS = 25, START_DELAY = 0.12, RING = 3.0, GEN_MARGIN = 0.1;
-  var TRIM   = { bass: 1.0, comp: 1.0, comp2: 1.0, drums: 1.0 };        // default balance at fader = 1 (tuned by measurement)
-  var SEND   = { bass: 0.02, comp: 0.16, comp2: 0.16, drums: 0.11 };     // room-reverb send per part
-  var JITTER = { bass: 0.003, comp: 0.004, comp2: 0.004, drums: 0.002 };  // random timing looseness, seconds
-  var LAY    = { bass: -0.006, comp: 0.008, comp2: 0.010, drums: 0 };     // where each player sits: bass a touch ahead of the ride, comping behind it
+  var TRIM   = { bass: 1.0, comp: 1.0, comp2: 1.0, drums: 1.0, congas: 1.0 };        // default balance at fader = 1 (tuned by measurement)
+  var SEND   = { bass: 0.02, comp: 0.16, comp2: 0.16, drums: 0.11, congas: 0.14 };     // room-reverb send per part
+  var JITTER = { bass: 0.003, comp: 0.004, comp2: 0.004, drums: 0.002, congas: 0.003 };  // random timing looseness, seconds
+  var LAY    = { bass: -0.006, comp: 0.008, comp2: 0.010, drums: 0, congas: 0.002 };     // where each player sits: bass a touch ahead of the ride, comping behind it
 
   // The conductor: how hard the band is playing this bar (0..1, 0.5 = the plain pattern). It
   // builds over four choruses, lifts through the last four bars of each one, and peaks on a
@@ -88,7 +98,7 @@
     return clamp(0.5 + v * (arc - 0.5), 0, 1);
   }
   var STRUM = 0.010, VEL_JITTER = 0.06, WET = 0.55, MASTER = 1.0;
-  var SEED = { bass: 101, comp: 211, comp2: 257, drums: 307, human: 401 };
+  var SEED = { bass: 101, comp: 211, comp2: 257, drums: 307, congas: 353, human: 401 };
 
   // the options a bar of another style is played with (BandCatalog.sectionOpts): the page's, with that style's own on top
   function styleOptsFor(name, base){ var C = global.BandCatalog; return C && C.sectionOpts ? C.sectionOpts(name, base) : null; }
@@ -98,6 +108,8 @@
     return out; }
   // the sample set the second chord player needs, if there is one
   function secondSound(opts){ var s = opts && opts.second; return s && s.comp ? (s.compSound || s.comp) : null; }
+  // are the congas asked for? (a pattern id other than none)
+  function congasOn(opts){ var c = opts && opts.congas; return !!c && c !== "none"; }
   function isStop(opts, idx, form){ var s = opts && opts.stops; return !!((form && form[idx] && form[idx].stop) || (s && s.indexOf && s.indexOf(idx) >= 0)); }
   // the chart's sections: a new one starts on every form bar that carries a name; none named = no sections
   function sectionsOf(form){
@@ -198,18 +210,20 @@
     this.advance = null; this.held = null; this.fillAsk = null; this.jump = null; this.lastInfo = null;   // hold mode and Fill now (see generate)
     this.organ = {};                                              // the organist's memory, for each chord part played on an organ
     this.human = mulberry32(seed + SEED.human);
+    this.humanC = mulberry32(seed + SEED.human + 31);             // and the congas'
     this.human2 = mulberry32(seed + SEED.human + 17);             // the second chord player's own, so the others are humanized the same with or without it
     this.parts = {};
-    var self = this, G = { bass: global.BandBass, comp: global.BandComp, drums: global.BandDrums };
+    var self = this, G = { bass: global.BandBass, comp: global.BandComp, drums: global.BandDrums, congas: global.BandCongas };
     if (global.BandComp && global.BandComp.createSecond) G.comp2 = { create: global.BandComp.createSecond };
     var H = global.BandHarmony, wrap = (H && H.feelPart) || function (x){ return x; };                 // half time / double time (opts.timeFeel)
-    PARTS.forEach(function (p){ if (G[p] && G[p].create) self.parts[p] = wrap(G[p].create({ rng: mulberry32(seed + SEED[p]) }), p === "comp2" ? "comp" : p); });
+    PARTS.forEach(function (p){ if (G[p] && G[p].create) self.parts[p] = wrap(G[p].create({ rng: mulberry32(seed + SEED[p]) }), p === "comp2" ? "comp" : p === "congas" ? "drums" : p); });      // the congas keep time with the drums in half / double time
     this.nextL = 0; this.barNo = 0; this.chorus = 0; this.pass = 0; this.prev = null;
     var r0 = this.range(), sb = c.startBar | 0;
     this.formIdx = (sb < this.form.length && r0.has(sb)) ? sb : r0.from;   // first pass may start part-way in
     this.countIn = this.countInLeft = clamp(c.countIn | 0, 0, 2);
     this.intro = this.formIdx === 0 ? introBars(this.form, c.intro) : []; this.introAt = 0;      // only from the top of the form
     this.pending = []; this.timeline = []; this.wantEnding = false; this.done = false; this.endL = null;
+    this.rit = null; this.landL = null;                     // the ritard into the ending ({ L0, len, k, spb }) and where the band landed
     this.gen = []; this.firedL = 0;                          // form bars generated so far (for rewind), and how far events have been handed to the bank
   }
   // Writing ahead (c.ahead): how many beats beyond the scheduling horizon are generated early, so the page can
@@ -230,6 +244,7 @@
     if (k < 0) return null;
     var g = this.gen[k], L0 = g.L0; this.gen.length = k;
     this.nextL = L0; this.formIdx = g.formIdx; this.barNo = g.barNo; this.chorus = g.chorus; this.wantEnding = false; this.done = false; this.endL = null;
+    if (this.rit && this.rit.L0 >= L0 - 1e-6) this.rit = null; if (this.landL != null && this.landL >= L0 - 1e-6) this.landL = null;
     this.advance = g.adv; this.held = g.held; this.fillAsk = g.ask; this.jump = null;
     this.pending = this.pending.filter(function (p){ return p.L0 < L0 - 1e-6; });
     this.timeline = this.timeline.filter(function (e){ return e.L < L0 - 1e-6; });
@@ -248,12 +263,25 @@
   Session.prototype.start = function (t0){ this.anchorT = t0; this.anchorL = 0; };
   // `prev` is the anchor before a scheduled tempo step, so bars already generated at the
   // old tempo keep their times while the new tempo starts exactly on the barline.
-  Session.prototype.timeOf = function (L){ var p = this.prev;
-    return (p && L < this.anchorL) ? p.T + (L - p.L) * p.spb : this.anchorT + (L - this.anchorL) * this.spb; };
-  Session.prototype.linAt = function (t){ var p = this.prev;
-    return (p && t < this.anchorT) ? p.L + (t - p.T) / p.spb : this.anchorL + (t - this.anchorT) / this.spb; };
+  // A ritard (this.rit) is laid over that: from beat L0 the beat grows evenly, to (1 + k) times its length `len` beats
+  // later, and stays there. It is extra time on top of the anchor's, so nothing before L0 moves.
+  Session.prototype.timeOf = function (L){ var p = this.prev, q = this.rit, x = q ? L - q.L0 : 0;
+    return ((p && L < this.anchorL) ? p.T + (L - p.L) * p.spb : this.anchorT + (L - this.anchorL) * this.spb)
+      + (x > 0 ? q.spb * q.k * (x < q.len ? x * x / (2 * q.len) : x - q.len / 2) : 0); };
+  Session.prototype.linAt = function (t){ var p = this.prev, q = this.rit;
+    var L = (p && t < this.anchorT) ? p.L + (t - p.T) / p.spb : this.anchorL + (t - this.anchorT) / this.spb, d = q ? L - q.L0 : 0;
+    if (d <= 0) return L;                                    // (d: the beats that would have gone by since L0 at the old tempo)
+    return q.L0 + (d < q.len * (1 + q.k / 2) ? q.len / q.k * (Math.sqrt(1 + 2 * q.k * d / q.len) - 1) : (d + q.k * q.len / 2) / (1 + q.k)); };
+  // the form bars of the loop in the order they are played, and how the tune ends over them (cached for the form and loop)
+  Session.prototype.endPlan = function (r){
+    var H = global.BandHarmony, e = this.endCache; if (!H || !H.endingPlan) return null;
+    if (e && e.form === this.form && e.from === r.from && e.to === r.to) return e.plan;
+    var order = [], n = this.form.length; for (var k = 0; k < r.len; k++) order.push((r.from + k) % n);
+    this.endCache = { form: this.form, from: r.from, to: r.to, plan: H.endingPlan(this.form, order) };
+    return this.endCache.plan;
+  };
   Session.prototype.setTempo = function (bpm){
-    var now = this.ctx.currentTime, L = this.linAt(now); this.prev = null;
+    var now = this.ctx.currentTime, L = this.linAt(now); this.prev = null; this.rit = null;      // (a tempo set by hand ends a ritard)
     this.anchorL = L; this.anchorT = now; this.tempo = bpm; this.spb = 60 / bpm;
   };
   // The bars being looped: the whole form, or the cycle the page set (clamped to the form).
@@ -299,19 +327,28 @@
     if (!fb || !fb.style) return c.opts; if (!(fb.style in m)){ var s = styleOptsFor(fb.style, c.opts); m[fb.style] = s ? s.opts : c.opts; }
     return m[fb.style];
   };
+  // opts.octave = { bass: n, comp: n, comp2: n }: that player's notes n octaves up (or down). The part chooses its notes as ever;
+  // they are moved afterwards, so the sound, the notation and the MIDI file all carry the move.
+  function octaves(part, evs, opts){
+    var n = opts && opts.octave ? Math.max(-3, Math.min(3, opts.octave[part] | 0)) : 0; if (!n) return evs;
+    evs.forEach(function (e){ if (!e) return; if (e.midi != null) e.midi += 12 * n; if (e.midis) e.midis = e.midis.map(function (m){ return m + 12 * n; }); });
+    return evs;
+  }
   Session.prototype.callParts = function (method, bctx, L0){
     var self = this; this.nowOpts = bctx.opts && bctx.opts !== this.c.opts ? bctx.opts : null;
     var rec = { bar: bctx.bar, index: bctx.index, chorus: bctx.chorus, length: bctx.length, beats: bctx.beats, tempo: bctx.tempo,
                 meter: bctx.meter, compound: !!bctx.compound,
-                ending: method === "ending", chords: bctx.chords, opts: Object.assign({}, bctx.opts), parts: {} };
+                ending: method === "ending" && !bctx.final, chords: bctx.chords, opts: Object.assign({}, bctx.opts), parts: {} };
     var tacet = bctx.tacet ? String(bctx.tacet).split(" ") : [];
+    if (tacet.indexOf("drums") >= 0) tacet.push("congas");                            // the congas wait with the drums
     PARTS.forEach(function (p){ var part = self.parts[p]; if (!part || typeof part[method] !== "function" || tacet.indexOf(p) >= 0) return;
       // the drummer listens: how busy and how loud the bass and the chords are in this bar, half and half with the conductor's intensity
       if (p === "drums" && method === "bar"){ var n = 0, vs = 0; ["bass", "comp"].forEach(function (q){ (rec.parts[q] || []).forEach(function (e){ if (e.hand === "L") return; n++; vs += e.vel || 0.6; }); });
         if (n){ var dens = clamp(n / (2 * (bctx.beats || 4)) * 1.3, 0, 1), loud = clamp((vs / n - 0.5) / 0.3, 0, 1); bctx.energy = clamp(0.5 * (bctx.intensity == null ? 0.5 : bctx.intensity) + 0.25 * dens + 0.25 * loud, 0, 1); } }
-      try { var evs = part[method](bctx) || [], dyn = 0.86 + 0.28 * (bctx.intensity == null ? 0.5 : bctx.intensity);
+      try { var evs = octaves(p, part[method](bctx) || [], bctx.opts || self.c.opts), dyn = 0.86 + 0.28 * (bctx.intensity == null ? 0.5 : bctx.intensity);
         evs.forEach(function (e){ if (e && e.vel != null) e.vel = Math.round(clamp(e.vel * dyn, 0.03, 1) * 1000) / 1000; });   // louder as the band builds
-        rec.parts[p] = evs; self.collect(p, evs, L0, bctx.beats, bctx.compound, bctx.unit); }
+        if (p !== "congas" || evs.length) rec.parts[p] = evs;       // (no congas part in the record unless they play)
+        self.collect(p, evs, L0, bctx.beats, bctx.compound, bctx.unit); }
       catch (e){ if (global.console) console.error("BandPlayer: " + p + "." + method + " failed", e); } });
     // An instrument with a pedal and a switch (the tonewheel organ): where the swell sits and when the rotary speaker changes
     // speed in this bar (BandComp.organist). Kept beside the notes as rec.parts.ctl and scheduled like them.
@@ -388,6 +425,21 @@
         if (to){ nextIdx = to.from; atEnd = false; last = false; } }
     }
     beats = fb.beats; var u = fb.unit || 1;                  // (u: this bar's beat against the tempo's beat, after a change of meter)
+    // The ending, on the last pass: what this bar is to it. In hold mode nobody knows the end is coming until the last bar is
+    // asked for, so the band can only land there, and only if that is where the last chord arrives.
+    var finalPass = c.choruses > 0 && this.chorus >= c.choruses - 1, plan = finalPass ? this.endPlan(r) : null, role = null;
+    if (plan && c.hold) role = last && this.formIdx === plan.land ? "land" : null;
+    else if (plan) role = this.formIdx === plan.land ? "land" : this.formIdx === plan.setup ? "setup" : this.landL != null && plan.ring.indexOf(this.formIdx) >= 0 ? "ring" : null;
+    // ... and the ritard into it, when asked for: over the two bars before the landing (or before the end, when the band
+    // will not land), or from the bar marked "^rit." in the chart
+    if (finalPass && !c.hold && !this.rit && (fb.rit || (c.opts && c.opts.ritard))){
+      var landP = plan ? r.pos(plan.land) : r.len, rl = 0;
+      if (cp < landP && (fb.rit || cp === Math.max(0, landP - 2))){
+        for (var rk = cp; rk < landP; rk++){ var rb = form[(r.from + rk) % form.length]; rl += rb.beats * (rb.unit || 1); }
+        var amt = c.opts ? +c.opts.ritard : NaN;
+        this.rit = { L0: L0, len: rl, k: amt > 0 && amt !== 1 ? clamp(amt, 0.1, 1.5) : 0.5, spb: this.spb };
+      }
+    }
     var bctx = { bar: this.barNo, index: this.formIdx, length: form.length, chorus: this.chorus, beats: beats,
       chords: fb.chords, nextChords: form[nextIdx].chords, tempo: this.tempo / u, unit: u, last: last, loopEnd: atEnd, opts: this.barOpts(fb, this.formIdx), form: form, nextIndex: nextIdx,
       meter: fb.meter, compound: !!fb.compound, stop: isStop(c.opts, this.formIdx, form), nextStop: !last && isStop(c.opts, nextIdx, form),
@@ -395,8 +447,10 @@
       intensity: this.level(sec && c.opts.build !== false ? this.sectionLevel(si, this.formIdx, nextIdx) : intensityFor(cp, r.len, this.chorus, c.choruses, c.opts && c.opts.variation)),
       phrase: { bar: cp % 4, turnaround: r.len - 1 - cp < 2, top: this.formIdx === r.from } };
     bctx.finalChorus = c.choruses > 0 && this.chorus >= c.choruses - 1;
+    if (role === "setup"){ bctx.nextStop = true; bctx.finalNext = true; if (!bctx.fill && (c.opts || {}).fills !== "none") bctx.fill = "large"; }
+    if (role === "land"){ bctx.final = true; bctx.last = true; bctx.hold = plan.hold; this.landL = L0; }
     gi.ctx = bctx; gi.beats = beats; gi.unit = u; gi.compound = !!fb.compound;
-    gi.rec = this.callParts("bar", bctx, L0);
+    gi.rec = this.callParts(role === "land" ? "ending" : role === "ring" ? "rest" : "bar", bctx, L0);       // ("rest": no part has one, so the bar is empty)
     // The tune, where the chart's bar has one written out (fb.melody): on the comping instrument, through the comping fader.
     // opts.melody = false leaves it out; opts.melodyLevel (0..1, default 0.8) is how hard it is played.
     if (fb.melody && c.opts.melody !== false){
@@ -408,10 +462,12 @@
     }
     var info = { bar: this.barNo, index: this.formIdx, chorus: this.chorus, src: fb.src, beats: beats, countIn: false, intensity: bctx.intensity };
     if (sec){ info.section = si; info.sectionName = sec.name; info.sectionBar = this.formIdx - sec.from; info.sectionLast = this.formIdx === sec.to; info.nextSection = last ? -1 : sectionAt(secs, nextIdx); }
+    if (role === "land" || role === "ring") info.final = true;
     this.timeline.push({ L: L0, beats: beats, unit: u, info: info }); this.lastInfo = info;
     this.nextL += beats * u; this.barNo++; this.formIdx = nextIdx;
     if (atEnd){ this.chorus++; if (!last) this.stepTempo(this.nextL); }
-    if (last) this.wantEnding = true;
+    if (last && this.landL != null){ this.endL = L0; this.done = true; }      // the band has landed: that was the ending
+    else if (last) this.wantEnding = true;
     var keepT = this.c.ahead ? 600 : 8;                      // (bars written ahead are still to come: keep them findable)
     if (this.timeline.length > keepT) this.timeline.splice(0, this.timeline.length - keepT);
   };
@@ -453,7 +509,7 @@
   // Hand one event to the sample bank: swing is already in L; add the human touches here.
   Session.prototype.fire = function (p, L){
     if (p.part === "ctl"){ if (this.bank.control) this.bank.control(p.ev.sound, p.ev.ctl, p.ev.value, this.timeOf(L), (p.ev.glide || 0) * this.spb * (p.unit || 1)); return; }
-    var ev = p.ev, h = p.part === "comp2" ? this.human2 : this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, dest = this.bus.ins[p.part];
+    var ev = p.ev, h = p.part === "comp2" ? this.human2 : p.part === "congas" ? this.humanC : this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, dest = this.bus.ins[p.part];
     var t = this.timeOf(L) + (LAY[p.part] + (h() + h() - 1) * JITTER[p.part]) * hz;
     var vel = clamp((ev.vel == null ? 0.7 : ev.vel) * (1 + (h() * 2 - 1) * VEL_JITTER * hz), 0, 1);
     var o = p.o || this.c.opts || {};
@@ -462,6 +518,7 @@
       var piece = (ev.piece === "ride" && o.rideSound === "ride2") ? "ride2" : ev.piece, kv = this.c.kit && this.c.kit[ev.piece];
       this.bank.play("kit", { piece: piece, vel: vel, gain: kv == null ? 1 : kv * kv }, t, dest);
     }
+    else if (p.part === "congas") this.bank.play("congas", { piece: ev.piece, vel: vel }, t, dest);
     else if (p.part === "bass") this.bank.play(o.bassSound === "electric" ? "ebass" : "bass", { midi: ev.midi, vel: vel, dur: (ev.dur || 0.9) * this.spb * (p.unit || 1) }, t, dest);
     else {
       var ms = (ev.midis || []).slice().sort(function (a, b){ return a - b; }), n = ms.length;
@@ -473,7 +530,7 @@
       if (ev.strum){ spread = Math.min(0.028, 0.12 * this.spb) * (ev.strum === "up" ? 0.6 : 1) * hz; if (ev.strum === "up") ms.reverse(); }
       for (var i = 0; i < n; i++) this.bank.play(sound, ev.mute ? { midi: ms[i], vel: vel, dur: dur, cutoff: 1100 } : { midi: ms[i], vel: vel, dur: dur }, t + (n > 1 ? spread * i / (n - 1) : 0), dest);
     }
-    if (this.tap) this.tap({ part: p.part, time: t, L: L, pos: ev.pos, vel: vel, piece: ev.piece, midi: ev.midi, midis: ev.midis, dur: ev.dur });
+    if (this.tap) this.tap({ part: p.part, time: t, L: L, pos: ev.pos, vel: vel, piece: ev.piece, stroke: ev.stroke, hand: ev.hand, midi: ev.midi, midis: ev.midis, dur: ev.dur });
   };
   // Generate and schedule everything that sounds before `horizonT` (Infinity = the whole performance).
   Session.prototype.pump = function (horizonT){
@@ -516,7 +573,7 @@
     return { parsed: cfg.parsed || null, tempo: clamp(+cfg.tempo || 120, 30, 400), transpose: cfg.transpose | 0,
       countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 2), choruses: Math.max(0, cfg.choruses | 0),
       opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, cfg.kit),
-      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, drums: v.drums == null ? 1 : v.drums },
+      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, congas: v.congas == null ? 1 : v.congas, drums: v.drums == null ? 1 : v.drums },
       intro: cfg.intro || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
       instruments: cfg.instruments || ["bass", "piano", "kit"], ahead: !!cfg.ahead };
   }
@@ -537,6 +594,7 @@
 
     // the sample sets to have: the page's, and those of any section played in a style of its own
     function needed(){ var out = c.instruments.slice(), f = [], s2 = secondSound(c.opts); if (s2 && out.indexOf(s2) < 0) out.push(s2);
+      var ov = c.opts && c.opts.sectionOverrides; if ((congasOn(c.opts) || (ov && Object.keys(ov).some(function (k){ return congasOn(ov[k]); }))) && out.indexOf("congas") < 0) out.push("congas");
       try { f = session ? session.form : global.BandHarmony.buildForm(c.parsed, c.transpose | 0); } catch (e){}
       styleSounds(f, c.opts).forEach(function (n){ if (out.indexOf(n) < 0) out.push(n); }); return out; }
     function load(){                                            // the bank skips what it already has
@@ -669,6 +727,7 @@
       var ctx = new OAC(2, Math.ceil(seconds * rate), rate), bank = global.BandSounds.create(ctx);
       var cc = Object.assign({}, c, { volumes: volumes });
       var need = c.instruments.slice(), s2 = secondSound(c.opts); if (s2 && need.indexOf(s2) < 0) need.push(s2);
+      var ov = c.opts && c.opts.sectionOverrides; if ((congasOn(c.opts) || (ov && Object.keys(ov).some(function (k){ return congasOn(ov[k]); }))) && need.indexOf("congas") < 0) need.push("congas");
       try { styleSounds(global.BandHarmony.buildForm(c.parsed, c.transpose | 0), c.opts).forEach(function (n){ if (need.indexOf(n) < 0) need.push(n); }); } catch (e){}
       return bank.load(need).then(function (){
         var s = new Session(ctx, bank, makeBus(ctx, volumes), cc, seed, tap);
@@ -681,8 +740,8 @@
       result.mix = mix;
       if (!o.stems) return result;
       result.stems = {};
-      return PARTS.filter(function (p){ return p !== "comp2" || secondSound(c.opts); }).reduce(function (chain, p){
-        return chain.then(function (){ var solo = { bass: 0, comp: 0, comp2: 0, drums: 0 }; solo[p] = c.volumes[p];
+      return PARTS.filter(function (p){ return (p !== "comp2" || secondSound(c.opts)) && (p !== "congas" || congasOn(c.opts)); }).reduce(function (chain, p){
+        return chain.then(function (){ var solo = { bass: 0, comp: 0, comp2: 0, drums: 0, congas: 0 }; solo[p] = c.volumes[p];
           return one(solo).then(function (buf){ result.stems[p] = buf; }); });
       }, Promise.resolve()).then(function (){ return result; });
     });
@@ -704,5 +763,17 @@
     });
   }
 
-  global.BandPlayer = { chord: chord, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor };
+  // One drum hit on the band's own kit (or one conga stroke), for pages that only want to hear a piece:  BandPlayer.hit("snare", { vel }) -> Promise
+  // (loads the kit on first use, wakes the AudioContext; call it from a click)
+  // The congas are a bank of their own: BandPlayer.hit("congaSlap", { bank: "congas" }), or just the piece name (any name starting
+  // conga or tumba is taken to be one).
+  function hit(piece, o){
+    o = o || {};
+    var bankName = o.bank || (/^(conga|tumba)/.test(piece) ? "congas" : "kit");
+    var a = audio(); if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
+    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
+    return a.bank.load([bankName]).then(function (){ a.bank.play(bankName, { piece: piece, vel: o.vel == null ? 0.8 : o.vel }, a.ctx.currentTime + 0.02, chordOut); });
+  }
+
+  global.BandPlayer = { hit: hit, chord: chord, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor };
 })(typeof window !== "undefined" ? window : globalThis);
