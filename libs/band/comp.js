@@ -362,6 +362,8 @@
         ctx = Object.assign({}, ctx, { opts: Object.assign({}, ctx.opts, { compRhythm: rest.length ? rest.join("+") : "auto" }) });
       }
       var su = setup(ctx.opts), inst = su.inst;
+      // a calm bar (opts.calm; BandHarmony.calmAt: a cadence, or chords already moving fast): strike and hold
+      su.calm = !!(ctx.opts && ctx.opts.calm) && !ctx.stop && !ctx.intro && !!(H.calmAt && H.calmAt(ctx.form, ctx.index));
       if (su.style === "auto") su.style = autoStyle(ctx, su);
       var tempo = ctx.tempo || 120;
       if (ctx.stop){
@@ -381,6 +383,12 @@
         st.mode = st.modePlan.shift();
         su.four = st.mode === "four"; su.stabs = st.mode === "stabs"; su.grid = GRID[st.mode] ? st.mode : null;
         phraseEnds = st.modePlan[0] !== st.mode;                              // the next bar is another texture
+      }
+      // calm: the blend's own long-note pattern takes the bar when it has one (a slider at zero leaves it out);
+      // otherwise the pattern in hand is played plain where it knows how (the piano ballads)
+      if (su.calm){
+        var held = su.tex.filter(function (m){ return GRID[m] && GRID[m].hold && (!su.weights || su.weights[m] == null || su.weights[m] > 0); })[0];
+        if (held){ su.four = false; su.stabs = false; su.grid = held; }
       }
       if (su.four) return fourToBar(ctx, su);
       if (su.grid) return gridBar(ctx, su);
@@ -514,7 +522,7 @@
       var K = ctx.form && ctx.form[ctx.index] && ctx.form[ctx.index].keyPcs, lift = !!(H.lifted && H.lifted(ctx));
       function pc(n){ return ((n % 12) + 12) % 12; }
       function inKey(n){ return !!K && K.indexOf(pc(n)) >= 0; }
-      var hits = pat.filter(function (h){ return h[0] < beats - 1e-6; }).map(function (h){ return { pos: h[0], what: h[1] }; });
+      var hits = su.calm ? [] : pat.filter(function (h){ return h[0] < beats - 1e-6; }).map(function (h){ return { pos: h[0], what: h[1] }; });      // (calm: each chord whole as it arrives, and held)
       var segs = []; (ctx.chords || []).forEach(function (c, k){ if (!c.chord || c.chord.nc) return; segs.push({ start: c.pos, end: k + 1 < ctx.chords.length ? ctx.chords[k + 1].pos : beats, chord: c.chord }); });
       function out(e){ if (lift) e.vel = Math.min(0.78, e.vel * 1.09); e.vel = Math.round(e.vel * 1000) / 1000; e.dur = Math.round(Math.max(0.12, Math.min(e.dur, beats - e.pos)) * 1000) / 1000;
         if (Math.abs(e.pos * 2 - Math.round(e.pos * 2)) > 1e-6) e.straight = true; e.inst = su.inst; ev.push(e); return e; }
@@ -567,7 +575,7 @@
         if (!mine.length || mine[0].pos > sg.start + 1e-6) mine.unshift({ pos: sg.start, what: "F" });       // every chord is stated when it arrives
         else if (mine[0].what !== "F" && sg.start > 0) mine[0] = { pos: mine[0].pos, what: "F" };
         // what the right hand does with this chord: all of it, no root, the root late, or no fifth
-        var mode = "full", rm = amount > 0 && role && v.length === 3 ? rng() : 1;
+        var mode = "full", rm = amount > 0 && role && v.length === 3 && !su.calm ? rng() : 1;
         if (role && v.length === 3){
           if (role.root >= 0) mode = rm < 0.30 * amount ? "noRoot" : rm < 0.55 * amount ? "late" : rm < 0.85 * amount && role.fifth >= 0 ? "no5" : "full";
           else if (role.fifth >= 0 && rm < 0.30 * amount) mode = "no5";
@@ -620,7 +628,8 @@
           // upper root on 3 and a lead-in | held | root, fifth, octave, fifth in quarters
           var LH = [ [[0, "O"], [1.5, "F"], [2, "E"]], [[0, "O"], [1.5, "E"], [2, "R"]], [[0, "O"], [2, "F"], [3, "E"]],
                      [[0, "O"], [2, "E"], [3.5, "A"]], [[0, "O"]], [[0, "R"], [1, "F"], [2, "E"], [3, "F"]] ], LW = [0.30, 0.12, 0.18, 0.15, 0.13, 0.12], fig = LH[0];
-          if (amount > 0){ var rf = rng(), acc = 0; for (var q = 0; q < LH.length; q++){ acc += q === 0 ? LW[0] + (1 - amount) * 0.7 : LW[q] * amount; if (rf < acc){ fig = LH[q]; break; } } }       // (less variation: more of the plain figure)
+          if (su.calm) fig = LH[4];                                      // the held octave
+          else if (amount > 0){ var rf = rng(), acc = 0; for (var q = 0; q < LH.length; q++){ acc += q === 0 ? LW[0] + (1 - amount) * 0.7 : LW[q] * amount; if (rf < acc){ fig = LH[q]; break; } } }       // (less variation: more of the plain figure)
           fig = fig.filter(function (x){ return x[0] < len - 1e-6; });
           fig.forEach(function (x, k){
             var end = k + 1 < fig.length ? fig[k + 1][0] : len, w = x[1];

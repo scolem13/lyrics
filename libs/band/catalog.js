@@ -341,10 +341,10 @@
     { id:"waltz", label:"Waltz (in one)", group:"Hymns and carols", genres:"Quick waltzes and carols in 3/4", feel:"straight", bass:"alt", rhythm:"waltz", drums:"waltz", voicing:PLAINV,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"piano" },
       desc:"A quick 3/4 felt one to the bar: the bass on 1, light chords on 2 and 3, brushes. The bars are phrased in fours." },
-    { id:"hymn", label:"Hymn (four parts)", group:"Hymns and carols", genres:"Hymns, chorales, traditional carols", feel:"straight", bass:"held", rhythm:"hymn", drums:"none", voicing:PLAINV,
+    { id:"hymn", label:"Hymn (four parts)", group:"Hymns and carols", genres:"Hymns, chorales, traditional carols", feel:"straight", bass:"held", rhythm:"hymn", drums:"none", voicing:PLAINV, calm:true,
       sound:{ bass:"upright", cymbal:"ride", piano:"piano", guitar:"aguitar", lead:"piano" },
       desc:"No drums. Every chord is held until the next: three voices over the root on the piano, with the bass doubling the root. Choose Church organ as the instrument for the other obvious sound." },
-    { id:"carol", label:"Folk carol", group:"Hymns and carols", genres:"Carols and folk hymns with a band: between a hymn and acoustic rock", feel:"straight", bass:"halves", rhythm:"strumFolk", drums:"brushes", voicing:STRUMV,
+    { id:"carol", label:"Folk carol", group:"Hymns and carols", genres:"Carols and folk hymns with a band: between a hymn and acoustic rock", feel:"straight", bass:"halves", rhythm:"strumFolk", drums:"brushes", voicing:STRUMV, calm:true,
       sound:{ bass:"upright", cymbal:"hat", piano:"piano", guitar:"aguitar", lead:"guitar" },
       desc:"A strummed steel-string guitar, upright bass on 1 and 3 and very light time, for Deck the Halls or God Rest Ye Merry, Gentlemen played by a folk-rock band." });
   // the steady congas fit every style, and so does "none"
@@ -359,7 +359,7 @@
   // family = "piano" | "guitar" (the comping instrument to use; default the style's lead, else piano).
   function styleOpts(id, family){
     var s = byId(styles, id) || styles[0], fam = family || s.sound.lead || "piano", snd = s.sound[fam] || fam;
-    return { opts: { comp: fam, compSound: snd, bassSound: s.sound.bass, ride: s.sound.cymbal, push: !!s.push, full: !!s.full, halfRhythm: s.halfRhythm || null, feel: s.feel, congas: s.congas || "none", bassFeel: s.bass, compRhythm: s.rhythm, groove: s.drums,
+    return { opts: { comp: fam, compSound: snd, bassSound: s.sound.bass, ride: s.sound.cymbal, push: !!s.push, full: !!s.full, calm: !!s.calm, halfRhythm: s.halfRhythm || null, feel: s.feel, congas: s.congas || "none", bassFeel: s.bass, compRhythm: s.rhythm, groove: s.drums,
                      voicing: (s.voicing && s.voicing[fam]) || undefined, timeFeel: s.time ? s.time.feel : "normal", timeFeelParts: s.time ? s.time.parts : undefined },
              instruments: [s.sound.bass === "electric" ? "ebass" : "bass", snd, "kit"].concat(s.congas && s.congas !== "none" ? ["congas"] : []) };
   }

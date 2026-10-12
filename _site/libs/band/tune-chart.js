@@ -131,6 +131,8 @@
         else if (/^[\^_<>@]\s*half(\s*time)?(\s+ballad)?$/i.test(s)){ cur.feel = "half";   // "^half time": this bar is felt in half time (in pairs: bars 1+2, 3+4, ...)
           if (/ballad$/i.test(s)) cur.halfComp = "ballad"; }                               // "^half time ballad": and the chords go over to the ballad patterns
         else if (/^[\^_<>@]\s*rit(\.|ard\.?|ardando)?$/i.test(s)) cur.rit = true;           // "^rit.": the last time through, slow down from this bar into the ending
+        else if (/^[\^_<>@]\s*phrase(\s*end)?$/i.test(s)) cur.phraseEnd = true;             // "^phrase": a phrase ends with this bar (calm bars, opts.calm)
+        else if (/^[\^_<>@]\s*plain$/i.test(s)) cur.plain = true;                           // "^plain": the chords are only struck and held in this bar (opts.calm)
         else if (/^[\^_<>@]\s*style\b/i.test(s)) cur.style = s.replace(/^[\^_<>@]\s*style\s*:?\s*/i, "").trim() || "none";   // "^style bossa": this bar and the rest of its section in that style
         else if (/^[\^_<>@]\s*stop$/i.test(s)) cur.stop = true;                               // "^stop": stop time on this bar
         else if (/^[A-G]/.test(s)) { cur.chords.push({ sym:s, onset:pos }); content = true; }

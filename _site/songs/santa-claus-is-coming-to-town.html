@@ -1565,6 +1565,8 @@ window.carolTypeChoice = function () {
   function mark(bar) {
     return (bar.feel === 'half' ? '"^half time' + (bar.half === 'ballad' ? ' ballad' : '') + '"' : '')
          + (bar.rit ? '"^rit."' : '')
+         + (bar.end ? '"^phrase"' : '')
+         + (bar.plain ? '"^plain"' : '')
          + (bar.stop ? '"^stop"' : '')
          + (bar.fill ? '"^' + (bar.fill === 'small' ? 'small fill'
                              : bar.fill === 'large' ? 'big fill' : 'fill') + '"'

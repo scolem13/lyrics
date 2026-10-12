@@ -626,6 +626,31 @@
   // What a beat is in a meter. 6/8, 9/8 and 12/8 are COMPOUND: the band counts dotted quarters
   // (2, 3 or 4 beats to the bar) and each beat divides in three. Everything else counts the
   // meter's own lower note.
+  // ---- calm bars ----
+  // Where a patterned accompaniment gets in the way: around cadences and wherever the chords are already moving
+  // faster than usual. A style that asks for it (opts.calm) only strikes and holds its chords there (comp.js).
+  // calmAt(form, i) is true for
+  //   - a bar marked "^plain" in the chart;
+  //   - the last bar of a phrase (a bar marked "^phrase"; marks closer than three bars to the phrase's start are
+  //     passed over, so a chart written two bars to a row is not half calm);
+  //   - the bar before that when it holds two chords or more (the approach to the cadence);
+  //   - any bar with more chords than the tune's usual bar has (and at least two).
+  // A chart with no marks has only the last kind. Nothing here draws from the rng.
+  var calmMemo = typeof WeakMap === "function" ? new WeakMap() : null;
+  function calmBars(form){
+    var n = form.map(function (b){ return (b.chords || []).filter(function (c){ return c.chord && !c.chord.nc; }).length; });
+    var some = n.filter(function (x){ return x > 0; }).sort(function (a, b){ return a - b; });
+    var usual = some.length ? some[Math.floor((some.length - 1) / 2)] : 1, busy = Math.max(2, usual + 1), ends = [], start = 0, out = [];
+    form.forEach(function (b, i){ if (b.section != null && i > 0) start = i; ends[i] = !!b.phraseEnd && i - start + 1 >= 3; if (ends[i]) start = i + 1; });
+    form.forEach(function (b, i){ out[i] = !!b.plain || ends[i] || n[i] >= busy || (!!ends[i + 1] && n[i] >= 2 && form[i + 1].section == null); });
+    return out;
+  }
+  function calmAt(form, i){
+    if (!form || !form[i]) return false;
+    var m = calmMemo && calmMemo.get(form); if (!m){ m = calmBars(form); if (calmMemo) calmMemo.set(form, m); }
+    return !!m[i];
+  }
+
   // ---- half time / double time ----
   // feelPart(part) wraps a part (bass, comp or drums) so that ctx.opts.timeFeel can change the size of
   // its beat without the chart, the tempo or the bar count changing:
@@ -919,6 +944,8 @@
       if (bar.feel) fbar.feel = bar.feel;                                                     // "^half time": felt in half time
       if (bar.halfComp) fbar.halfComp = bar.halfComp;                                         // "^half time ballad": with the ballad piano
       if (bar.rit) fbar.rit = true;                                                           // "^rit.": the ritard into the ending starts here
+      if (bar.phraseEnd) fbar.phraseEnd = true;                                               // "^phrase": a phrase ends with this bar
+      if (bar.plain) fbar.plain = true;                                                       // "^plain": a calm bar whatever else is true of it
       if (bar.stop) fbar.stop = true;                                                         // "^stop": stop time on this bar
       if (bar.fill) fbar.fill = bar.fill;                                                     // "^fill": the drummer fills at the end of it
       out.push(fbar);
@@ -993,7 +1020,7 @@
   // Is this bar one of the chorus bars (opts.lift = form bar indexes), where the band plays up?
   function lifted(ctx, index){ var l = ctx && ctx.opts && ctx.opts.lift; return !!(l && l.indexOf && !ctx.intro && l.indexOf(index == null ? ctx.index : index) >= 0); }
 
-  global.BandHarmony = { endingPlan: endingPlan, BALLAD: BALLAD, pushes: pushes, lifted: lifted,
+  global.BandHarmony = { endingPlan: endingPlan, calmAt: calmAt, BALLAD: BALLAD, pushes: pushes, lifted: lifted,
     parseChord: parseChord, chordScale: chordScale, voicing: voicing, buildForm: buildForm,
     chordAt: chordAt, sameChord: sameChord, noteName: noteName, pcName: pcName, libChord: libChord,
     voicingClass: voicingClass, motion: motion, STYLES: STYLES,
