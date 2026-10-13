@@ -19,6 +19,7 @@
 //                                  // opts.ritard (true, or how much: 0.5 = the default, the beat half as long again by the landing) slows
 //                                  // the two bars before the landing; a bar marked "^rit." in the chart starts it there instead. Last pass only.
 //     intro: null,                 // { bars: 4, kind: "vamp" (the first chord) | "last" (the last bars of the form), tacet: "drums" }
+//                                  // or { kind: "bars", list: [form bar index, ...], tacet }: those bars of the form, in that order
 //                                  // played once after the count-in when starting from the top; onBar gets intro:true,
 //                                  // introBar / introBars, index -1. Stops and pins do not apply to it. player.setIntro(o)
 //     opts: {},                    // handed to the parts untouched, as ctx.opts
@@ -45,6 +46,11 @@
 //   player.setStartBar(i)          // form bar the next play() starts on (after the count-in)
 //   player.setCycle(from, to)      // loop just those form bars (inclusive); setCycle(null) = whole form. Live.
 //                                  // from > to loops OVER THE END of the form: setCycle(9, 1) plays bars 10..last, 1, 2.
+//   player.setBetween(o)           // bars played between one pass and the next (of the loop, or of the whole form), never after the
+//                                  // last: { kind: "click", bars: 2 } = stick clicks as in the count-in, or an intro's kinds
+//                                  // ("vamp" on the loop's first chord, "last" bars of the loop, "bars" + list), with tacet.
+//                                  // A tempo step is taken before them, so they are in the new tempo. onBar gets between:true
+//                                  // with countIn:true (click) or intro:true (the band), index -1. null = off. Live. Not in hold mode.
 //   player.setTempoSteps([8, -3])  // bpm added at each repeat, taken in turn; null = off. cfg.onTempo(bpm) reports
 //                                  // each step; stopping returns to the tempo that was set.
 // Sections: the chart's own (a P: line in the ABC puts `section` on a form bar). cfg.onSection({ index, name, bar, early })
@@ -223,6 +229,7 @@
     this.formIdx = (sb < this.form.length && r0.has(sb)) ? sb : r0.from;   // first pass may start part-way in
     this.countIn = this.countInLeft = clamp(c.countIn | 0, 0, 2);
     this.intro = this.formIdx === 0 ? introBars(this.form, c.intro) : []; this.introAt = 0;      // only from the top of the form
+    this.gap = null; this.gapAt = 0;                        // the bars between two passes (c.between), while they are being played
     this.pending = []; this.timeline = []; this.wantEnding = false; this.done = false; this.endL = null;
     this.rit = null; this.landL = null;                     // the ritard into the ending ({ L0, len, k, spb }) and where the band landed
     this.gen = []; this.firedL = 0;                          // form bars generated so far (for rewind), and how far events have been handed to the bank
@@ -247,21 +254,32 @@
     var g = this.gen[k], L0 = g.L0; this.gen.length = k;
     this.nextL = L0; this.formIdx = g.formIdx; this.barNo = g.barNo; this.chorus = g.chorus; this.wantEnding = false; this.done = false; this.endL = null;
     if (this.rit && this.rit.L0 >= L0 - 1e-6) this.rit = null; if (this.landL != null && this.landL >= L0 - 1e-6) this.landL = null;
-    this.advance = g.adv; this.held = g.held; this.fillAsk = g.ask; this.jump = null;
+    this.advance = g.adv; this.held = g.held; this.fillAsk = g.ask; this.jump = null; this.gap = null;
     this.pending = this.pending.filter(function (p){ return p.L0 < L0 - 1e-6; });
     this.timeline = this.timeline.filter(function (e){ return e.L < L0 - 1e-6; });
     return g.barNo;
   };
-  // The bars of an intro: a vamp on the form's first chord, or the last bars of the form.
-  function introBars(form, o){
-    var n = o ? clamp(o.bars | 0, 0, 16) : 0, out = [], k;
-    if (!n || !form.length) return out;
-    if (o.kind === "last"){ for (k = n; k >= 1; k--) out.push(form[((form.length - k) % form.length + form.length) % form.length]); return out; }
-    var fb = form[0], first = null;
+  // The bars of an intro: a vamp on the form's first chord, the last bars of the form, or the form bars listed.
+  // With r (a loop, Session.range) the first chord and the last bars are the loop's.
+  function introBars(form, o, r){
+    var out = [], k, N = form.length;
+    if (!o || !N) return out;
+    if (o.kind === "bars"){ (o.list || []).slice(0, 64).forEach(function (i){ if (i >= 0 && form[i | 0]) out.push(form[i | 0]); }); return out; }
+    var n = clamp(o.bars | 0, 0, 16), from = r ? r.from : 0, len = r ? r.len : N;
+    if (!n) return out;
+    if (o.kind === "last"){ for (k = n; k >= 1; k--) out.push(form[(from + ((len - k) % len + len) % len) % N]); return out; }
+    var fb = form[from], first = null;
     for (k = 0; k < fb.chords.length && !first; k++) if (fb.chords[k].chord && !fb.chords[k].chord.nc) first = fb.chords[k].chord;
     for (k = 0; k < n; k++) out.push({ src: -1, beats: fb.beats, chords: first ? [{ pos: 0, chord: first }] : [], meter: fb.meter, compound: fb.compound });
     return out;
   }
+  // What is played between this pass and the next (c.between), or null.
+  Session.prototype.gapFor = function (r){
+    var o = this.c.between; if (!o || this.c.hold) return null;
+    if (o.kind === "click"){ var n = clamp(o.bars | 0, 0, 16); return n ? { click: true, n: n } : null; }
+    var bars = introBars(this.form, o, r);
+    return bars.length ? { bars: bars, n: bars.length, tacet: o.tacet } : null;
+  };
   Session.prototype.start = function (t0){ this.anchorT = t0; this.anchorL = 0; };
   // `prev` is the anchor before a scheduled tempo step, so bars already generated at the
   // old tempo keep their times while the new tempo starts exactly on the barline.
@@ -365,32 +383,57 @@
     if (this.barTap && !bctx.intro) this.barTap(rec);        // (the intro is not part of the log of choruses)                       // onBarEvents: the bar exactly as generated (notation / MIDI export)
     return rec;
   };
+  // A bar of stick clicks in the meter of form bar `fb` (the count-in, and a click between passes). Returns its beats.
+  Session.prototype.clickBar = function (fb, L0, sparse){
+    var beats = fb.beats, cmp = !!fb.compound, thin = sparse && beats >= 4, evs = [];         // short bars are counted in full both times
+    for (var b = 0; b < beats; b++) if (!thin || b % 2 === 0){
+      evs.push({ pos: b, piece: "sticks", vel: b === 0 ? 0.8 : 0.66 });
+      if (cmp && !sparse){ evs.push({ pos: b + 1 / 3, piece: "sticks", vel: 0.3, straight: true }); evs.push({ pos: b + 2 / 3, piece: "sticks", vel: 0.3, straight: true }); }   // the three eighths of each beat
+    }
+    this.collect("drums", evs, L0, beats, cmp, fb.unit || 1);
+    return beats;
+  };
+  // Bar `ik` of a run of bars that leads into the form: the intro, or the bars between two passes (between = true).
+  Session.prototype.leadBar = function (ib, ik, L0, tacet, between){
+    var c = this.c, form = this.form, ibar = ib[ik], inext = ik + 1 < ib.length ? ib[ik + 1] : form[this.formIdx], beats = ibar.beats, u = ibar.unit || 1;
+    var chorus = between ? this.chorus : 0;
+    this.callParts("bar", { bar: ik - ib.length, index: ik, length: ib.length, chorus: chorus, beats: beats, chords: ibar.chords, nextChords: inext.chords,
+      tempo: this.tempo / u, unit: u, last: false, loopEnd: false, opts: Object.assign({}, first1(c.opts), { pins: null, stops: null }), form: ib, nextIndex: ik + 1,
+      fill: this.takeFill(), sectionEnd: ik + 1 === ib.length && form[this.formIdx].section != null ? true : undefined,      // a fill into a named first section
+      meter: ibar.meter, compound: !!ibar.compound, stop: false, nextStop: ik + 1 === ib.length && isStop(c.opts, this.formIdx, form),
+      intensity: intensityFor(0, form.length, chorus, c.choruses, c.opts && c.opts.variation), intro: true, tacet: tacet,
+      phrase: { bar: ik % 4, turnaround: ib.length - 1 - ik < 2, top: ik === 0 } }, L0);
+    var info = { bar: ik - ib.length, index: -1, chorus: chorus, src: ibar.src, beats: beats, countIn: false, intro: true, introBar: ik, introBars: ib.length };
+    if (between) info.between = true;
+    this.timeline.push({ L: L0, beats: beats, unit: u, info: info });
+    this.nextL += beats * u;
+  };
   // Generate the next bar (count-in, a bar of the form, or the ending) into `pending`.
   Session.prototype.generate = function (){
     var c = this.c, form = this.form, L0 = this.nextL, beats, b;
     if (this.countInLeft > 0){
-      beats = form[0].beats;
-      var sparse = this.countIn === 2 && this.countInLeft === 2, evs = [];        // "1 . 2 ." then "1 2 3 4"
-      var cmp = !!form[0].compound, thin = sparse && beats >= 4;                  // short bars are counted in full both times
-      for (b = 0; b < beats; b++) if (!thin || b % 2 === 0){
-        evs.push({ pos: b, piece: "sticks", vel: b === 0 ? 0.8 : 0.66 });
-        if (cmp && !sparse){ evs.push({ pos: b + 1 / 3, piece: "sticks", vel: 0.3, straight: true }); evs.push({ pos: b + 2 / 3, piece: "sticks", vel: 0.3, straight: true }); }   // the three eighths of each beat
+      beats = this.clickBar(form[0], L0, this.countIn === 2 && this.countInLeft === 2);       // "1 . 2 ." then "1 2 3 4"
+      if (this.countInLeft === 1 && this.formIdx === 0 && !this.intro.length && form[0].pickup && c.opts.melody !== false){         // the tune's pickup: the end of the last count-in bar
+        var pkLead = c.opts.comp === "guitar" ? "guitar" : "piano", pkVel = c.opts.melodyLevel == null ? 0.8 : +c.opts.melodyLevel;
+        this.collect("comp", form[0].pickup.map(function (n){ var e = { pos: n.pos, dur: Math.max(0.1, n.dur * 0.95), midis: [n.midi], vel: pkVel, inst: pkLead, melody: true };
+          if (Math.abs(n.pos * 2 - Math.round(n.pos * 2)) > 1e-3) e.straight = true; return e; }), L0, beats, form[0].compound, form[0].unit || 1);
       }
-      this.collect("drums", evs, L0, beats, cmp);
       this.timeline.push({ L: L0, beats: beats, info: { bar: -this.countInLeft, index: -1, chorus: 0, src: -1, beats: beats, countIn: true } });
       this.countInLeft--; this.nextL += beats; return;
     }
     if (this.introAt < this.intro.length){                   // the intro: once, between the count-in and the top
-      var ib = this.intro, ik = this.introAt, ibar = ib[ik], inext = ik + 1 < ib.length ? ib[ik + 1] : form[this.formIdx];
-      beats = ibar.beats;
-      this.callParts("bar", { bar: ik - ib.length, index: ik, length: ib.length, chorus: 0, beats: beats, chords: ibar.chords, nextChords: inext.chords,
-        tempo: this.tempo, last: false, loopEnd: false, opts: Object.assign({}, first1(c.opts), { pins: null, stops: null }), form: ib, nextIndex: ik + 1,
-        fill: this.takeFill(), sectionEnd: ik + 1 === ib.length && form[this.formIdx].section != null ? true : undefined,      // a fill into a named first section
-        meter: ibar.meter, compound: !!ibar.compound, stop: false, nextStop: ik + 1 === ib.length && isStop(c.opts, this.formIdx, form),
-        intensity: intensityFor(0, form.length, 0, c.choruses, c.opts && c.opts.variation), intro: true, tacet: c.intro && c.intro.tacet,
-        phrase: { bar: ik % 4, turnaround: ib.length - 1 - ik < 2, top: ik === 0 } }, L0);
-      this.timeline.push({ L: L0, beats: beats, info: { bar: ik - ib.length, index: -1, chorus: 0, src: ibar.src, beats: beats, countIn: false, intro: true, introBar: ik, introBars: ib.length } });
-      this.introAt++; this.nextL += beats; return;
+      this.leadBar(this.intro, this.introAt, L0, c.intro && c.intro.tacet, false);
+      this.introAt++; return;
+    }
+    if (this.gap){                                           // between two passes: a click, or bars of the band's
+      var gp = this.gap, gk = this.gapAt;
+      if (gp.click){
+        var gb = form[this.formIdx] || form[0], gu = gb.unit || 1; beats = this.clickBar(gb, L0, false);
+        this.timeline.push({ L: L0, beats: beats, unit: gu, info: { bar: gk - gp.n, index: -1, chorus: this.chorus, src: -1, beats: beats, countIn: true, between: true } });
+        this.nextL += beats * gu;
+      } else this.leadBar(gp.bars, gk, L0, gp.tacet, true);
+      if (++this.gapAt >= gp.n) this.gap = null;
+      return;
     }
     if (this.wantEnding){                                    // the final hit: every part lands on the top chord
       var top = form[this.range().from], first = top.chords.length ? [{ pos: 0, chord: top.chords[0].chord }] : [];
@@ -457,8 +500,9 @@
     // The tune, where the chart's bar has one written out (fb.melody): on the comping instrument, through the comping fader.
     // opts.melody = false leaves it out; opts.melodyLevel (0..1, default 0.8) is how hard it is played.
     if (fb.melody && c.opts.melody !== false){
+      var pkOut = role === "land" || role === "ring";                           // (a pickup leads into the top: after the ending there is none)
       var lead = c.opts.comp === "guitar" ? "guitar" : "piano", mv = c.opts.melodyLevel == null ? 0.8 : +c.opts.melodyLevel;
-      var mel = fb.melody.map(function (n){ var e = { pos: n.pos, dur: Math.max(0.1, n.dur * 0.95), midis: [n.midi], vel: mv, inst: lead, melody: true };
+      var mel = fb.melody.filter(function (n){ return !(pkOut && n.pickup); }).map(function (n){ var e = { pos: n.pos, dur: Math.max(0.1, n.dur * 0.95), midis: [n.midi], vel: mv, inst: lead, melody: true };
         if (Math.abs(n.pos * 2 - Math.round(n.pos * 2)) > 1e-3) e.straight = true; return e; });
       this.collect("comp", mel, L0, beats, fb.compound, u);
       if (gi.rec && gi.rec.parts) gi.rec.parts.melody = mel;
@@ -468,7 +512,7 @@
     if (role === "land" || role === "ring") info.final = true;
     this.timeline.push({ L: L0, beats: beats, unit: u, info: info }); this.lastInfo = info;
     this.nextL += beats * u; this.barNo++; this.formIdx = nextIdx;
-    if (atEnd){ this.chorus++; if (!last) this.stepTempo(this.nextL); }
+    if (atEnd){ this.chorus++; if (!last){ this.stepTempo(this.nextL); this.gap = this.gapFor(r); this.gapAt = 0; } }
     if (last && this.landL != null){ this.endL = L0; this.done = true; }      // the band has landed: that was the ending
     else if (last) this.wantEnding = true;
     var keepT = this.c.ahead ? 600 : 8;                      // (bars written ahead are still to come: keep them findable)
@@ -577,7 +621,7 @@
       countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 2), choruses: Math.max(0, cfg.choruses | 0),
       opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, cfg.kit),
       volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, congas: v.congas == null ? 1 : v.congas, drums: v.drums == null ? 1 : v.drums },
-      intro: cfg.intro || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
+      intro: cfg.intro || null, between: cfg.between || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
       instruments: cfg.instruments || ["bass", "piano", "kit"], ahead: !!cfg.ahead };
   }
   function newSeed(seed){ return seed == null ? (Math.random() * 0x7fffffff) | 0 : seed | 0; }
@@ -704,6 +748,7 @@
         if (!c.hold) session.jump = session.sections[i].from; else { session.advance = i | 0; if (session.held) session.fillNow("medium", true); } return true; },
       fill: function (size){ if (!session) return null; redo(); return session.fillNow(size === "small" || size === "large" ? size : "medium"); },
       setIntro: function (o){ c.intro = o || null; },             // takes effect at the next play()
+      setBetween: function (o){ c.between = o || null; redo(); },  // live
       setChoruses: function (n){ c.choruses = Math.max(0, n | 0); redo(); },
       setStartBar: function (i){ c.startBar = Math.max(0, i | 0); },                       // form bar index for the next play()
       setCycle: function (from, to){ c.cycle = from == null ? null : { from: from | 0, to: (to == null ? from : to) | 0 }; redo(); },   // live
@@ -716,7 +761,7 @@
   function renderOffline(o){
     o = o || {};
     var c = settings(o), seed = newSeed(o.seed), rate = o.sampleRate || 44100;
-    c.startBar = 0; c.cycle = null; c.tempoSteps = null;      // offline renders are whole choruses at one tempo
+    c.startBar = 0; c.cycle = null; c.tempoSteps = null; c.between = null;      // offline renders are whole choruses at one tempo
     if (!(c.choruses > 0)) c.choruses = 2;
     var OAC = global.OfflineAudioContext || global.webkitOfflineAudioContext, form = buildForm(c.parsed, c.transpose);
     if (!OAC || !global.BandSounds) return Promise.reject(new Error("BandPlayer: offline audio unavailable"));
@@ -778,5 +823,15 @@
     return a.bank.load([bankName]).then(function (){ a.bank.play(bankName, { piece: piece, vel: o.vel == null ? 0.8 : o.vel }, a.ctx.currentTime + 0.02, chordOut); });
   }
 
-  global.BandPlayer = { hit: hit, chord: chord, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor };
+  // A page that keeps its own time (a metronome that changes bar length while you play): load the kit, then put a stick click on the clock.
+  //   BandPlayer.clickLoad() -> Promise(AudioContext)     BandPlayer.clickAt(ctxTime, accent)
+  function clickLoad(){
+    var a = audio(); if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
+    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
+    return a.bank.load(["kit"]).then(function (){ return a.ctx; });
+  }
+  function clickAt(at, accent){ var a = audio(); a.bank.play("kit", { piece: "sticks", vel: accent ? 0.85 : 0.55 }, at, chordOut); }
+
+  global.BandPlayer = { hit: hit, chord: chord, clickLoad: clickLoad, clickAt: clickAt, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor,
+    Session: Session };                                      // (for tests: the bars a session generates, without sound)
 })(typeof window !== "undefined" ? window : globalThis);

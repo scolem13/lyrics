@@ -938,6 +938,7 @@
     var kf = String(parsed.keyField || "").replace(/^[A-Ga-g][#b]?\s*/, ""), minorKey = /^(m(?!aj)|min|aeo)/i.test(kf);
     var keyPcs = parsed.keyPc == null ? null : [0, 2, 4, 5, 7, 9, 11].map(function (iv){ return mod12(parsed.keyPc + (minorKey ? 3 : 0) + (transpose || 0) + iv); });
 
+    var pickedFirst = false;
     order.forEach(function (bi){
       var bar = parsed.bars[bi];
       if (!bar || bar.anacrusis) return;                            // the band comes in on bar 1
@@ -948,6 +949,11 @@
       // a bar that does not add up to its meter (TuneChart marks it misfit): a full bar of the meter, unless the chart says to
       // play such bars as written (parsed.asWritten), short or long
       if (bar.misfit) beats = parsed.asWritten ? Math.max(1, Math.round(len)) : mi.beats;
+      // A pickup (anacrusis) is the end of the last bar: the tune's last bar and its pickup make one bar of the meter. The band does not play
+      // the pickup as a bar, so the last bar is played whole (else every chorus is a beat short) and the pickup's notes sound at its end.
+      var pk = parsed.anacrusis && parsed.bars[0] && parsed.bars[0].anacrusis ? parsed.bars[0] : null;
+      var endsWithPickup = !!pk && bi !== 0 && bi === order[order.length - 1] && !bar.misfit && Math.abs(bar.lengthUnits + (parsed.anacrusisUnits || 0) - bar.fullUnits) < 1e-6;
+      if (endsWithPickup) beats = mi.beats;
       var barUnits = beats * upBeat;
 
       var raw = [];
@@ -986,6 +992,10 @@
       if (bar.section != null && bar.section !== "") fbar.section = String(bar.section);      // P:Verse in the ABC: a section starts on this bar
       // a written melody for this bar (a page puts it on the parsed bar): [{ pos (beats), dur (beats), midi }]; the player plays it on the comping instrument
       if (bar.melody && bar.melody.length) fbar.melody = bar.melody.map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0) }; });
+      var pkNotes = pk && pk.melody && pk.melody.length ? pk.melody.map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0), pickup: true }; }) : null;
+      if (pkNotes && endsWithPickup) fbar.melody = (fbar.melody || []).concat(pkNotes);          // (sounds at the end of the last bar, into the top)
+      if (pkNotes && !pickedFirst) fbar.pickup = pkNotes;                          // (the first bar: the player sounds it at the end of the count-in)
+      pickedFirst = true;
       if (styleAt[bi]) fbar.style = styleAt[bi];                                              // "^style bossa" / %%style under a P: line: this section's own style
       if (bar.feel) fbar.feel = bar.feel;                                                     // "^half time": felt in half time
       if (bar.halfComp) fbar.halfComp = bar.halfComp;                                         // "^half time ballad": with the ballad piano

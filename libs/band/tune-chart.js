@@ -154,7 +154,9 @@
       // tuplet "(p" (vs slur "(")
       if (c === '(' && /\d/.test(music[i+1] || "")){ var p = parseInt(music[i+1], 10);
         tupletLeft = p; tupletMul = (TUPLET_TIME[p] || 2) / p; i += 2;
-        if (music[i] === ':'){ while (i < music.length && /[:\d]/.test(music[i])) i++; }       // (p:q:r — ignore q/r
+        if (music[i] === ':'){                                                                  // (p:q:r — p notes in the time of q, over the next r notes
+          var mq = /^:(\d*)(?::(\d*))?/.exec(music.slice(i)); i += mq[0].length;
+          if (mq[1]) tupletMul = parseInt(mq[1], 10) / p; if (mq[2]) tupletLeft = parseInt(mq[2], 10); }
         continue; }
       if (c === '(' || c === ')' || c === '-'){ i++; continue; }                              // slurs / ties
       // inline field or note-chord group in brackets
@@ -469,6 +471,8 @@
     + '.tune-chart .tc-bar.tc-live{background:var(--tc-live-soft)}'
     + '.tune-chart .tc-bar.tc-live::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--tc-live)}'
     + '.tune-chart .tc-bar.tc-live .tc-chord{color:#0c5a52}'
+    + '.tune-chart .tc-tight .tc-rt{font-size:1.25rem}.tune-chart .tc-tight .tc-q{font-size:.8rem}.tune-chart.tc-roman-both .tc-tight .tc-chord{gap:.25rem}'
+    + '.tune-chart.tc-roman-both .tc-tight .tc-rn{font-size:.6rem;letter-spacing:0}.tune-chart.tc-roman-mode .tc-tight .tc-rt{font-size:1rem;letter-spacing:0}'
     + '@media (max-width:560px){.tune-chart .tc-rt{font-size:1.3rem}.tune-chart.tc-roman-both .tc-rt{font-size:1.1rem}.tune-chart.tc-roman-both .tc-rn{font-size:.66rem}}';
     var st = document.createElement("style"); st.id = "tune-chart-css"; st.textContent = css; document.head.appendChild(st);
   }
@@ -503,6 +507,10 @@
       return rows;
     }
     function fillChord(cell, bar, upb){
+      // a bar with a chord that has under a third of the bar to itself (a two-five, a beat each) is drawn smaller, so that its letters and numerals do not run together
+      var ons = bar.chords.map(function(c){ return c.onset; }).sort(function(a, b){ return a - b; }), tight = false;
+      for (var q = 0; q < ons.length; q++) if (((q + 1 < ons.length ? ons[q + 1] : upb) - ons[q]) / upb < 0.3) tight = true;
+      cell.classList.toggle("tc-tight", tight);
       bar.chords.forEach(function(ch){
         var el = document.createElement("span");
         var leftCss = "calc(" + (100 * ch.onset / upb) + "% + .2rem)";

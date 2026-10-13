@@ -1686,10 +1686,12 @@ window.carolTypeChoice = function () {
           var m = barMeter(b);
           return { text: gridBar(b), n: m.n, d: m.d };
         });
-        // Another version's chords under the tune the section has written out.
-        if (other && part && part.abc) {
+        // Another version's chords under the tune the section has written out,
+        // or a melody written for the grid's own bars ({start_of_abc} next to it).
+        var tune = other && part && part.abc ? part.abc : !other && part ? part.melody_abc : null;
+        if (tune) {
           try {
-            var sung = tuneBars(part.abc);
+            var sung = tuneBars(tune);
             if (sung.length === bars.length) {
               bars.forEach(function (b, k) { b.melody = sung[k].melody; });
             }
@@ -1776,6 +1778,13 @@ window.carolTypeChoice = function () {
   var fillButton = button('Drum fill', 'd', fillNow);
   var tuneButton = button('', 'm', toggleTune);
   tuneButton.hidden = true;
+  // A song whose bars are not all sung by a written melody (none at all, or only
+  // an intro and an interlude): the Chord Entry page of the music site, with this
+  // song's chords loaded, set to record the melody against the band.
+  var entryButton = button('Enter the melody', '', enterMelody);
+  entryButton.hidden = true;
+  entryButton.firstChild.nodeValue = 'Enter the melody';
+  entryButton.removeChild(entryButton.lastChild);
   var status = document.createElement('div');
   status.className = 'midi-status';
   panel.appendChild(status);
@@ -1837,6 +1846,37 @@ window.carolTypeChoice = function () {
     if (player) player.setOpts(bandOpts());
   }
   showTune();
+  // Bars that have a melody, of all the bars the band plays (the chart as the
+  // road walks it; the same bar twice counts twice).
+  function melodyCount() {
+    return { have: melodies.filter(function (m) { return m; }).length, total: melodies.length };
+  }
+  function showEntry(known) {
+    var c = melodyCount();
+    entryButton.hidden = !known || !c.total || c.have >= c.total;
+    if (entryButton.hidden) return;
+    entryButton.firstChild.nodeValue = c.have
+      ? 'Enter the melody (' + c.have + ' of ' + c.total + ' bars have one)'
+      : 'Enter the melody';
+    entryButton.title = 'Opens the Chord Entry page of the music site with this song\'s chords loaded, set to record the melody with the band';
+  }
+  function enterMelody() {
+    var c = melodyCount(), abc = window.carolBandAbc;
+    if (!abc) return;
+    var heading = document.querySelector('h1.title');
+    var d = { abc: abc.replace(/^T:\s*\d+\.\s*/m, 'T:'), have: c.have, total: c.total, tempo: tempo(), style: styleBox.value,
+              title: (heading ? heading.textContent : document.title).replace(/^\d+\.\s*/, '').trim() };
+    // The song's own file goes too, so the page can put its words under the notes and
+    // hand the file back with the melody written in; and the melody it already has.
+    var source = null;
+    try { source = JSON.parse(document.getElementById('band-source').textContent); } catch (e) {}
+    if (source && source.cho) { d.cho = source.cho; d.slug = source.slug || ''; }
+    if (c.have) d.melody = melodies.map(function (m) {
+      return m ? m.map(function (n) { return { pos: Math.round(n.pos * 1000) / 1000, dur: Math.round(n.dur * 1000) / 1000, midi: n.midi }; }) : null;
+    });
+    var page = musicSite() + '/tools/chord-entry.html#from=tune&d=' + encodeURIComponent(JSON.stringify(d));
+    if (!window.open(page, 'carols-chord-entry')) say('The browser blocked the new window. Allow pop-ups for this site.');
+  }
   var here = null, handlers = null;
   // The Backing Track page in a window of its own, playing for this one.
   var away = null, awayOrigin = null, awayState = 'idle';
@@ -2008,6 +2048,7 @@ window.carolTypeChoice = function () {
       parsed.bars.forEach(function (b, k) { if (melodies[k]) b.melody = melodies[k]; });
     } else hasTune = false;
     tuneButton.hidden = !hasTune;
+    showEntry(parsed.bars.length === melodies.length);
     form = window.BandHarmony.buildForm(parsed, 0);
     starts = [];
     form.forEach(function (bar, i) { if (bar.section != null) starts.push(i); });
@@ -2028,9 +2069,10 @@ window.carolTypeChoice = function () {
       },
       onBar: function (info) {
         if (info.countIn) say('Count-in');
-        var fresh = !nowBar;
+        // (back: a loop in the Backing Track window has gone round to an earlier bar)
+        var fresh = !nowBar, back = !!nowBar && info.index <= nowBar.index;
         nowBar = info.countIn || info.ending || info.intro ? null : info;
-        if (nowBar && (info.sectionBar === 0 || fresh)) chordsOf(info.section, info.index);
+        if (nowBar && (info.sectionBar === 0 || fresh || back)) chordsOf(info.section, info.index);
       },
       onBeat: function (info) { chordBeat(info.beat); },
       onSection: function (sc) {
