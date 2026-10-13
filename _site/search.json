@@ -383,11 +383,11 @@
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html",
-    "href": "songs/winter-wonderland.html",
+    "objectID": "songs/winter-wonderland.html#segno",
+    "href": "songs/winter-wonderland.html#segno",
     "title": "2. Winter Wonderland",
-    "section": "",
-    "text": "Sleigh bells Ebring, are you Gmlistening?Cm In the Fmlane, snow is Bbglistening A Gmbeautiful sD9ight, we’re Gm7happy toC9#5night F9Walking in a Bb7winter wonderlEband",
+    "section": "Segno",
+    "text": "Segno",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -398,8 +398,8 @@
     "objectID": "songs/winter-wonderland.html#verse-1",
     "href": "songs/winter-wonderland.html#verse-1",
     "title": "2. Winter Wonderland",
-    "section": "",
-    "text": "Sleigh bells Ebring, are you Gmlistening?Cm In the Fmlane, snow is Bbglistening A Gmbeautiful sD9ight, we’re Gm7happy toC9#5night F9Walking in a Bb7winter wonderlEband",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nSleigh bells Ebring, are you Gmlistening?C7 In the Fmlane, snow is Bbglistening A Gmbeautiful sD9ight, we’re Gm7happy toC9#5night F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -411,7 +411,7 @@
     "href": "songs/winter-wonderland.html#verse-2",
     "title": "2. Winter Wonderland",
     "section": "Verse 2",
-    "text": "Verse 2\n\nGone aEbway, is the GmbluebirdCm Here to Fmstay, is a Bbnew bird He Gmsings a love D9song, as Gm7we go aC9#5long F9Walking in a Bb7winter wonderlEband",
+    "text": "Verse 2\n\nGone aEbway, is the GmbluebirdC7 Here to Fmstay, is a Bbnew bird He Gmsings a love D9song, as Gm7we go aC9#5long F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -423,7 +423,7 @@
     "href": "songs/winter-wonderland.html#bridge",
     "title": "2. Winter Wonderland",
     "section": "Bridge",
-    "text": "Bridge\n\nGM7In the meadow AM7/Dwe can build a GM7snowman GThen pretend that AM7/Dhe is Parson GM7Brown BbHe’ll say, “Are you Cm7/Fmarried?” We’ll say, Bb“No man, but C7you can do theF7 job while you’re in Bbtown”",
+    "text": "Bridge\n\nGM7In the meadow Am7/Dwe can build a GM7snowman GThen pretend that Am7/Dhe is Parson GM7Brown BbHe’ll say, “Are you Cm7/Fmarried?” We’ll say, Bb“No man, but C7you can do theF7 job while you’re in Bbtown”",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -435,7 +435,7 @@
     "href": "songs/winter-wonderland.html#verse-3",
     "title": "2. Winter Wonderland",
     "section": "Verse 3",
-    "text": "Verse 3\n\nLater Ebon, we’ll GmconspireCm As we Fmdream, by the Bbfire To Gmface unaD9fraid, the Gm7plans that we C9#5made F9Walking in a Bb7winter wonderlEband",
+    "text": "Verse 3\n\nLater Ebon, we’ll GmconspireC7 As we Fmdream, by the Bbfire To Gmface unaD9fraid, the Gm7plans that we C9#5made F9Walking in a Bb7winter wonderlEband",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -455,11 +455,11 @@
     ]
   },
   {
-    "objectID": "songs/winter-wonderland.html#d.c.-al-coda",
-    "href": "songs/winter-wonderland.html#d.c.-al-coda",
+    "objectID": "songs/winter-wonderland.html#d.s.-al-coda",
+    "href": "songs/winter-wonderland.html#d.s.-al-coda",
     "title": "2. Winter Wonderland",
-    "section": "D.C. al Coda",
-    "text": "D.C. al Coda",
+    "section": "D.S. al Coda",
+    "text": "D.S. al Coda",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -842,7 +842,7 @@
     "href": "songs/twelve-days-of-christmas.html",
     "title": "10. Twelve Days of Christmas",
     "section": "",
-    "text": "On the Dfirst day of BmChristmas, My Emtrue love Asent to Dme ATwelve drummers drumming, AEleven pipers piping, ATen lords a-leaping, ANine ladies dancing, AEight maids a-milking, ASeven swans a-swimming, ASix geese a-laying, DFive Egolden Arings, DFour calling birds, BmThree French hens, ETwo turtle Adoves, And a D/F#partrGidge D/Ain a Apear Dtree!",
+    "text": "On the Dfirst day of BmChristmas, My Emtrue love Asent to Dme ATwelve drummers drumming, AEleven pipers piping, ATen lords a-leaping, ANine ladies dancing, AEight maids a-milking, ASeven swans a-swimming, ASix geese a-laying, DFive Egolden Arings, AFour calling birds, DFour calling birds, AThree French hens, BmThree French hens, ATwo turtle doves, ETwo turtle Adoves, A D/F#partrGidge D/Ain a Apear Dtree! And a D/F#partrGidge D/Ain a Apear Dtree!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1082,7 +1082,7 @@
     "href": "songs/end-of-beginning.html",
     "title": "1. End of Beginning",
     "section": "",
-    "text": "|N.C.|",
+    "text": "N.C.N.C.",
     "crumbs": [
       "Programme",
       "Winter Concert",
@@ -1094,7 +1094,7 @@
     "href": "songs/end-of-beginning.html#intro",
     "title": "1. End of Beginning",
     "section": "",
-    "text": "|N.C.|",
+    "text": "N.C.N.C.",
     "crumbs": [
       "Programme",
       "Winter Concert",
@@ -1166,7 +1166,7 @@
     "href": "songs/end-of-beginning.html#chorus-2",
     "title": "1. End of Beginning",
     "section": "Chorus",
-    "text": "Chorus\n\nGAnd when I'm Dback in ChiAcago, I Gfeel it Another Bmversion of Ame, I was F#m7in Git I wave goodDbye to the Aend of beGginning G(Goodbye, goodbye)N.C.\n\n\n\n← Programme Viva la Vida →",
+    "text": "Chorus\n\nGAnd when I'm Dback in ChiAcago, I Gfeel it Another Bmversion of Ame, I was F#m7in Git I wave goodDbye to the Aend of beGginning G(Goodbye, goodbye)N.C.\n\n\n\n\n← Programme Viva la Vida →",
     "crumbs": [
       "Programme",
       "Winter Concert",
@@ -1386,7 +1386,7 @@
     "href": "songs/viva-la-vida.html#interlude-2",
     "title": "2. Viva la Vida",
     "section": "Interlude",
-    "text": "Interlude\n\nDbFmx3 Ebadd11Ebadd11 OhDbhhhhEbadd11h OhAbhhhhFmh OhDbhhhhEbadd11h OhAbhhhhFmh",
+    "text": "Interlude\n\nDbFmDbFmDbFm Ebadd11Ebadd11 OhDbhhhhEbadd11h OhAbhhhhFmh OhDbhhhhEbadd11h OhAbhhhhFmh",
     "crumbs": [
       "Programme",
       "Winter Concert",

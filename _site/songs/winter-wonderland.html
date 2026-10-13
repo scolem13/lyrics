@@ -137,6 +137,16 @@ window.CAROL_TYPE = {
     min: 50, max: 220, step: 5, fallback: 100, unit: '%',
     cssVar: '--staff-height', cssUnit: '%'
   },
+  // The words under the chord the band is on, when the chords are hidden.
+  sung: {
+    label: 'Sung words',
+    options: [
+      { id: 'marked', name: 'Highlighted',
+        vars: { '--sung-now': '#0d6efd', '--sung-line': '#0d6efd', '--sung-stroke': '.03em' } },
+      { id: 'plain', name: 'Not highlighted',
+        vars: { '--sung-now': 'currentColor', '--sung-line': 'transparent', '--sung-stroke': '0' } }
+    ]
+  },
   chordColour: {
     label: 'Chord colour',
     options: [
@@ -377,12 +387,14 @@ window.carolTypeChoice = function () {
     <h2 id="toc-title">Sections</h2>
    
   <ul class="collapse">
-  <li><a href="#verse-1" id="toc-verse-1" class="nav-link active" data-scroll-target="#verse-1">Verse 1</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#segno" id="toc-segno" class="nav-link" data-scroll-target="#segno">Segno</a></li>
+  <li><a href="#verse-1" id="toc-verse-1" class="nav-link" data-scroll-target="#verse-1">Verse 1</a></li>
   <li><a href="#verse-2" id="toc-verse-2" class="nav-link" data-scroll-target="#verse-2">Verse 2</a></li>
   <li><a href="#bridge" id="toc-bridge" class="nav-link" data-scroll-target="#bridge">Bridge</a></li>
   <li><a href="#verse-3" id="toc-verse-3" class="nav-link" data-scroll-target="#verse-3">Verse 3</a></li>
   <li><a href="#interlude" id="toc-interlude" class="nav-link" data-scroll-target="#interlude">Interlude</a></li>
-  <li><a href="#d.c.-al-coda" id="toc-d.c.-al-coda" class="nav-link" data-scroll-target="#d.c.-al-coda">D.C. al Coda</a></li>
+  <li><a href="#d.s.-al-coda" id="toc-d.s.-al-coda" class="nav-link" data-scroll-target="#d.s.-al-coda">D.S. al Coda</a></li>
   <li><a href="#coda" id="toc-coda" class="nav-link" data-scroll-target="#coda">Coda</a></li>
   </ul>
 </nav>
@@ -409,28 +421,40 @@ window.carolTypeChoice = function () {
 </header>
 
 
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<div class="cline">
+
+</div>
+</section>
+<section id="segno" class="level2">
+<h2 class="anchored" data-anchor-id="segno">Segno</h2>
+<div class="cline">
+
+</div>
+</section>
 <section id="verse-1" class="level2">
 <h2 class="anchored" data-anchor-id="verse-1">Verse 1</h2>
 <div class="cline">
-<p><span class="ln"><span class="cw">Sleigh bells </span><span class="cw"><span class="ch">Eb</span>ring, are you </span><span class="nb"><span class="cw"><span class="ch">Gm</span>listening?</span><span class="cw bare"><span class="ch">Cm</span></span></span></span> <span class="ln"><span class="cw">In the </span><span class="cw"><span class="ch">Fm</span>lane, snow is </span><span class="cw"><span class="ch">Bb</span>glistening</span></span> <span class="ln"><span class="cw">A </span><span class="nb"><span class="cw"><span class="ch">Gm</span>beautiful s</span><span class="cw"><span class="ch">D9</span>ight, </span></span><span class="cw">we’re </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>happy to</span><span class="cw"><span class="ch">C9#5</span>night</span></span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
+<p><span class="ln"><span class="cw">Sleigh bells </span><span class="cw"><span class="ch">Eb</span>ring, are you </span><span class="nb"><span class="cw"><span class="ch">Gm</span>listening?</span><span class="cw bare"><span class="ch">C7</span></span></span></span> <span class="ln"><span class="cw">In the </span><span class="cw"><span class="ch">Fm</span>lane, snow is </span><span class="cw"><span class="ch">Bb</span>glistening</span></span> <span class="ln"><span class="cw">A </span><span class="nb"><span class="cw"><span class="ch">Gm</span>beautiful s</span><span class="cw"><span class="ch">D9</span>ight, </span></span><span class="cw">we’re </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>happy to</span><span class="cw"><span class="ch">C9#5</span>night</span></span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
 </div>
 </section>
 <section id="verse-2" class="level2">
 <h2 class="anchored" data-anchor-id="verse-2">Verse 2</h2>
 <div class="cline">
-<p><span class="ln"><span class="nb"><span class="cw">Gone a</span><span class="cw"><span class="ch">Eb</span>way, </span></span><span class="cw">is the </span><span class="nb"><span class="cw"><span class="ch">Gm</span>bluebird</span><span class="cw bare"><span class="ch">Cm</span></span></span></span> <span class="ln"><span class="cw">Here to </span><span class="cw"><span class="ch">Fm</span>stay, is a </span><span class="cw"><span class="ch">Bb</span>new bird</span></span> <span class="ln"><span class="cw">He </span><span class="cw"><span class="ch">Gm</span>sings a love </span><span class="cw"><span class="ch">D9</span>song, as </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>we go a</span><span class="cw"><span class="ch">C9#5</span>long</span></span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
+<p><span class="ln"><span class="nb"><span class="cw">Gone a</span><span class="cw"><span class="ch">Eb</span>way, </span></span><span class="cw">is the </span><span class="nb"><span class="cw"><span class="ch">Gm</span>bluebird</span><span class="cw bare"><span class="ch">C7</span></span></span></span> <span class="ln"><span class="cw">Here to </span><span class="cw"><span class="ch">Fm</span>stay, is a </span><span class="cw"><span class="ch">Bb</span>new bird</span></span> <span class="ln"><span class="cw">He </span><span class="cw"><span class="ch">Gm</span>sings a love </span><span class="cw"><span class="ch">D9</span>song, as </span><span class="nb"><span class="cw"><span class="ch">Gm7</span>we go a</span><span class="cw"><span class="ch">C9#5</span>long</span></span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
 </div>
 </section>
 <section id="bridge" class="level2">
 <h2 class="anchored" data-anchor-id="bridge">Bridge</h2>
 <div class="cline">
-<p><span class="ln"><span class="cw"><span class="ch">GM7</span>In the meadow </span><span class="cw"><span class="ch">AM7/D</span>we can build a </span><span class="cw"><span class="ch">GM7</span>snowman</span></span> <span class="ln"><span class="cw"><span class="ch">G</span>Then pretend that </span><span class="cw"><span class="ch">AM7/D</span>he is Parson </span><span class="cw"><span class="ch">GM7</span>Brown</span></span> <span class="ln"><span class="cw"><span class="ch">Bb</span>He’ll say, “Are you </span><span class="cw"><span class="ch">Cm7/F</span>married?”</span></span> <span class="ln"><span class="cw">We’ll say, </span><span class="cw"><span class="ch">Bb</span>“No man, but </span><span class="nb"><span class="cw"><span class="ch">C7</span>you can do the</span><span class="cw"><span class="ch">F7</span> job </span></span><span class="cw">while you’re in </span><span class="cw"><span class="ch">Bb</span>town”</span></span></p>
+<p><span class="ln"><span class="cw"><span class="ch">GM7</span>In the meadow </span><span class="cw"><span class="ch">Am7/D</span>we can build a </span><span class="cw"><span class="ch">GM7</span>snowman</span></span> <span class="ln"><span class="cw"><span class="ch">G</span>Then pretend that </span><span class="cw"><span class="ch">Am7/D</span>he is Parson </span><span class="cw"><span class="ch">GM7</span>Brown</span></span> <span class="ln"><span class="cw"><span class="ch">Bb</span>He’ll say, “Are you </span><span class="cw"><span class="ch">Cm7/F</span>married?”</span></span> <span class="ln"><span class="cw">We’ll say, </span><span class="cw"><span class="ch">Bb</span>“No man, but </span><span class="nb"><span class="cw"><span class="ch">C7</span>you can do the</span><span class="cw"><span class="ch">F7</span> job </span></span><span class="cw">while you’re in </span><span class="cw"><span class="ch">Bb</span>town”</span></span></p>
 </div>
 </section>
 <section id="verse-3" class="level2">
 <h2 class="anchored" data-anchor-id="verse-3">Verse 3</h2>
 <div class="cline">
-<p><span class="ln"><span class="cw">Later </span><span class="cw"><span class="ch">Eb</span>on, we’ll </span><span class="nb"><span class="cw"><span class="ch">Gm</span>conspire</span><span class="cw bare"><span class="ch">Cm</span></span></span></span> <span class="ln"><span class="cw">As we </span><span class="cw"><span class="ch">Fm</span>dream, by the </span><span class="cw"><span class="ch">Bb</span>fire</span></span> <span class="ln"><span class="cw">To </span><span class="nb"><span class="cw"><span class="ch">Gm</span>face una</span><span class="cw"><span class="ch">D9</span>fraid, </span></span><span class="cw">the </span><span class="cw"><span class="ch">Gm7</span>plans that we </span><span class="cw"><span class="ch">C9#5</span>made</span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
+<p><span class="ln"><span class="cw">Later </span><span class="cw"><span class="ch">Eb</span>on, we’ll </span><span class="nb"><span class="cw"><span class="ch">Gm</span>conspire</span><span class="cw bare"><span class="ch">C7</span></span></span></span> <span class="ln"><span class="cw">As we </span><span class="cw"><span class="ch">Fm</span>dream, by the </span><span class="cw"><span class="ch">Bb</span>fire</span></span> <span class="ln"><span class="cw">To </span><span class="nb"><span class="cw"><span class="ch">Gm</span>face una</span><span class="cw"><span class="ch">D9</span>fraid, </span></span><span class="cw">the </span><span class="cw"><span class="ch">Gm7</span>plans that we </span><span class="cw"><span class="ch">C9#5</span>made</span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
 </div>
 </section>
 <section id="interlude" class="level2">
@@ -439,8 +463,8 @@ window.carolTypeChoice = function () {
 
 </div>
 </section>
-<section id="d.c.-al-coda" class="level2">
-<h2 class="anchored" data-anchor-id="d.c.-al-coda">D.C. al Coda</h2>
+<section id="d.s.-al-coda" class="level2">
+<h2 class="anchored" data-anchor-id="d.s.-al-coda">D.S. al Coda</h2>
 <div class="cline">
 
 </div>
@@ -450,8 +474,8 @@ window.carolTypeChoice = function () {
 <div class="cline">
 <p><span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span> <span class="ln"><span class="cw"><span class="ch">F9</span>Walking in a </span><span class="nb"><span class="cw"><span class="ch">Bb7</span>winter wonderl</span><span class="cw"><span class="ch">Eb</span>and</span></span></span></p>
 </div>
-<script type="application/json" id="band-chart">{"sections": [{"name": "Verse 1", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "Cm"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", "D9"]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "Verse 2", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "Cm"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", "D9"]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}], "from": "Verse 1"}, {"name": "Bridge", "bars": [{"c": ["GM7", "AM7/D"]}, {"c": ["GM7"]}, {"c": ["G", "AM7/D"]}, {"c": ["GM7"], "end": true}, {"c": ["Bb", "Cm7/F"]}, {"c": ["Bb"]}, {"c": ["C7", "F7"]}, {"c": ["Bb"], "end": true}]}, {"name": "Verse 3", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "Cm"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", ".", ".", "D9", ".", ".", ".", "."]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "Interlude", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "Cm"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", ".", ".", "D9", ".", ".", ".", "."]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "D.C. al Coda", "bars": null}, {"name": "Coda", "bars": [{"c": ["F9", "Bb7"]}, {"c": ["Eb"]}, {"c": ["F9"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb"], "feel": "half"}, {"c": ["Eb"], "feel": "half", "end": true}]}], "versions": [{"name": "Songbook", "note": "Tonic for two bars, dominant for two, then dominant and its ii swapping under \"a beautiful sight, we're happy tonight\" and II7 V7 I to finish. The bridge is the same eight bars as written without the colour: I V7 I in G, then in Bb, and a Bb7 to come home. Many guitar charts play IV for the V7 there (G C G, Bb Eb Bb). The 1934 sheet is in Eb, in cut time, and was played as a foxtrot.", "source": "the plain changes most singalong and easy-piano books print (unverified)", "sections": {"0": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "1": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "2": [{"c": ["G", "D7"]}, {"c": ["G"]}, {"c": ["G", "D7"]}, {"c": ["G"], "end": true}, {"c": ["Bb", "F7"]}, {"c": ["Bb"]}, {"c": ["C7", "F7"]}, {"c": ["Bb7"], "end": true}], "3": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "4": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "6": [{"c": ["F7", "Bb7"]}, {"c": ["Eb"]}, {"c": ["F7"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb"], "feel": "half"}, {"c": ["Eb"], "feel": "half", "end": true}]}}, {"name": "Jazz ii-V", "note": "Every dominant gets its ii in front of it. Ebmaj7 C7b9 Fm7 Bb7 opens each verse, and the bridge approaches G and then Bb through their own ii-V. The last bar of the bridge turns back with Fm7 Bb7.", "style": "swing", "source": "jam-session changes (unverified); the I VI7 ii V turnaround is as taught by PianoGroove", "sections": {"0": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "1": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "2": [{"c": ["Gmaj7", ".", "Am7", "D7"]}, {"c": ["Gmaj7"]}, {"c": ["Gmaj7", ".", "Am7", "D7"]}, {"c": ["Gmaj7"], "end": true}, {"c": ["Bbmaj7", ".", "Cm7", "F7"]}, {"c": ["Bbmaj7"]}, {"c": ["C7", "F7"]}, {"c": ["Fm7", "Bb7"], "end": true}], "3": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "4": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "6": [{"c": ["F9", "Bb7"]}, {"c": ["Eb6"]}, {"c": ["F9"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb6"], "feel": "half"}, {"c": ["Eb6"], "feel": "half", "end": true}]}}], "tempo": "128", "time": "4/4", "setup": {"v": 1, "name": "Winter Wonderland", "style": "swing", "unlock": true, "feel": "swing", "bass": "two", "groove": "auto", "rhythm": "auto+charleston+garland+offbeats+hymn", "mix": {"hymn": 100, "charleston": 30, "garland": 25, "offbeats": 20}, "voicing": "drop2+shell+standard", "fields": {"bt-tabview": "unique", "bt-fills": "sections", "bt-hold": "through", "bt-bass-sound": "upright", "bt-comp": "piano", "bt-vmove": "move", "bt-ext": "0", "bt-variation": "0.6", "bt-boom": "35", "bt-figs": "always", "bt-timefeel": "normal", "bt-timeparts": "bass drums", "bt-countin": "1", "bt-ride": "ride", "bt-ride-sound": "ride", "bt-roman": "off", "bt-chartfor": "concert", "bt-vol-bass": "100", "bt-vol-comp": "100", "bt-vol-drums": "100", "bt-kit-kick": "100", "bt-kit-snare": "100", "bt-kit-hat": "100", "bt-kit-ride": "53", "bt-kit-crash": "53", "bt-kit-toms": "100"}, "checks": {"bt-push": false, "bt-intro-nodrums": false, "bt-ext-six": true, "bt-ext-nine": true, "bt-ext-thirteen": true}}}</script>
-<script type="application/json" id="band-source">{"slug": "winter-wonderland", "title": "Winter Wonderland", "cho": "{title: Winter Wonderland}\n{tempo: 128}\n{time: 4/4}\n\n{comment: Verse 1}\n{start_of_grid}\n| Eb | Gm Cm | Fm | Bb |\n| Gm D9 | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\nSleigh bells [Eb]ring, are you [Gm]listening?[Cm]\nIn the [Fm]lane, snow is [Bb]glistening\nA [Gm]beautiful s[D9]ight, we’re [Gm7]happy to[C9#5]night\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Verse 2}\nGone a[Eb]way, is the [Gm]bluebird[Cm]\nHere to [Fm]stay, is a [Bb]new bird\nHe [Gm]sings a love [D9]song, as [Gm7]we go a[C9#5]long\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Bridge}\n{start_of_grid}\n| GM7 AM7/D | GM7 | G AM7/D | GM7 |\n| Bb Cm7/F | Bb | C7 F7 | Bb |\n{end_of_grid}\n[GM7]In the meadow [AM7/D]we can build a [GM7]snowman\n[G]Then pretend that [AM7/D]he is Parson [GM7]Brown\n[Bb]He’ll say, “Are you [Cm7/F]married?”\nWe’ll say, [Bb]“No man, but [C7]you can do the[F7] job while you’re in [Bb]town”\n\n{comment: Verse 3}\n{start_of_grid}\n| Eb | Gm Cm | Fm | Bb |\n| Gm . . D9 . . . . | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\nLater [Eb]on, we’ll [Gm]conspire[Cm]\nAs we [Fm]dream, by the [Bb]fire\nTo [Gm]face una[D9]fraid, the [Gm7]plans that we [C9#5]made\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Interlude}\n{start_of_grid}\n| Eb | Gm Cm | Fm | Bb |\n| Gm . . D9 . . . . | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\n\n{comment: D.C. al Coda}\n\n{comment: Coda}\n{start_of_grid}\n| F9 Bb7 | Eb | half F9 | Bb7 | Eb | % |\n{end_of_grid}\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n\n# ---- Other versions of the changes (teacher view only) ----\n# Drafted from memory of the usual printed and jam-session changes, not copied\n# from an edition: check each against your own books before trusting it.\n\n{start_of_version: Songbook}\nsource: the plain changes most singalong and easy-piano books print (unverified)\nTonic for two bars, dominant for two, then dominant and its ii swapping under \"a beautiful sight, we're happy tonight\" and II7 V7 I to finish.\nThe bridge is the same eight bars as written without the colour: I V7 I in G, then in Bb, and a Bb7 to come home. Many guitar charts play IV for the V7 there (G C G, Bb Eb Bb).\nThe 1934 sheet is in Eb, in cut time, and was played as a foxtrot.\nVerse, Interlude:\n| Eb | % | Bb7 | % |\n| Bb7 Fm | Bb7 Fm | F7 Bb7 | Eb |\nBridge:\n| G D7 | G | G D7 | G |\n| Bb F7 | Bb | C7 F7 | Bb7 |\nCoda:\n| F7 Bb7 | Eb | half F7 | Bb7 | Eb | % |\n{end_of_version}\n\n{start_of_version: Jazz ii-V}\nstyle: swing\nsource: jam-session changes (unverified); the I VI7 ii V turnaround is as taught by PianoGroove\nEvery dominant gets its ii in front of it. Ebmaj7 C7b9 Fm7 Bb7 opens each verse, and the bridge approaches G and then Bb through their own ii-V.\nThe last bar of the bridge turns back with Fm7 Bb7.\nVerse, Interlude:\n| Ebmaj7 | Ebmaj7 C7b9 | Fm7 | Bb7 |\n| Fm7 Bb7 | Fm7 Bb7 | F9 Bb7 | Eb6 |\nBridge:\n| Gmaj7 . Am7 D7 | Gmaj7 | Gmaj7 . Am7 D7 | Gmaj7 |\n| Bbmaj7 . Cm7 F7 | Bbmaj7 | C7 F7 | Fm7 Bb7 |\nCoda:\n| F9 Bb7 | Eb6 | half F9 | Bb7 | Eb6 | % |\n{end_of_version}\n", "tempo": "128", "time": "4/4"}</script>
+<script type="application/json" id="band-chart">{"sections": [{"name": "Intro", "bars": [{"c": ["Gm", "D9"]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "Segno", "bars": null}, {"name": "Verse 1", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "C7"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", "D9"]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "Verse 2", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "C7"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", "D9"]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}], "from": "Verse 1"}, {"name": "Bridge", "bars": [{"c": ["GM7", "Am7/D"]}, {"c": ["GM7"]}, {"c": ["G", "Am7/D"]}, {"c": ["GM7"], "end": true}, {"c": ["Bb", "Cm7/F"]}, {"c": ["Bb"]}, {"c": ["C7", "F7"]}, {"c": ["Bb"], "end": true}]}, {"name": "Verse 3", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "C7"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", ".", ".", "D9", ".", ".", ".", "."]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "Interlude", "bars": [{"c": ["Eb"]}, {"c": ["Gm", "Cm"]}, {"c": ["Fm"]}, {"c": ["Bb"], "end": true}, {"c": ["Gm", ".", ".", "D9", ".", ".", ".", "."]}, {"c": ["Gm7", ".", ".", "C9#5", ".", ".", ".", "."]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb"], "end": true}]}, {"name": "D.S. al Coda", "bars": null}, {"name": "Coda", "bars": [{"c": ["F9", "Bb7"]}, {"c": ["Eb"]}, {"c": ["F9"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb"], "feel": "half"}, {"c": ["Eb"], "feel": "half", "end": true}]}], "versions": [{"name": "Songbook", "note": "Tonic for two bars, dominant for two, then dominant and its ii swapping under \"a beautiful sight, we're happy tonight\" and II7 V7 I to finish. The bridge is the same eight bars as written without the colour: I V7 I in G, then in Bb, and a Bb7 to come home. Many guitar charts play IV for the V7 there (G C G, Bb Eb Bb). The 1934 sheet is in Eb, in cut time, and was played as a foxtrot.", "source": "the plain changes most singalong and easy-piano books print (unverified)", "sections": {"2": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "3": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "4": [{"c": ["G", "D7"]}, {"c": ["G"]}, {"c": ["G", "D7"]}, {"c": ["G"], "end": true}, {"c": ["Bb", "F7"]}, {"c": ["Bb"]}, {"c": ["C7", "F7"]}, {"c": ["Bb7"], "end": true}], "5": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "6": [{"c": ["Eb"]}, {"c": ["Eb"]}, {"c": ["Bb7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Bb7", "Fm"]}, {"c": ["Bb7", "Fm"]}, {"c": ["F7", "Bb7"]}, {"c": ["Eb"], "end": true}], "8": [{"c": ["F7", "Bb7"]}, {"c": ["Eb"]}, {"c": ["F7"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb"], "feel": "half"}, {"c": ["Eb"], "feel": "half", "end": true}]}}, {"name": "Jazz ii-V", "note": "Every dominant gets its ii in front of it. Ebmaj7 C7b9 Fm7 Bb7 opens each verse, and the bridge approaches G and then Bb through their own ii-V. The last bar of the bridge turns back with Fm7 Bb7.", "style": "swing", "source": "jam-session changes (unverified); the I VI7 ii V turnaround is as taught by PianoGroove", "sections": {"2": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "3": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "4": [{"c": ["Gmaj7", ".", "Am7", "D7"]}, {"c": ["Gmaj7"]}, {"c": ["Gmaj7", ".", "Am7", "D7"]}, {"c": ["Gmaj7"], "end": true}, {"c": ["Bbmaj7", ".", "Cm7", "F7"]}, {"c": ["Bbmaj7"]}, {"c": ["C7", "F7"]}, {"c": ["Fm7", "Bb7"], "end": true}], "5": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "6": [{"c": ["Ebmaj7"]}, {"c": ["Ebmaj7", "C7b9"]}, {"c": ["Fm7"]}, {"c": ["Bb7"], "end": true}, {"c": ["Fm7", "Bb7"]}, {"c": ["Fm7", "Bb7"]}, {"c": ["F9", "Bb7"]}, {"c": ["Eb6"], "end": true}], "8": [{"c": ["F9", "Bb7"]}, {"c": ["Eb6"]}, {"c": ["F9"], "feel": "half"}, {"c": ["Bb7"], "feel": "half"}, {"c": ["Eb6"], "feel": "half"}, {"c": ["Eb6"], "feel": "half", "end": true}]}}], "tempo": "128", "time": "4/4", "setup": {"v": 1, "name": "Winter Wonderland", "style": "swing", "unlock": true, "feel": "swing", "bass": "two", "groove": "auto", "rhythm": "auto+charleston+garland+offbeats+hymn", "mix": {"hymn": 100, "charleston": 30, "garland": 25, "offbeats": 20}, "voicing": "drop2+shell+standard", "fields": {"bt-tabview": "unique", "bt-fills": "sections", "bt-hold": "through", "bt-bass-sound": "upright", "bt-comp": "piano", "bt-vmove": "move", "bt-ext": "0", "bt-variation": "0.6", "bt-boom": "35", "bt-figs": "always", "bt-timefeel": "normal", "bt-timeparts": "bass drums", "bt-countin": "1", "bt-ride": "ride", "bt-ride-sound": "ride", "bt-roman": "off", "bt-chartfor": "concert", "bt-vol-bass": "100", "bt-vol-comp": "100", "bt-vol-drums": "100", "bt-kit-kick": "100", "bt-kit-snare": "100", "bt-kit-hat": "100", "bt-kit-ride": "53", "bt-kit-crash": "53", "bt-kit-toms": "100"}, "checks": {"bt-push": false, "bt-intro-nodrums": false, "bt-ext-six": true, "bt-ext-nine": true, "bt-ext-thirteen": true}}}</script>
+<script type="application/json" id="band-source">{"slug": "winter-wonderland", "title": "Winter Wonderland", "cho": "{title: Winter Wonderland}\n{tempo: 128}\n{time: 4/4}\n\n\n{comment: Intro}\n{start_of_grid}\n| Gm D9 | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\n\n{comment: Segno}\n\n{comment: Verse 1}\n{start_of_grid}\n| Eb | Gm C7 | Fm | Bb |\n| Gm D9 | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\nSleigh bells [Eb]ring, are you [Gm]listening?[C7]\nIn the [Fm]lane, snow is [Bb]glistening\nA [Gm]beautiful s[D9]ight, we’re [Gm7]happy to[C9#5]night\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Verse 2}\nGone a[Eb]way, is the [Gm]bluebird[C7]\nHere to [Fm]stay, is a [Bb]new bird\nHe [Gm]sings a love [D9]song, as [Gm7]we go a[C9#5]long\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Bridge}\n{start_of_grid}\n| GM7 Am7/D | GM7 | G Am7/D | GM7 |\n| Bb Cm7/F | Bb | C7 F7 | Bb |\n{end_of_grid}\n[GM7]In the meadow [Am7/D]we can build a [GM7]snowman\n[G]Then pretend that [Am7/D]he is Parson [GM7]Brown\n[Bb]He’ll say, “Are you [Cm7/F]married?”\nWe’ll say, [Bb]“No man, but [C7]you can do the[F7] job while you’re in [Bb]town”\n\n{comment: Verse 3}\n{start_of_grid}\n| Eb | Gm C7 | Fm | Bb |\n| Gm . . D9 . . . . | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\nLater [Eb]on, we’ll [Gm]conspire[C7]\nAs we [Fm]dream, by the [Bb]fire\nTo [Gm]face una[D9]fraid, the [Gm7]plans that we [C9#5]made\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n{comment: Interlude}\n{start_of_grid}\n| Eb | Gm Cm | Fm | Bb |\n| Gm . . D9 . . . . | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |\n{end_of_grid}\n\n{comment: D.S. al Coda}\n\n{comment: Coda}\n{start_of_grid}\n| F9 Bb7 | Eb | half F9 | Bb7 | Eb | % |\n{end_of_grid}\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n[F9]Walking in a [Bb7]winter wonderl[Eb]and\n\n\n# ---- Other versions of the changes (teacher view only) ----\n# Drafted from memory of the usual printed and jam-session changes, not copied\n# from an edition: check each against your own books before trusting it.\n\n{start_of_version: Songbook}\nsource: the plain changes most singalong and easy-piano books print (unverified)\nTonic for two bars, dominant for two, then dominant and its ii swapping under \"a beautiful sight, we're happy tonight\" and II7 V7 I to finish.\nThe bridge is the same eight bars as written without the colour: I V7 I in G, then in Bb, and a Bb7 to come home. Many guitar charts play IV for the V7 there (G C G, Bb Eb Bb).\nThe 1934 sheet is in Eb, in cut time, and was played as a foxtrot.\nVerse, Interlude:\n| Eb | % | Bb7 | % |\n| Bb7 Fm | Bb7 Fm | F7 Bb7 | Eb |\nBridge:\n| G D7 | G | G D7 | G |\n| Bb F7 | Bb | C7 F7 | Bb7 |\nCoda:\n| F7 Bb7 | Eb | half F7 | Bb7 | Eb | % |\n{end_of_version}\n\n{start_of_version: Jazz ii-V}\nstyle: swing\nsource: jam-session changes (unverified); the I VI7 ii V turnaround is as taught by PianoGroove\nEvery dominant gets its ii in front of it. Ebmaj7 C7b9 Fm7 Bb7 opens each verse, and the bridge approaches G and then Bb through their own ii-V.\nThe last bar of the bridge turns back with Fm7 Bb7.\nVerse, Interlude:\n| Ebmaj7 | Ebmaj7 C7b9 | Fm7 | Bb7 |\n| Fm7 Bb7 | Fm7 Bb7 | F9 Bb7 | Eb6 |\nBridge:\n| Gmaj7 . Am7 D7 | Gmaj7 | Gmaj7 . Am7 D7 | Gmaj7 |\n| Bbmaj7 . Cm7 F7 | Bbmaj7 | C7 F7 | Fm7 Bb7 |\nCoda:\n| F9 Bb7 | Eb6 | half F9 | Bb7 | Eb6 | % |\n{end_of_version}\n", "tempo": "128", "time": "4/4"}</script>
 <div class="songnav">
 <p><a href="../songs/deck-the-halls.html" class="nav-prev">← Deck The Halls</a> <a href="../songs/santa-claus-is-coming-to-town.html" class="nav-next">Santa Claus is Coming to Town →</a></p>
 </div>
@@ -576,6 +600,8 @@ window.carolTypeChoice = function () {
         dacapo: !!h && /^d\.?\s*[cs]\b/i.test(h.textContent.trim()),
         // Fine is where that second pass ends.
         fine: !!h && /^fine$/i.test(h.textContent.trim()),
+        // Segno is where a dal segno (D.S.) goes back to, in place of the top.
+        segno: !!h && /^segno$/i.test(h.textContent.trim()),
         // Played once on the way down, an interlude is skipped on the repeat.
         interlude: !!h && /^interlude$/i.test(h.textContent.trim()),
         taken: false
@@ -585,7 +611,17 @@ window.carolTypeChoice = function () {
 
   // A direction tells you what to do; it is not a place in the song, so
   // neither j nor k nor a click in the list ever lands on one.
-  function isDirection(h) { return h.dacapo || h.fine; }
+  function isDirection(h) { return h.dacapo || h.fine || h.segno; }
+  // Where the jump written at heads[n] goes: a D.S. to the section after the
+  // Segno above it, anything else (and a D.S. with no Segno) to the top.
+  function start(n) {
+    if (!heads[n] || !/^d\.?\s*s/i.test(heads[n].heading.textContent.trim())) return 0;
+    for (var i = n - 1; i >= 0; i--) {
+      if (!heads[i].segno) continue;
+      for (var to = i + 1; to < n; to++) if (!isDirection(heads[to])) return to;
+    }
+    return 0;
+  }
 
   // A Fine is where the repeat ends, so it means nothing until the da capo
   // has been read. Until then it is there to be seen, but greyed back.
@@ -635,7 +671,7 @@ window.carolTypeChoice = function () {
       var nav = main.querySelector('.songnav');
       if (nav && nav.parentNode) nav.parentNode.insertBefore(section, nav);
       else main.appendChild(section);
-      heads.push({ section: section, heading: h, dacapo: false, fine: true,
+      heads.push({ section: section, heading: h, dacapo: false, fine: true, segno: false,
                    interlude: false, taken: false });
       supplied = true;
     } catch (e) { /* no Fine on this page; the song still works */ }
@@ -823,6 +859,10 @@ window.carolTypeChoice = function () {
     gifts.forEach(function (g) {
       // Hidden, not removed: the lines already sung hold their place.
       g.classList.toggle('unsung', +g.getAttribute('data-day') > day);
+      // A gift that goes one way on the early days and another later is
+      // written once for each; only the day's own is on the page.
+      g.classList.toggle('other-days', day < +(g.getAttribute('data-from') || 1) ||
+                                       day > +(g.getAttribute('data-until') || 12));
     });
     if (ordinal) {
       ordinal.textContent = ORDINALS[day - 1];
@@ -912,10 +952,11 @@ window.carolTypeChoice = function () {
       var h = heads[n];
       if (repeating && h.interlude) { n++; continue; }
       if (h.dacapo) {
-        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = 0; }
+        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = start(n); }
         else n++;
         continue;
       }
+      if (h.segno) { n++; continue; }
       if (h.fine) { if (repeating) break; n++; continue; }
       out.push({ head: n, taken: taken.slice() });
       n++;
@@ -955,13 +996,14 @@ window.carolTypeChoice = function () {
         if (repeating && ahead.interlude) { next++; continue; }
         if (ahead.dacapo) {
           if (!ahead.taken) {           // read it once: back to the beginning
-            ahead.taken = true;
-            go(0, { dacapo: next });
+            ahead.taken = true;         // (or to the segno)
+            go(start(next), { dacapo: next });
             return;
           }
           next++;                        // read already: carry on past it
           continue;
         }
+        if (ahead.segno) { next++; continue; }
         if (ahead.fine) {
           if (repeating) return;         // the second pass ends here
           next++;                        // first time through, Fine is passed
@@ -974,7 +1016,20 @@ window.carolTypeChoice = function () {
       return;
     }
 
-    // Backwards is the same road travelled the other way.
+    // Backwards is the same road travelled the other way. Where a dal segno
+    // put us is not the top of the song, but going back from there is the
+    // same: give the marker back and return to where it was read.
+    var dc = -1;
+    for (i = heads.length - 1; i >= 0; i--) {
+      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
+    }
+    if (dc >= 0 && base > 0 && start(dc) === base) {
+      heads[dc].taken = false;
+      var from = dc - 1;
+      while (from >= 0 && isDirection(heads[from])) from--;
+      go(Math.max(0, from), { untake: dc });
+      return;
+    }
     var prev = base - 1;
     while (prev >= 0) {
       if (repeating && heads[prev].interlude) { prev--; continue; }
@@ -985,10 +1040,6 @@ window.carolTypeChoice = function () {
 
     // At the top of the song. If a da capo put us here, give the marker back
     // and return to the section it was read from.
-    var dc = -1;
-    for (i = heads.length - 1; i >= 0; i--) {
-      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
-    }
     if (dc < 0) { go(0); return; }
     heads[dc].taken = false;
     var back = dc - 1;
@@ -1755,6 +1806,7 @@ window.carolTypeChoice = function () {
   }
 
   var playButton = button('Play', 'p', function () { toggle(); });
+  playButton.title = 'Play or stop: p, or the space bar';
   var holdButton = button('', 'h', toggleHold);
   var fillButton = button('Drum fill', 'd', fillNow);
   var tuneButton = button('', 'm', toggleTune);
@@ -1859,10 +1911,50 @@ window.carolTypeChoice = function () {
   }
 
   function styleSetup() {
-    var so = window.BandCatalog.styleOpts(styleBox.value);
+    var so = window.BandCatalog.styleOpts(styleBox.value), S = window.BandSounds;
+    // The setup's own instruments, while its style is the one chosen here:
+    // the chord instrument (and so whose voicings are played), the bass, a
+    // second chord instrument, congas, and the octave each is played in.
+    var f = setup && styleBox.value === setup.style && setup.fields;
+    if (f && S && S.family) {
+      var lead = f['bt-comp'], fam = lead && S.family(lead);
+      if (fam === 'piano' || fam === 'guitar') {
+        so = window.BandCatalog.styleOpts(styleBox.value, fam);
+        so.instruments[1] = lead;
+        so.opts.comp = fam;
+        so.opts.compSound = lead;
+      }
+      if (f['bt-bass-sound']) {
+        so.opts.bassSound = f['bt-bass-sound'];
+        so.instruments[0] = f['bt-bass-sound'] === 'electric' ? 'ebass' : 'bass';
+      }
+      var two = f['bt-second'], fam2 = two && S.family(two);
+      if (fam2 === 'piano' || fam2 === 'guitar') {
+        so.opts.second = { comp: fam2, compSound: two, compRhythm: f['bt-second-rhythm'] || 'pad',
+                           voicing: f['bt-second-voicing'] || undefined };
+        if (so.instruments.indexOf(two) < 0) so.instruments.push(two);
+      }
+      if (setup.congas) {
+        so.opts.congas = setup.congas;
+        var at = so.instruments.indexOf('congas');
+        if (setup.congas === 'none' && at >= 0) so.instruments.splice(at, 1);
+        if (setup.congas !== 'none' && at < 0) so.instruments.push('congas');
+      }
+      so.opts.octave = { bass: parseInt(f['bt-oct-bass'], 10) || 0, comp: parseInt(f['bt-oct-comp'], 10) || 0,
+                         comp2: parseInt(f['bt-oct-comp2'], 10) || 0 };
+    }
     // the sounds of any section the setup gives settings of its own
     sectionSetup().sounds.forEach(function (n) { if (so.instruments.indexOf(n) < 0) so.instruments.push(n); });
     return so;
+  }
+  // The setup's faders, with its instruments: 100 is the band's own balance.
+  function setVolumes(to) {
+    var f = setup && styleBox.value === setup.style && setup.fields;
+    [['bass', 'bt-vol-bass'], ['comp', 'bt-vol-comp'], ['comp2', 'bt-vol-comp2'],
+     ['drums', 'bt-vol-drums'], ['congas', 'bt-vol-congas']].forEach(function (one) {
+      var v = f ? parseInt(f[one[1]], 10) : NaN;
+      if (to && to.setVolume) to.setVolume(one[0], v >= 0 ? v / 100 : 1);
+    });
   }
   // What the setup keeps for single sections (set section by section on the
   // Backing Track page): put on the sections of this chart that have those
@@ -1874,8 +1966,15 @@ window.carolTypeChoice = function () {
     var names = [];
     form.forEach(function (b) { if (b.section != null || !names.length) names.push(b.section || ''); });
     var put = C.placeSections(setup.sections, names);
+    // The bars of the choruses, as the Backing Track counts them: a strum
+    // that is muted in the verse and open in the chorus has to know them.
+    var chorus = [], name = '';
+    form.forEach(function (b, i) {
+      if (b.section != null) name = b.section;
+      if (/^(chorus|refrain)\b/i.test(name)) chorus.push(i);
+    });
     Object.keys(put).forEach(function (k) {
-      out.map[k] = put[k].opts;
+      out.map[k] = /^(chorus|refrain)\b/i.test(names[k]) ? Object.assign({}, put[k].opts, { lift: chorus }) : put[k].opts;
       (put[k].sounds || []).forEach(function (n) { if (out.sounds.indexOf(n) < 0) out.sounds.push(n); });
     });
     return out;
@@ -1890,6 +1989,12 @@ window.carolTypeChoice = function () {
       if (setup.feel) o.feel = setup.feel;
       if (setup.bass) o.bassFeel = setup.bass;
       if (setup.groove) o.groove = setup.groove;
+      // a blend of bass lines or of grooves ("walk+two"): how much of each (0-100 on the sliders)
+      [['bmix', 'bassMix'], ['gmix', 'grooveMix']].forEach(function (k) {
+        if (!setup[k[0]] || typeof setup[k[0]] !== 'object') return;
+        o[k[1]] = {};
+        Object.keys(setup[k[0]]).forEach(function (id) { o[k[1]][id] = (+setup[k[0]][id] || 0) / 100; });
+      });
       if (setup.rhythm) o.compRhythm = setup.rhythm;
       if (setup.voicing) o.voicing = setup.voicing;
     }
@@ -1989,11 +2094,13 @@ window.carolTypeChoice = function () {
       onSection: function (sc) { if (!away) handlers.onSection(sc); }
     });
     player = here;
+    setVolumes(here);
     window.carolBandAbc = abc;         // the chart as the band reads it
     window.carolBandChart = parsed;    // ... parsed, with the tune on its bars
     ready = true;
     playButton.disabled = false;
     say('');
+    findWindow();
   }
 
   // ---- the chord being played, lit up over the words ----
@@ -2040,7 +2147,10 @@ window.carolTypeChoice = function () {
     if (stop && document.body.classList.contains('day-reveal')) {
       return Array.prototype.filter.call(document.querySelectorAll('#verse .ch'), function (el) {
         var gift = el.closest('.gift');
-        return !gift || +gift.getAttribute('data-day') <= stop.head + 1;
+        var day = stop.head + 1;
+        return !gift || (+gift.getAttribute('data-day') <= day &&
+                         day >= +(gift.getAttribute('data-from') || 1) &&
+                         day <= +(gift.getAttribute('data-until') || 12));
       });
     }
     return box ? Array.prototype.slice.call(box.querySelectorAll('.ch')) : [];
@@ -2272,6 +2382,7 @@ window.carolTypeChoice = function () {
   function toggle(fromBar) {
     if (!ready) return;
     if (away && away.closed) comeBack();
+    if (!away) findWindow();           // (a key press may look where a page load may not)
     if (fromBar == null && (playing || player.state() !== 'idle')) { player.stop(); return; }
     if (player.state() !== 'idle') player.stop();
     var k = stopFor(Math.max(0, song.at()));
@@ -2305,6 +2416,7 @@ window.carolTypeChoice = function () {
     if (!player) return;
     player.setInstruments(styleSetup().instruments);
     player.setOpts(bandOpts());
+    setVolumes(here);
   });
   fillsBox.addEventListener('change', function () {
     keep('fills', fillsBox.value);
@@ -2362,8 +2474,45 @@ window.carolTypeChoice = function () {
       : 'Open the Backing Track page in its own window and let it play, with all of its options';
     windowButton.setAttribute('aria-pressed', String(!!away));
   }
+  // The Backing Track window outlives this page: a reload, or the next song,
+  // and the page no longer has hold of it. Whether it was playing there is
+  // kept for the tab, and the window is looked for again by its name -- which
+  // finds it without loading anything into it -- and given this page's song.
+  function remember(on) {
+    try {
+      if (on) sessionStorage.setItem('carols-band-away', '1');
+      else sessionStorage.removeItem('carols-band-away');
+    } catch (e) {}
+  }
+  function sendSong() {
+    var others = window.carolTeacher ? versionAbcs() : [];
+    post({ type: 'bt-load', abc: window.carolBandAbc, melody: melodies,
+           versions: others, version: versionNow ? versionNow.name : '',
+           written: others.length ? buildAbc(null) : null,
+           tempo: tempo(), style: styleBox.value, hold: hold, setup: setup,
+           fills: fillsBox.value, countIn: parseInt(countBox.value, 10),
+           title: (document.querySelector('h1.title') || {}).textContent || '' });
+  }
+  function findWindow() {
+    var was = false, found = null, blank = false;
+    try { was = sessionStorage.getItem('carols-band-away') === '1'; } catch (e) {}
+    if (!was || away || !ready) return;
+    try { found = window.open('', 'carols-backing-track'); } catch (e) {}
+    if (!found) return;                // not allowed just now: the next Play asks again
+    // No window of that name was left, and the browser made an empty one.
+    // (The real one is another site's page, and may not be looked at.)
+    try { blank = found.location.href === 'about:blank'; } catch (e) {}
+    if (blank) { found.close(); remember(false); return; }
+    if (here.state() !== 'idle') here.stop();
+    away = found; awayState = 'idle';
+    try { awayOrigin = new URL(musicSite()).origin; } catch (e) { awayOrigin = null; }
+    player = proxy;
+    showWindow();
+    sendSong();
+  }
   function comeBack() {
     if (!away) return;
+    remember(false);
     try { if (!away.closed) away.postMessage({ type: 'bt-stop' }, awayOrigin || '*'); } catch (e) {}
     away = null; awayOrigin = null; awayState = 'idle';
     player = here;
@@ -2377,6 +2526,7 @@ window.carolTypeChoice = function () {
     away = window.open(musicSite() + '/tools/backing-track.html?remote=1', 'carols-backing-track');
     if (!away) { say('The browser blocked the new window. Allow pop-ups for this site.'); return; }
     player = proxy;
+    remember(true);
     showWindow();
     say('Opening ' + musicSite() + ' …');
   }
@@ -2385,13 +2535,7 @@ window.carolTypeChoice = function () {
     if (!away || e.source !== away || !m || typeof m.type !== 'string') return;
     if (m.type === 'bt-ready') {
       awayOrigin = e.origin;
-      var others = window.carolTeacher ? versionAbcs() : [];
-      post({ type: 'bt-load', abc: window.carolBandAbc, melody: melodies,
-             versions: others, version: versionNow ? versionNow.name : '',
-             written: others.length ? buildAbc(null) : null,
-             tempo: tempo(), style: styleBox.value, hold: hold, setup: setup,
-             fills: fillsBox.value, countIn: parseInt(countBox.value, 10),
-             title: (document.querySelector('h1.title') || {}).textContent || '' });
+      sendSong();
     } else if (m.type === 'bt-loaded') {
       say(m.bars ? AWAY + ' Click in it once so it may make sound.'
                  : 'The Backing Track window could not read this song.');
@@ -2466,7 +2610,13 @@ window.carolTypeChoice = function () {
     if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
     if (e.target.matches && e.target.matches('input, textarea, select, [contenteditable]')) return;
     var k = (e.key || '').toLowerCase();
-    if (k === 'p') toggle();
+    // The space bar plays and stops too -- unless it is on a button or a
+    // link, where it presses that. (While a tap take runs, it is the take's.)
+    if (k === ' ' || k === 'spacebar') {
+      if (e.target.closest && e.target.closest('button, a, summary, [role=button]')) return;
+      toggle();
+    }
+    else if (k === 'p') toggle();
     else if (k === 'w') toggleWindow();
     else if (k === 'h') toggleHold();
     else if (k === 'm' && hasTune) toggleTune();

@@ -19,6 +19,8 @@
 // Stop time (ctx.stop): one hit on beat 1 — kick, snare and a closed hat — then nothing; a
 // { pos, choke:"cymbals" } event asks the player to damp whatever cymbal is still ringing. The
 // bar after it comes back in with a crash.
+// A cymbal grabbed with the hand: "^choke" on a bar of the chart (ctx.form[i].choke) puts a crash on its beat 1 and stops it
+// before beat 2; opts.endChoke does the same to the last hit of the tune. The choke event carries `damp`, the time the hand takes.
 // Fills. opts.fills says how often: "auto" (unset; into every chorus and section, and at some phrase ends), "busy" (more of
 // them), "sections" (only into a chorus, a new section and the top of the form) or "none" (only the ones asked for). A fill
 // is asked for on one bar by opts.fillBars = { formIndex: "small" | "medium" | "large" }, by a "^fill" in the chart
@@ -29,6 +31,11 @@
 // two-bar patterns for the Latin, Caribbean, folk and rock styles. They are written for 4/4 (a 2/4 bar
 // takes the first half; 3/4 only where the groove has its own three-beat bar) and fall back to the
 // time above in any other meter. The Latin and Caribbean ones play no fills: a tom fill is a rock habit.
+// A written groove (ctx.opts.written = a BandGroove object or its text, see groove.js): the drummer plays that and nothing of
+// its own: bar i of the form is bar i % bars of the groove, no fills, no stop time, no ending hit. Every event is straight:true;
+// the groove's own swing is already in the positions (opts.writtenSwing = a ratio to use in its place, 0.5 = none).
+// opts.writtenPieces = the kit-piece names to keep (the page passes the ones the kit has samples for). opts.writtenClick = 4, 8
+// or 16 adds a click (sticks) on those note values; its events carry click:true.
 // Meters: 3/4 is a jazz waltz (ride "ding, ding-a, ding", hat foot on 2 and 3, kick on 1). The
 // compound meters (ctx.compound: 6/8, 9/8, 12/8, where a beat is a dotted quarter) get their own
 // groove whatever opts.feel says: all three eighths on the cymbal, kick on 1 (and 3), backbeat on
@@ -126,6 +133,12 @@
   var FOOT = [[1, "hatFoot", 0.36], [3, "hatFoot", 0.36]];
   function ROCK(kicks){ return cymEighths(0.58, 0.44).concat(kicks.map(function (p){ return [p, "kick", p === 0 ? 0.62 : p === Math.floor(p) ? 0.58 : 0.48]; }), [[1, "snare", 0.66], [3, "snare", 0.66]]); }
   function BACK(on, off, kicks, piece, v){ return cymEighths(on, off).concat(kicks.map(function (p){ return [p, "kick", p === 0 ? 0.58 : p === Math.floor(p) ? 0.52 : 0.42]; }), [[1, piece, v], [3, piece, v]]); }
+  // helpers for the hi-hat lesson grooves: hats at positions, the kick and snare, a leaning run of eighths, a run of sixteenths (some left out)
+  var EIGHTHS = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5];
+  function hats(ps, piece, v){ return ps.map(function (p){ return [p, piece, v]; }); }
+  function KS(kicks, snares){ return kicks.map(function (p){ return [p, "kick", p === 0 ? 0.62 : 0.58]; }).concat(snares.map(function (p){ return [p, "snare", 0.66]; })); }
+  function lean(on, off, ps){ return ps.map(function (p){ return [p, "hatClosed", p === Math.floor(p) ? on : off]; }); }
+  function sixteenths(n, skip){ var h = []; for (var i = 0; i < n; i++) if (skip.indexOf(i) < 0) h.push([i / 4, "hatClosed", [0.50, 0.34, 0.42, 0.34][i % 4]]); return h; }
   function lifted(ctx, i){ var l = ctx.opts && ctx.opts.lift; return !!(l && l.indexOf && !ctx.intro && l.indexOf(i == null ? ctx.index : i) >= 0); }
   // What is asked of bar `index` (this bar when left out): { fill: a size or null, sectionEnd: the next bar starts a section }.
   // A wrapper that renumbers the bars (half time, double time) hands the answer over as ctx.fillPlan.
@@ -143,6 +156,14 @@
     var form = ctx.form;
     if (form && !ctx.fillPlan && !ctx.intro) for (var i = ctx.index; i >= 0; i--) if (form[i] && form[i].section != null) return (ctx.index - i) % 4;
     return ctx.index % 4;
+  }
+  // opts.written: a groove somebody wrote down (a BandGroove object, or its text), or nothing
+  var lastText = null, lastGroove = null;
+  function written(ctx){
+    var w = ctx.opts && ctx.opts.written; if (!w || !global.BandGroove) return null;
+    if (typeof w !== "string") return w;
+    if (w !== lastText){ lastText = w; lastGroove = global.BandGroove.parse(w); }
+    return lastGroove;
   }
   function tripletGroove(ctx){ var g = ctx.opts && GROOVES.hasOwnProperty(ctx.opts.groove) ? GROOVES[ctx.opts.groove] : null; return !!(g && g.triplet); }
   var BOSSA_K = [[0, "kick", 0.46], [1.5, "kick", 0.38], [2, "kick", 0.46], [3.5, "kick", 0.38]];
@@ -202,6 +223,28 @@
     ridetime: { bars: [ cymBeats(0.58).concat([[1.5, "cymOff", 0.42], [3.5, "cymOff", 0.42], [1, "hatFoot", 0.46], [3, "hatFoot", 0.46]]) ],
                 three: [[0, "cym", 0.58], [1, "cym", 0.58], [1.5, "cymOff", 0.42], [2, "cym", 0.58], [1, "hatFoot", 0.44], [2, "hatFoot", 0.44]], fills: false },
     shuffle:  { bars: [ cymEighths(0.56, 0.38).concat([[0, "kick", 0.58], [2, "kick", 0.54], [1, "snare", 0.62], [3, "snare", 0.62]]) ], fills: true },
+    // The hi-hat lesson (lessons/hihat-grooves.qmd): the hi-hat written out piece by piece, whatever the Cymbal menu says (hat:true keeps the
+    // foot when the menu is on the hi-hat). Each is one bar, no fills unless asked. sixteenths:true marks the sixteenth positions
+    // (x.25, x.75) straight and six, so the player leaves them alone and the drum staff writes real sixteenths (notation.js).
+    hhquarters: { bars: [ hats([0, 1, 2, 3], "hatClosed", 0.54).concat(KS([0, 2], [1, 3])) ], three: hats([0, 1, 2], "hatClosed", 0.54).concat(KS([0], [2])), fills: false, hat: true },
+    hheighths:  { bars: [ hats(EIGHTHS, "hatClosed", 0.50).concat(KS([0, 2], [1, 3])) ], three: hats(EIGHTHS.slice(0, 6), "hatClosed", 0.50).concat(KS([0], [2])), fills: false, hat: true },
+    hhaccents:  { bars: [ lean(0.62, 0.30, EIGHTHS).concat(KS([0, 2], [1, 3])) ], three: lean(0.62, 0.30, EIGHTHS.slice(0, 6)).concat(KS([0], [2])), fills: false, hat: true },
+    hhoffbeats: { bars: [ hats([0.5, 1.5, 2.5, 3.5], "hatClosed", 0.52).concat(KS([0, 1, 2, 3], [1, 3])) ], three: hats([0.5, 1.5, 2.5], "hatClosed", 0.52).concat(KS([0, 1], [2])), fills: false, hat: true },
+    // one open note, on the and of 4 (the last and of the bar); the stick and the foot close it on 1 of the next bar
+    hhopen:     { bars: [ hats([0, 0.5, 1, 1.5, 2, 2.5, 3], "hatClosed", 0.50).concat([[3.5, "hatOpen", 0.58], [0, "hatFoot", 0.40]], KS([0, 2], [1, 3])) ],
+                  three: hats([0, 0.5, 1, 1.5, 2], "hatClosed", 0.50).concat([[2.5, "hatOpen", 0.58], [0, "hatFoot", 0.40]], KS([0], [2])), fills: false, hat: true },
+    // four on the floor as a lesson step: the dance groove without the clap
+    hhdance:    { bars: [ [0, 1, 2, 3].reduce(function (h, b){ return h.concat([[b, "kick", 0.64], [b, "hatClosed", 0.34], [b + 0.5, "hatOpen", 0.46]]); }, []).concat([[1, "snare", 0.60], [3, "snare", 0.60]]) ],
+                  three: [0, 1, 2].reduce(function (h, b){ return h.concat([[b, "kick", 0.62], [b, "hatClosed", 0.34], [b + 0.5, "hatOpen", 0.46]]); }, []).concat([[2, "snare", 0.58]]), fills: false, hat: true },
+    // sixteenths on the hi-hat, one hand, then two hands (the right hand leaves the hat for the snare on 2 and 4, so the hat is silent there)
+    hhsix:      { bars: [ sixteenths(16, []).concat(KS([0, 2], [1, 3])) ], three: sixteenths(12, []).concat(KS([0], [2])), fills: false, hat: true, sixteenths: true },
+    hhsix2:     { bars: [ sixteenths(16, [4, 12]).concat(KS([0, 2], [1, 3])) ], three: sixteenths(12, [8]).concat(KS([0], [2])), fills: false, hat: true, sixteenths: true },
+    // the foot on every beat under a rock beat on the ride
+    hhfoot4:    { bars: [ ["ride"].reduce(function (h, p){ return h.concat(EIGHTHS.map(function (x){ return [x, p, x === Math.floor(x) ? 0.56 : 0.42]; })); }, []).concat(hats([0, 1, 2, 3], "hatFoot", 0.44), KS([0, 2], [1, 3])) ],
+                  three: EIGHTHS.slice(0, 6).map(function (x){ return [x, "ride", x === Math.floor(x) ? 0.56 : 0.42]; }).concat(hats([0, 1, 2], "hatFoot", 0.44), KS([0], [2])), fills: false, hat: true },
+    // the ride pattern on the hi-hat: open on 1 and 3, closed on 2 and 4 with the skip note after them, the foot closing it on 2 and 4 (swung by the player)
+    hhswing:    { bars: [ [[0, "hatOpen", 0.54], [1, "hatClosed", 0.62], [1.5, "hatClosed", 0.42], [2, "hatOpen", 0.54], [3, "hatClosed", 0.62], [3.5, "hatClosed", 0.42], [1, "hatFoot", 0.50], [3, "hatFoot", 0.50]] ],
+                  three: [[0, "hatOpen", 0.54], [1, "hatClosed", 0.62], [1.5, "hatClosed", 0.42], [2, "hatClosed", 0.56], [1, "hatFoot", 0.48], [2, "hatFoot", 0.48]], fills: false, hat: true },
     halftime:{ bars: [ cymEighths(0.54, 0.40).concat([[0, "kick", 0.60], [1.5, "kick", 0.46], [2, "snare", 0.68]]) ], fills: "light" },
     funk:    { bars: [ cymEighths(0.54, 0.44).concat([[0, "kick", 0.62], [1.5, "kick", 0.50], [2.5, "kick", 0.52], [1, "snare", 0.66], [3, "snare", 0.66]]) ], fills: true }
   };
@@ -292,6 +335,7 @@
     // fill starts on and its events (the caller drops what the drums had from there on), or null when nothing fits.
     function fillNow(ctx, size, room){
       var beats = ctx.beats || 4, g = ctx.opts && ctx.opts.groove;
+      if (written(ctx)) return null;
       if (ctx.stop || g === "click" || g === "none" || beats < 2) return null;
       var maxN = Math.min(Math.floor(room + 1e-6), beats === 2 ? 1 : beats === 3 ? 2 : beats - 1);
       if (maxN < 1) return null;
@@ -366,11 +410,13 @@
       pat.forEach(function (h){
         if (h[0] >= timeEnds - 1e-6) return;
         var piece = h[1] === "cym" ? beatPiece : h[1] === "cymOff" ? offPiece : h[1];
-        if (piece === "hatFoot" && cym === "hat") return;                // the hat is being played with the stick
+        if (piece === "hatFoot" && cym === "hat" && !g.hat) return;      // the hat is being played with the stick (a hi-hat lesson groove writes its own foot)
         if (h[0] === 0 && landing === "crash" && (h[1] === "cym" || h[1] === "cymOff")) return;
         if (piece === "back") piece = lift ? "snare" : "rim";
         if (piece === "kick" && ((tied && h[0] === 0) || (push && h[0] >= 3.5))) return;
-        ev.push({ pos:h[0], piece:piece, vel: lift && (piece === "snare" || piece === "kick") ? Math.min(0.8, Math.round(h[2] * 1060) / 1000) : h[2] });
+        var e = { pos:h[0], piece:piece, vel: lift && (piece === "snare" || piece === "kick") ? Math.min(0.8, Math.round(h[2] * 1060) / 1000) : h[2] };
+        if (g.sixteenths && !onEighthGrid(h[0])){ e.straight = true; e.six = true; }     // (a lesson groove's own sixteenths: not swung, written as sixteenths)
+        ev.push(e);
       });
       if (fill){
         fill.hits.forEach(function (h){ var e = { pos: timeEnds + h[0], piece: h[1], vel: h[2] }; if (!onEighthGrid(h[0])) e.straight = true; ev.push(e); });
@@ -393,7 +439,36 @@
       return ev;
     }
 
-    function bar(ctx){
+    // A written groove (opts.written): its bars in turn, exactly as written, every note where the groove puts it.
+    function writtenBar(ctx){
+      var w = written(ctx), B = global.BandGroove, sw = ctx.opts.writtenSwing;
+      var bars = B.toEvents(w, { swing: sw == null ? true : sw, pieces: ctx.opts.writtenPieces }), beats = ctx.beats || 4;
+      var out = bars[(ctx.index || 0) % bars.length].filter(function (e){ return e.pos < beats; })
+        .map(function (e){ var o = { pos:e.pos, piece:e.piece, vel:e.vel, straight:true }; if (e.art) o.art = e.art; return o; });
+      // a click with it (opts.writtenClick = 4, 8 or 16: on those note values, the bar's first one louder)
+      var ck = +ctx.opts.writtenClick, d = w.d || 4;
+      if (ck){ var stepB = (ctx.compound ? 8 / 3 : d) / ck;                                 // one click's length in beats
+        for (var k = 0; k * stepB < beats - 1e-6; k++){ var p = Math.round(k * stepB * 1e6) / 1e6, on = Math.abs(p - Math.round(p)) < 1e-6;
+          out.push({ pos:p, piece:"sticks", vel: k === 0 ? 0.8 : on ? 0.6 : 0.34, straight:true, click:true }); }
+        out.sort(function (a, b){ return a.pos - b.pos; }); }
+      return out;
+    }
+
+    // A choked crash ("^choke" on the chart's bar): the crash and the kick on beat 1, and the hand closing on the cymbal
+    // before beat 2. `damp` is how fast the hand stops it (the player hands it to the sample bank); slower than a stop-time cut.
+    var GRAB = 0.05;
+    function choked(ctx, ev){
+      var fb = !ctx.intro && ctx.form && ctx.form[ctx.index]; if (!fb || !fb.choke || ctx.stop) return ev;
+      var g = ctx.opts && ctx.opts.groove; if (g === "click" || g === "none") return ev;
+      ev = ev.filter(function (e){ return !(e.pos === 0 && /^(ride|ride2|rideBell|crash|hatClosed|hatOpen)$/.test(e.piece)); });
+      if (!ev.some(function (e){ return e.pos === 0 && e.piece === "kick" && e.vel >= 0.4; })) ev.push({ pos:0, piece:"kick", vel:0.62 });
+      ev.push({ pos:0, piece:"crash", vel:0.78 }, { pos:0.7, choke:"cymbals", damp:GRAB, straight:true });
+      sinceCrash = 0;
+      return ev.sort(function (a, b){ return a.pos - b.pos; });
+    }
+    function bar(ctx){ return choked(ctx, plainBar(ctx)); }
+    function plainBar(ctx){
+      if (written(ctx)) return writtenBar(ctx);
       if (ctx.opts && ctx.opts.groove === "click") return clickBar(ctx);
       if (ctx.opts && ctx.opts.groove === "none") return [];                // no drummer
       if (ctx.stop) return stopBar();
@@ -471,7 +546,10 @@
 
     function ending(ctx){
       afterFill = null; if (ctx && ctx.opts && ctx.opts.groove === "none") return [];
-      return [ { pos:0, piece:"crash", vel:0.80 }, { pos:0, piece:"kick", vel:0.70 } ];
+      if (ctx && written(ctx)) return [];
+      var hit = [ { pos:0, piece:"crash", vel:0.80 }, { pos:0, piece:"kick", vel:0.70 } ];
+      if (ctx && ctx.opts && ctx.opts.endChoke) hit.push({ pos:0.6, choke:"cymbals", damp:GRAB, straight:true });      // a short ending: the crash is grabbed
+      return hit;
     }
 
     function reset(){ afterFill = null; lastComp = -1; lastFill = null; pushedIn = false; sinceCrash = 99; }

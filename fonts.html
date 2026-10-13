@@ -63,6 +63,16 @@ window.CAROL_TYPE = {
     min: 50, max: 220, step: 5, fallback: 100, unit: '%',
     cssVar: '--staff-height', cssUnit: '%'
   },
+  // The words under the chord the band is on, when the chords are hidden.
+  sung: {
+    label: 'Sung words',
+    options: [
+      { id: 'marked', name: 'Highlighted',
+        vars: { '--sung-now': '#0d6efd', '--sung-line': '#0d6efd', '--sung-stroke': '.03em' } },
+      { id: 'plain', name: 'Not highlighted',
+        vars: { '--sung-now': 'currentColor', '--sung-line': 'transparent', '--sung-stroke': '0' } }
+    ]
+  },
   chordColour: {
     label: 'Chord colour',
     options: [

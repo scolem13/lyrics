@@ -15,7 +15,7 @@
 //   bank.play("bass",  { midi:41, vel:0.8, dur:0.45 }, when, destNode)
 //   bank.play("kit",   { piece:"ride", vel:0.6 },      when, destNode)
 //   bank.play("congas", { piece:"congaSlap", vel:0.6 }, when, destNode)   // the congas are a kit of their own (pieces: see the definition)
-//   bank.choke("cymbals", when)                        // damp ringing cymbals (a stop-time hit)
+//   bank.choke("cymbals", when, damp)                  // damp ringing cymbals (a stop-time hit; damp = seconds, slower for a hand)
 //   bank.stopAll()                                     // fade + cut everything sounding or scheduled
 //   bank.has(name)                                     // loaded and playable?
 //   BandSounds.define(name, def | function (sf) -> def)  // override/add an instrument at runtime
@@ -157,20 +157,25 @@
                 zones: soundfontKit(sf, { kick:36, rim:37, snare:38, hatClosed:42, hatFoot:44, hatOpen:46,
                                           crash:49, ride:51, ride2:59, rideBell:53, tomLo:43, tomMid:45, tomHi:48, sticks:31, clap:39, tamb:54 }),
                 // per-piece trim (the soundfont's kick is ~8x hotter than its ride); group/chokes =
-                // the closed hat and the foot cut a ringing open hat; the cymbals can be damped by choke("cymbals")
-                pieces: { kick:{ gain:0.56 }, snare:{ gain:0.80 }, clap:{ gain:0.70 }, tamb:{ gain:0.90 }, rim:{ gain:1.15 }, sticks:{ gain:0.50 },
+                // the closed hat and the foot cut a ringing open hat; the cymbals can be damped by choke("cymbals").
+                // A drum has one head: struck again, its last note lets go (damp = how fast) instead of piling up under
+                // the new one, and a cross-stick, with the stick lying on the head, stops the snare. Cymbals ring on.
+                pieces: { kick:{ gain:0.56, group:"kick", chokes:"kick", damp:0.02 }, snare:{ gain:0.80, group:"snare", chokes:"snare", damp:0.03 }, clap:{ gain:0.70 }, tamb:{ gain:0.90 },
+                          rim:{ gain:1.15, chokes:"snare", damp:0.015 }, sticks:{ gain:0.50 },
                           ride:{ gain:1.95, group:"cymbals" }, ride2:{ gain:2.4, group:"cymbals" }, rideBell:{ gain:1.5, group:"cymbals" }, crash:{ gain:1.9, group:"cymbals" },
                           hatClosed:{ gain:1.6, chokes:"hat" }, hatFoot:{ gain:1.6, chokes:"hat" }, hatOpen:{ gain:1.4, group:"hat" },
-                          tomHi:{ gain:0.95 }, tomMid:{ gain:0.95 }, tomLo:{ gain:0.95 } } },
+                          tomHi:{ gain:0.95, group:"tomHi", chokes:"tomHi", damp:0.04 }, tomMid:{ gain:0.95, group:"tomMid", chokes:"tomMid", damp:0.04 }, tomLo:{ gain:0.95, group:"tomLo", chokes:"tomLo", damp:0.04 } } },
       // Congas. General MIDI has only three conga sounds (62 mute high, 63 open high, 64 low), so heel, toe, slap and the bass tone are
       // stand-ins made from them: the same file at another level (and, for the toe and the bass, another pitch). The pieces share
       // files, which are fetched once. A first guess, not yet listened to. The conga is the higher drum, the tumba the lower.
       congas: { family: "congas", gain: 1.3,
                 zones: soundfontKit(sf, { congaOpen:63, congaSlap:62, congaMute:62, congaHeel:62, congaToe:62, congaBass:64,
                                           tumbaOpen:64, tumbaMute:64, tumbaBass:64 }),
-                pieces: { congaOpen:{ gain:0.95 }, congaSlap:{ gain:1.0 }, congaMute:{ gain:0.60 },
-                          congaHeel:{ gain:0.30, rate:0.90 }, congaToe:{ gain:0.40, rate:1.12 }, congaBass:{ gain:0.50, rate:0.90 },
-                          tumbaOpen:{ gain:0.95 }, tumbaMute:{ gain:0.50 }, tumbaBass:{ gain:0.50, rate:0.88 } } }
+                // Each drum has one head. A hand that lands and stays (heel, toe, slap, muted, bass) stops the open tone
+                // that was ringing on that drum; an open tone struck again takes over from the last. The other drum rings on.
+                pieces: { congaOpen:{ gain:0.95, group:"conga", chokes:"conga", damp:0.03 }, congaSlap:{ gain:1.0, group:"conga", chokes:"conga" }, congaMute:{ gain:0.60, group:"conga", chokes:"conga" },
+                          congaHeel:{ gain:0.30, rate:0.90, group:"conga", chokes:"conga" }, congaToe:{ gain:0.40, rate:1.12, group:"conga", chokes:"conga" }, congaBass:{ gain:0.50, rate:0.90, group:"conga", chokes:"conga" },
+                          tumbaOpen:{ gain:0.95, group:"tumba", chokes:"tumba", damp:0.03 }, tumbaMute:{ gain:0.50, group:"tumba", chokes:"tumba" }, tumbaBass:{ gain:0.50, rate:0.88, group:"tumba", chokes:"tumba" } } }
     };
   }
 
@@ -488,11 +493,13 @@
       }).then(function (){});
     }
 
-    function choke(group, t){
-      var list = ringing[group]; if (!list) return;
+    // damp = how fast what was ringing dies away (a time constant in seconds): a hand or a closing hi-hat is quick,
+    // a drum head struck again lets go of its last note more slowly
+    function choke(group, t, damp){
+      var list = ringing[group]; if (!list) return; damp = damp || 0.012;
       ringing[group] = list.filter(function (v){
         if (v.t >= t) return true;
-        try { v.g.gain.cancelScheduledValues(t); v.g.gain.setTargetAtTime(0, t, 0.012); v.src.stop(t + 0.12); } catch (e) {}
+        try { v.g.gain.cancelScheduledValues(t); v.g.gain.setTargetAtTime(0, t, damp); v.src.stop(t + Math.max(0.12, damp * 8)); } catch (e) {}
         return false;
       });
     }
@@ -523,7 +530,7 @@
       g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(level, t + 0.002);
 
       var v = { src: src, g: g, t: t };
-      if (pc.chokes) choke(pc.chokes, t);
+      if (pc.chokes) choke(pc.chokes, t, pc.damp);
       if (pc.group) (ringing[pc.group] = ringing[pc.group] || []).push(v);
       src.start(t, z.offset || 0);
       if (spec.dur != null){                                // note-off: short release so nothing clicks
@@ -544,7 +551,7 @@
       ringing = {};
     }
 
-    return { load: load, play: play, control: control2, stopAll: stopAll, choke: function (group, when){ choke(group, Math.max(when || 0, ctx.currentTime)); }, has: function (n){ return !!ready[n]; }, context: ctx };
+    return { load: load, play: play, control: control2, stopAll: stopAll, choke: function (group, when, damp){ choke(group, Math.max(when || 0, ctx.currentTime), damp); }, has: function (n){ return !!ready[n]; }, context: ctx };
   }
 
   global.BandSounds = {

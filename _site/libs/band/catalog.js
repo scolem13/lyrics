@@ -231,7 +231,28 @@
     { id:"twelve8", label:"12/8", feel:"any", group:"Folk, rock and pop", tags:["Doo-wop","Blues","Ballad"],
       desc:"Three eighths to every beat on the cymbal, kick on 1 and 3, backbeat on 2 and 4. In 4/4 the eighths are triplets." },
     { id:"halftime", label:"Half-time", feel:"straight", group:"Folk, rock and pop", tags:["Pop","Ballad","Rock"],
-      desc:"The backbeat at half speed: kick on 1 and the and of 2, one snare on beat 3." }
+      desc:"The backbeat at half speed: kick on 1 and the and of 2, one snare on beat 3." },
+    // the hi-hat lesson, a set (lessons/hihat-grooves.qmd): the hi-hat is always written out, whatever the Cymbal menu says
+    { id:"hhquarters", label:"Hi-hat: quarter notes", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Closed hi-hat on every beat, kick on 1 and 3, snare on 2 and 4. The first rock beat. In 3/4: hi-hat on every beat, kick on 1, snare on 3.", three:true },
+    { id:"hheighths", label:"Hi-hat: eighth notes", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Closed hi-hat on every eighth note, all of one weight, kick on 1 and 3, snare on 2 and 4. The basic rock beat. In 3/4: six eighths, kick on 1, snare on 3.", three:true },
+    { id:"hhaccents", label:"Hi-hat: accented eighths", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"The basic rock beat with the hi-hat leaning on the beats and the off-beats played lightly (shoulder of the stick on the beat, tip on the off-beat). Written with an accent over each beat.", three:true },
+    { id:"hhoffbeats", label:"Hi-hat: off-beats only", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"The closed hi-hat plays only the ands, 1-and 2-and 3-and 4-and. Kick on every beat, snare on 2 and 4. In 3/4: kick on 1 and 2, snare on 3.", three:true },
+    { id:"hhopen", label:"Hi-hat: one open note", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Eighth notes on the closed hi-hat, with the and of 4 left open. The foot and the stick close it again on beat 1 of the next bar. Kick on 1 and 3, snare on 2 and 4.", three:true },
+    { id:"hhdance", label:"Hi-hat: open off-beats", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Four on the floor: kick on every beat, snare on 2 and 4, a closed hi-hat on each beat and an open one on every off-beat (the stick closing it each time). The Four on the floor groove without the clap.", three:true },
+    { id:"hhsix", label:"Hi-hat: sixteenth notes", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Sixteen notes to the bar on the closed hi-hat with one hand, the beats a little stronger. Kick on 1 and 3, snare on 2 and 4. For slow and medium tempos.", three:true },
+    { id:"hhsix2", label:"Hi-hat: sixteenths, two hands", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Sixteenth notes on the hi-hat, right-left-right-left, except that the right hand leaves the hi-hat for the snare on 2 and 4, so the hi-hat is silent on those two notes. Kick on 1 and 3. For slow and medium tempos.", three:true },
+    { id:"hhfoot4", label:"Hi-hat: foot on every beat", feel:"straight", group:"Folk, rock and pop", tags:["Rock","Pop","Hi-hat lesson"],
+      desc:"Eighth notes on the ride cymbal, the hi-hat closed with the foot on all four beats, kick on 1 and 3, snare on 2 and 4.", three:true },
+    { id:"hhswing", label:"Hi-hat: swing time", feel:"swing", group:"Jazz", tags:["Jazz","Swing","Hi-hat lesson"],
+      desc:"The ride pattern played on the hi-hat itself: open on 1 and 3, closed on 2 and 4 with the skip note after them, the foot closing the cymbals on 2 and 4. Swung. Nothing else.", three:true }
   ];
 
   // The conga player (congas.js). "none" first: a style without congas, and every style may have none.
@@ -262,7 +283,9 @@
             strumCamp:"strum rock folk carol", strumFolk:"carol folk strum train", strumEights:"rock strum emo", strumPunk:"emo rock", strumQuarters:"strum rock folk pop carol emo", strum332:"strum rock dance", strum16:"strum rock dance", upbeats:"calypso reggae freylekhs", bossa:"bossa", tango:"tango",
             montuno:"montuno", chacha:"chacha", arp:"pop ballad folk strum doowop hymn carol", arp2:"pop folk strum carol emo prine", prine:"prine folk strum carol train", travis:"prine folk strum carol train", alberti:"pop folk", tresillo:"dance rock reggaeton", clave32:"rock", barbara:"motown rock", g333322:"rock dance", g33433:"dance reggaeton", g3x8:"dance rock", sowhat:"swing", maiden:"boogaloo bossa", takefive:"swing" },
     drums: { auto:"swing ballad boogaloo", quarters:"swing ballad", ridetime:"swing ballad", shuffle:"swing doowop", funk:"boogaloo rock", bossa:"bossa", clave:"montuno", clave32:"montuno", bodiddley:"rock", dembow:"reggaeton dance", chacha:"chacha", tango:"tango", calypso:"calypso",
-             onedrop:"reggae", none:"hymn carol pop folk strum prine", brushes:"carol strum folk pop", boomchick:"folk train carol freylekhs", waltz:"waltz folk carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo" }
+             onedrop:"reggae", none:"hymn carol pop folk strum prine", brushes:"carol strum folk pop", boomchick:"folk train carol freylekhs", waltz:"waltz folk carol", rock:"rock emo", strum:"strum rock pop", ballad:"pop strum", dance:"dance", motown:"motown", train:"train", twelve8:"doowop", halftime:"pop rock emo",
+             hhquarters:"rock pop strum dance boogaloo", hheighths:"rock pop strum dance boogaloo", hhaccents:"rock pop strum dance boogaloo", hhoffbeats:"rock pop strum dance boogaloo", hhopen:"rock pop strum dance boogaloo",
+             hhdance:"rock pop strum dance boogaloo", hhsix:"rock pop strum dance boogaloo", hhsix2:"rock pop strum dance boogaloo", hhfoot4:"rock pop strum dance boogaloo", hhswing:"swing" }
   };
   var JAZZ = "swing ballad boogaloo", POP = "folk freylekhs rock emo pop strum dance motown doowop train prine hymn carol waltz", PLAIN = POP + " calypso reggae reggaeton tango montuno chacha";
   var VOICE = {

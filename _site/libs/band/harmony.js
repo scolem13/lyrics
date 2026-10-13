@@ -626,6 +626,52 @@
   // What a beat is in a meter. 6/8, 9/8 and 12/8 are COMPOUND: the band counts dotted quarters
   // (2, 3 or 4 beats to the bar) and each beat divides in three. Everything else counts the
   // meter's own lower note.
+  // ---- blends of bass lines and of grooves ----
+  // opts.bassFeel and opts.groove may each name several patterns joined by "+", as opts.compRhythm does. The
+  // player (and BandMidi.generate) asks blendOpts for each bar's options, in which each is one pattern again,
+  // so every part sees the same bass line and the same groove for the bar. They are planned four bars at a time,
+  // the way the comping plans its rhythms (comp.js, planSpan): one pattern is at home for the phrase, chosen by
+  // its share of the blend (opts.bassMix / opts.grooveMix: { id: 0..1 }, unlisted = 0.5; with no shares, mostly
+  // a different one from last time), and the phrase may hold visitors: its second bar goes back to the
+  // pattern just left (35% after a change); its last bar is already the next one (40% before a change), or
+  // else its third bar is some other pattern (30%). A pattern with no share takes no part.
+  // st = the caller's own state object ({}), rng = random numbers of its own. With no "+" in either, the
+  // options come back untouched and nothing is drawn from the rng.
+  var BLENDS = [["bassFeel", "bassMix"], ["groove", "grooveMix"]];
+  function blendIds(v){ var seen = {}; return String(v == null ? "" : v).split("+").filter(function (x){ if (!x || seen[x]) return false; seen[x] = 1; return true; }); }
+  function blendFirst(opts){
+    if (!opts || !BLENDS.some(function (b){ return String(opts[b[0]] || "").indexOf("+") >= 0; })) return opts;
+    var o = Object.assign({}, opts); BLENDS.forEach(function (b){ if (String(o[b[0]] || "").indexOf("+") >= 0) o[b[0]] = blendIds(o[b[0]])[0]; }); return o;
+  }
+  function blendSpan(s, ids, W, rng){
+    function w(id){ return !W || W[id] == null ? 0.5 : Math.max(0, +W[id] || 0); }
+    var live = W ? ids.filter(function (id){ return w(id) > 0; }) : ids; if (!live.length) live = ids;
+    function weighted(pool){ var sum = pool.reduce(function (a, id){ return a + w(id); }, 0), r = rng() * sum;
+      for (var i = 0; i < pool.length - 1; i++){ r -= w(pool[i]); if (r < 0) return pool[i]; } return pool[pool.length - 1]; }
+    function choose(not){ if (W) return weighted(live); var pool = live.length > 1 && not != null && rng() < 0.7 ? live.filter(function (id){ return id !== not; }) : live; return pool[Math.floor(rng() * pool.length)]; }
+    var prev = s.home, home = s.next && live.indexOf(s.next) >= 0 ? s.next : choose(prev), next = choose(home), span = [home, home, home, home];
+    if (live.length > 1){
+      var others = live.filter(function (id){ return id !== home; });
+      if (prev && prev !== home && live.indexOf(prev) >= 0 && rng() < 0.35) span[1] = prev;
+      if (next !== home && rng() < 0.4) span[3] = next;
+      else if (others.length && rng() < 0.3) span[2] = W ? weighted(others) : others[Math.floor(rng() * others.length)];
+    }
+    s.home = home; s.next = next; s.span = span;
+  }
+  function blendOpts(st, opts, ctx, rng){
+    if (!opts || !BLENDS.some(function (b){ return String(opts[b[0]] || "").indexOf("+") >= 0; })) return opts;
+    st = st || {}; rng = rng || Math.random;
+    var pos = (((ctx && ctx.phrase && ctx.phrase.bar) | 0) % 4 + 4) % 4, o = Object.assign({}, opts);
+    BLENDS.forEach(function (b){
+      var ids = blendIds(opts[b[0]]); if (ids.length < 2){ if (ids.length) o[b[0]] = ids[0]; return; }
+      var W = opts[b[1]] || null, sig = ids.join("+") + "|" + (W ? ids.map(function (id){ return W[id]; }).join(",") : ""), s = st[b[0]] || (st[b[0]] = {});
+      if (s.sig !== sig){ s.sig = sig; s.span = null; s.home = null; s.next = null; }
+      if (!s.span || (pos === 0 && s.at !== ctx.bar)) blendSpan(s, ids, W, rng);
+      s.at = ctx.bar; o[b[0]] = s.span[pos];
+    });
+    return o;
+  }
+
   // ---- calm bars ----
   // Where a patterned accompaniment gets in the way: around cadences and wherever the chords are already moving
   // faster than usual. A style that asks for it (opts.calm) only strikes and holds its chords there (comp.js).
@@ -948,6 +994,7 @@
       if (bar.plain) fbar.plain = true;                                                       // "^plain": a calm bar whatever else is true of it
       if (bar.stop) fbar.stop = true;                                                         // "^stop": stop time on this bar
       if (bar.fill) fbar.fill = bar.fill;                                                     // "^fill": the drummer fills at the end of it
+      if (bar.choke) fbar.choke = true;                                                       // "^choke": a crash on beat 1, grabbed with the hand
       out.push(fbar);
     });
     return out;
@@ -1020,7 +1067,7 @@
   // Is this bar one of the chorus bars (opts.lift = form bar indexes), where the band plays up?
   function lifted(ctx, index){ var l = ctx && ctx.opts && ctx.opts.lift; return !!(l && l.indexOf && !ctx.intro && l.indexOf(index == null ? ctx.index : index) >= 0); }
 
-  global.BandHarmony = { endingPlan: endingPlan, calmAt: calmAt, BALLAD: BALLAD, pushes: pushes, lifted: lifted,
+  global.BandHarmony = { endingPlan: endingPlan, calmAt: calmAt, blendOpts: blendOpts, blendFirst: blendFirst, blendIds: blendIds, BALLAD: BALLAD, pushes: pushes, lifted: lifted,
     parseChord: parseChord, chordScale: chordScale, voicing: voicing, buildForm: buildForm,
     chordAt: chordAt, sameChord: sameChord, noteName: noteName, pcName: pcName, libChord: libChord,
     voicingClass: voicingClass, motion: motion, STYLES: STYLES,

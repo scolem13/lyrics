@@ -137,6 +137,16 @@ window.CAROL_TYPE = {
     min: 50, max: 220, step: 5, fallback: 100, unit: '%',
     cssVar: '--staff-height', cssUnit: '%'
   },
+  // The words under the chord the band is on, when the chords are hidden.
+  sung: {
+    label: 'Sung words',
+    options: [
+      { id: 'marked', name: 'Highlighted',
+        vars: { '--sung-now': '#0d6efd', '--sung-line': '#0d6efd', '--sung-stroke': '.03em' } },
+      { id: 'plain', name: 'Not highlighted',
+        vars: { '--sung-now': 'currentColor', '--sung-line': 'transparent', '--sung-stroke': '0' } }
+    ]
+  },
   chordColour: {
     label: 'Chord colour',
     options: [
@@ -568,6 +578,8 @@ window.carolTypeChoice = function () {
         dacapo: !!h && /^d\.?\s*[cs]\b/i.test(h.textContent.trim()),
         // Fine is where that second pass ends.
         fine: !!h && /^fine$/i.test(h.textContent.trim()),
+        // Segno is where a dal segno (D.S.) goes back to, in place of the top.
+        segno: !!h && /^segno$/i.test(h.textContent.trim()),
         // Played once on the way down, an interlude is skipped on the repeat.
         interlude: !!h && /^interlude$/i.test(h.textContent.trim()),
         taken: false
@@ -577,7 +589,17 @@ window.carolTypeChoice = function () {
 
   // A direction tells you what to do; it is not a place in the song, so
   // neither j nor k nor a click in the list ever lands on one.
-  function isDirection(h) { return h.dacapo || h.fine; }
+  function isDirection(h) { return h.dacapo || h.fine || h.segno; }
+  // Where the jump written at heads[n] goes: a D.S. to the section after the
+  // Segno above it, anything else (and a D.S. with no Segno) to the top.
+  function start(n) {
+    if (!heads[n] || !/^d\.?\s*s/i.test(heads[n].heading.textContent.trim())) return 0;
+    for (var i = n - 1; i >= 0; i--) {
+      if (!heads[i].segno) continue;
+      for (var to = i + 1; to < n; to++) if (!isDirection(heads[to])) return to;
+    }
+    return 0;
+  }
 
   // A Fine is where the repeat ends, so it means nothing until the da capo
   // has been read. Until then it is there to be seen, but greyed back.
@@ -627,7 +649,7 @@ window.carolTypeChoice = function () {
       var nav = main.querySelector('.songnav');
       if (nav && nav.parentNode) nav.parentNode.insertBefore(section, nav);
       else main.appendChild(section);
-      heads.push({ section: section, heading: h, dacapo: false, fine: true,
+      heads.push({ section: section, heading: h, dacapo: false, fine: true, segno: false,
                    interlude: false, taken: false });
       supplied = true;
     } catch (e) { /* no Fine on this page; the song still works */ }
@@ -815,6 +837,10 @@ window.carolTypeChoice = function () {
     gifts.forEach(function (g) {
       // Hidden, not removed: the lines already sung hold their place.
       g.classList.toggle('unsung', +g.getAttribute('data-day') > day);
+      // A gift that goes one way on the early days and another later is
+      // written once for each; only the day's own is on the page.
+      g.classList.toggle('other-days', day < +(g.getAttribute('data-from') || 1) ||
+                                       day > +(g.getAttribute('data-until') || 12));
     });
     if (ordinal) {
       ordinal.textContent = ORDINALS[day - 1];
@@ -904,10 +930,11 @@ window.carolTypeChoice = function () {
       var h = heads[n];
       if (repeating && h.interlude) { n++; continue; }
       if (h.dacapo) {
-        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = 0; }
+        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = start(n); }
         else n++;
         continue;
       }
+      if (h.segno) { n++; continue; }
       if (h.fine) { if (repeating) break; n++; continue; }
       out.push({ head: n, taken: taken.slice() });
       n++;
@@ -947,13 +974,14 @@ window.carolTypeChoice = function () {
         if (repeating && ahead.interlude) { next++; continue; }
         if (ahead.dacapo) {
           if (!ahead.taken) {           // read it once: back to the beginning
-            ahead.taken = true;
-            go(0, { dacapo: next });
+            ahead.taken = true;         // (or to the segno)
+            go(start(next), { dacapo: next });
             return;
           }
           next++;                        // read already: carry on past it
           continue;
         }
+        if (ahead.segno) { next++; continue; }
         if (ahead.fine) {
           if (repeating) return;         // the second pass ends here
           next++;                        // first time through, Fine is passed
@@ -966,7 +994,20 @@ window.carolTypeChoice = function () {
       return;
     }
 
-    // Backwards is the same road travelled the other way.
+    // Backwards is the same road travelled the other way. Where a dal segno
+    // put us is not the top of the song, but going back from there is the
+    // same: give the marker back and return to where it was read.
+    var dc = -1;
+    for (i = heads.length - 1; i >= 0; i--) {
+      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
+    }
+    if (dc >= 0 && base > 0 && start(dc) === base) {
+      heads[dc].taken = false;
+      var from = dc - 1;
+      while (from >= 0 && isDirection(heads[from])) from--;
+      go(Math.max(0, from), { untake: dc });
+      return;
+    }
     var prev = base - 1;
     while (prev >= 0) {
       if (repeating && heads[prev].interlude) { prev--; continue; }
@@ -977,10 +1018,6 @@ window.carolTypeChoice = function () {
 
     // At the top of the song. If a da capo put us here, give the marker back
     // and return to the section it was read from.
-    var dc = -1;
-    for (i = heads.length - 1; i >= 0; i--) {
-      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
-    }
     if (dc < 0) { go(0); return; }
     heads[dc].taken = false;
     var back = dc - 1;
@@ -1747,6 +1784,7 @@ window.carolTypeChoice = function () {
   }
 
   var playButton = button('Play', 'p', function () { toggle(); });
+  playButton.title = 'Play or stop: p, or the space bar';
   var holdButton = button('', 'h', toggleHold);
   var fillButton = button('Drum fill', 'd', fillNow);
   var tuneButton = button('', 'm', toggleTune);
@@ -1851,10 +1889,50 @@ window.carolTypeChoice = function () {
   }
 
   function styleSetup() {
-    var so = window.BandCatalog.styleOpts(styleBox.value);
+    var so = window.BandCatalog.styleOpts(styleBox.value), S = window.BandSounds;
+    // The setup's own instruments, while its style is the one chosen here:
+    // the chord instrument (and so whose voicings are played), the bass, a
+    // second chord instrument, congas, and the octave each is played in.
+    var f = setup && styleBox.value === setup.style && setup.fields;
+    if (f && S && S.family) {
+      var lead = f['bt-comp'], fam = lead && S.family(lead);
+      if (fam === 'piano' || fam === 'guitar') {
+        so = window.BandCatalog.styleOpts(styleBox.value, fam);
+        so.instruments[1] = lead;
+        so.opts.comp = fam;
+        so.opts.compSound = lead;
+      }
+      if (f['bt-bass-sound']) {
+        so.opts.bassSound = f['bt-bass-sound'];
+        so.instruments[0] = f['bt-bass-sound'] === 'electric' ? 'ebass' : 'bass';
+      }
+      var two = f['bt-second'], fam2 = two && S.family(two);
+      if (fam2 === 'piano' || fam2 === 'guitar') {
+        so.opts.second = { comp: fam2, compSound: two, compRhythm: f['bt-second-rhythm'] || 'pad',
+                           voicing: f['bt-second-voicing'] || undefined };
+        if (so.instruments.indexOf(two) < 0) so.instruments.push(two);
+      }
+      if (setup.congas) {
+        so.opts.congas = setup.congas;
+        var at = so.instruments.indexOf('congas');
+        if (setup.congas === 'none' && at >= 0) so.instruments.splice(at, 1);
+        if (setup.congas !== 'none' && at < 0) so.instruments.push('congas');
+      }
+      so.opts.octave = { bass: parseInt(f['bt-oct-bass'], 10) || 0, comp: parseInt(f['bt-oct-comp'], 10) || 0,
+                         comp2: parseInt(f['bt-oct-comp2'], 10) || 0 };
+    }
     // the sounds of any section the setup gives settings of its own
     sectionSetup().sounds.forEach(function (n) { if (so.instruments.indexOf(n) < 0) so.instruments.push(n); });
     return so;
+  }
+  // The setup's faders, with its instruments: 100 is the band's own balance.
+  function setVolumes(to) {
+    var f = setup && styleBox.value === setup.style && setup.fields;
+    [['bass', 'bt-vol-bass'], ['comp', 'bt-vol-comp'], ['comp2', 'bt-vol-comp2'],
+     ['drums', 'bt-vol-drums'], ['congas', 'bt-vol-congas']].forEach(function (one) {
+      var v = f ? parseInt(f[one[1]], 10) : NaN;
+      if (to && to.setVolume) to.setVolume(one[0], v >= 0 ? v / 100 : 1);
+    });
   }
   // What the setup keeps for single sections (set section by section on the
   // Backing Track page): put on the sections of this chart that have those
@@ -1866,8 +1944,15 @@ window.carolTypeChoice = function () {
     var names = [];
     form.forEach(function (b) { if (b.section != null || !names.length) names.push(b.section || ''); });
     var put = C.placeSections(setup.sections, names);
+    // The bars of the choruses, as the Backing Track counts them: a strum
+    // that is muted in the verse and open in the chorus has to know them.
+    var chorus = [], name = '';
+    form.forEach(function (b, i) {
+      if (b.section != null) name = b.section;
+      if (/^(chorus|refrain)\b/i.test(name)) chorus.push(i);
+    });
     Object.keys(put).forEach(function (k) {
-      out.map[k] = put[k].opts;
+      out.map[k] = /^(chorus|refrain)\b/i.test(names[k]) ? Object.assign({}, put[k].opts, { lift: chorus }) : put[k].opts;
       (put[k].sounds || []).forEach(function (n) { if (out.sounds.indexOf(n) < 0) out.sounds.push(n); });
     });
     return out;
@@ -1882,6 +1967,12 @@ window.carolTypeChoice = function () {
       if (setup.feel) o.feel = setup.feel;
       if (setup.bass) o.bassFeel = setup.bass;
       if (setup.groove) o.groove = setup.groove;
+      // a blend of bass lines or of grooves ("walk+two"): how much of each (0-100 on the sliders)
+      [['bmix', 'bassMix'], ['gmix', 'grooveMix']].forEach(function (k) {
+        if (!setup[k[0]] || typeof setup[k[0]] !== 'object') return;
+        o[k[1]] = {};
+        Object.keys(setup[k[0]]).forEach(function (id) { o[k[1]][id] = (+setup[k[0]][id] || 0) / 100; });
+      });
       if (setup.rhythm) o.compRhythm = setup.rhythm;
       if (setup.voicing) o.voicing = setup.voicing;
     }
@@ -1981,11 +2072,13 @@ window.carolTypeChoice = function () {
       onSection: function (sc) { if (!away) handlers.onSection(sc); }
     });
     player = here;
+    setVolumes(here);
     window.carolBandAbc = abc;         // the chart as the band reads it
     window.carolBandChart = parsed;    // ... parsed, with the tune on its bars
     ready = true;
     playButton.disabled = false;
     say('');
+    findWindow();
   }
 
   // ---- the chord being played, lit up over the words ----
@@ -2032,7 +2125,10 @@ window.carolTypeChoice = function () {
     if (stop && document.body.classList.contains('day-reveal')) {
       return Array.prototype.filter.call(document.querySelectorAll('#verse .ch'), function (el) {
         var gift = el.closest('.gift');
-        return !gift || +gift.getAttribute('data-day') <= stop.head + 1;
+        var day = stop.head + 1;
+        return !gift || (+gift.getAttribute('data-day') <= day &&
+                         day >= +(gift.getAttribute('data-from') || 1) &&
+                         day <= +(gift.getAttribute('data-until') || 12));
       });
     }
     return box ? Array.prototype.slice.call(box.querySelectorAll('.ch')) : [];
@@ -2264,6 +2360,7 @@ window.carolTypeChoice = function () {
   function toggle(fromBar) {
     if (!ready) return;
     if (away && away.closed) comeBack();
+    if (!away) findWindow();           // (a key press may look where a page load may not)
     if (fromBar == null && (playing || player.state() !== 'idle')) { player.stop(); return; }
     if (player.state() !== 'idle') player.stop();
     var k = stopFor(Math.max(0, song.at()));
@@ -2297,6 +2394,7 @@ window.carolTypeChoice = function () {
     if (!player) return;
     player.setInstruments(styleSetup().instruments);
     player.setOpts(bandOpts());
+    setVolumes(here);
   });
   fillsBox.addEventListener('change', function () {
     keep('fills', fillsBox.value);
@@ -2354,8 +2452,45 @@ window.carolTypeChoice = function () {
       : 'Open the Backing Track page in its own window and let it play, with all of its options';
     windowButton.setAttribute('aria-pressed', String(!!away));
   }
+  // The Backing Track window outlives this page: a reload, or the next song,
+  // and the page no longer has hold of it. Whether it was playing there is
+  // kept for the tab, and the window is looked for again by its name -- which
+  // finds it without loading anything into it -- and given this page's song.
+  function remember(on) {
+    try {
+      if (on) sessionStorage.setItem('carols-band-away', '1');
+      else sessionStorage.removeItem('carols-band-away');
+    } catch (e) {}
+  }
+  function sendSong() {
+    var others = window.carolTeacher ? versionAbcs() : [];
+    post({ type: 'bt-load', abc: window.carolBandAbc, melody: melodies,
+           versions: others, version: versionNow ? versionNow.name : '',
+           written: others.length ? buildAbc(null) : null,
+           tempo: tempo(), style: styleBox.value, hold: hold, setup: setup,
+           fills: fillsBox.value, countIn: parseInt(countBox.value, 10),
+           title: (document.querySelector('h1.title') || {}).textContent || '' });
+  }
+  function findWindow() {
+    var was = false, found = null, blank = false;
+    try { was = sessionStorage.getItem('carols-band-away') === '1'; } catch (e) {}
+    if (!was || away || !ready) return;
+    try { found = window.open('', 'carols-backing-track'); } catch (e) {}
+    if (!found) return;                // not allowed just now: the next Play asks again
+    // No window of that name was left, and the browser made an empty one.
+    // (The real one is another site's page, and may not be looked at.)
+    try { blank = found.location.href === 'about:blank'; } catch (e) {}
+    if (blank) { found.close(); remember(false); return; }
+    if (here.state() !== 'idle') here.stop();
+    away = found; awayState = 'idle';
+    try { awayOrigin = new URL(musicSite()).origin; } catch (e) { awayOrigin = null; }
+    player = proxy;
+    showWindow();
+    sendSong();
+  }
   function comeBack() {
     if (!away) return;
+    remember(false);
     try { if (!away.closed) away.postMessage({ type: 'bt-stop' }, awayOrigin || '*'); } catch (e) {}
     away = null; awayOrigin = null; awayState = 'idle';
     player = here;
@@ -2369,6 +2504,7 @@ window.carolTypeChoice = function () {
     away = window.open(musicSite() + '/tools/backing-track.html?remote=1', 'carols-backing-track');
     if (!away) { say('The browser blocked the new window. Allow pop-ups for this site.'); return; }
     player = proxy;
+    remember(true);
     showWindow();
     say('Opening ' + musicSite() + ' …');
   }
@@ -2377,13 +2513,7 @@ window.carolTypeChoice = function () {
     if (!away || e.source !== away || !m || typeof m.type !== 'string') return;
     if (m.type === 'bt-ready') {
       awayOrigin = e.origin;
-      var others = window.carolTeacher ? versionAbcs() : [];
-      post({ type: 'bt-load', abc: window.carolBandAbc, melody: melodies,
-             versions: others, version: versionNow ? versionNow.name : '',
-             written: others.length ? buildAbc(null) : null,
-             tempo: tempo(), style: styleBox.value, hold: hold, setup: setup,
-             fills: fillsBox.value, countIn: parseInt(countBox.value, 10),
-             title: (document.querySelector('h1.title') || {}).textContent || '' });
+      sendSong();
     } else if (m.type === 'bt-loaded') {
       say(m.bars ? AWAY + ' Click in it once so it may make sound.'
                  : 'The Backing Track window could not read this song.');
@@ -2458,7 +2588,13 @@ window.carolTypeChoice = function () {
     if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
     if (e.target.matches && e.target.matches('input, textarea, select, [contenteditable]')) return;
     var k = (e.key || '').toLowerCase();
-    if (k === 'p') toggle();
+    // The space bar plays and stops too -- unless it is on a button or a
+    // link, where it presses that. (While a tap take runs, it is the take's.)
+    if (k === ' ' || k === 'spacebar') {
+      if (e.target.closest && e.target.closest('button, a, summary, [role=button]')) return;
+      toggle();
+    }
+    else if (k === 'p') toggle();
     else if (k === 'w') toggleWindow();
     else if (k === 'h') toggleHold();
     else if (k === 'm' && hasTune) toggleTune();

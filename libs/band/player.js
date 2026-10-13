@@ -217,6 +217,7 @@
     if (global.BandComp && global.BandComp.createSecond) G.comp2 = { create: global.BandComp.createSecond };
     var H = global.BandHarmony, wrap = (H && H.feelPart) || function (x){ return x; };                 // half time / double time (opts.timeFeel)
     PARTS.forEach(function (p){ if (G[p] && G[p].create) self.parts[p] = wrap(G[p].create({ rng: mulberry32(seed + SEED[p]) }), p === "comp2" ? "comp" : p === "congas" ? "drums" : p); });      // the congas keep time with the drums in half / double time
+    this.blend = {}; this.blendRng = mulberry32(seed + 977);        // several bass lines or grooves in a blend: which one each bar gets (BandHarmony.blendOpts)
     this.nextL = 0; this.barNo = 0; this.chorus = 0; this.pass = 0; this.prev = null;
     var r0 = this.range(), sb = c.startBar | 0;
     this.formIdx = (sb < this.form.length && r0.has(sb)) ? sb : r0.from;   // first pass may start part-way in
@@ -239,6 +240,7 @@
   // Something changed (options, choruses, loop, chart) while bars had been written ahead: throw away every bar
   // that has not started to be scheduled and go back to generate it again. Returns its bar number, or null.
   // The parts keep their state (they have "played" the discarded bars), which only costs a little continuity.
+  function first1(o){ var h = global.BandHarmony; return h && h.blendFirst ? h.blendFirst(o) : o; }       // the intro and the old ending: the first pattern of a blend
   Session.prototype.rewind = function (){
     var k = -1; for (var i = 0; i < this.gen.length; i++) if (this.gen[i].L0 > this.firedL + 1e-6){ k = i; break; }
     if (k < 0) return null;
@@ -382,7 +384,7 @@
       var ib = this.intro, ik = this.introAt, ibar = ib[ik], inext = ik + 1 < ib.length ? ib[ik + 1] : form[this.formIdx];
       beats = ibar.beats;
       this.callParts("bar", { bar: ik - ib.length, index: ik, length: ib.length, chorus: 0, beats: beats, chords: ibar.chords, nextChords: inext.chords,
-        tempo: this.tempo, last: false, loopEnd: false, opts: Object.assign({}, c.opts, { pins: null, stops: null }), form: ib, nextIndex: ik + 1,
+        tempo: this.tempo, last: false, loopEnd: false, opts: Object.assign({}, first1(c.opts), { pins: null, stops: null }), form: ib, nextIndex: ik + 1,
         fill: this.takeFill(), sectionEnd: ik + 1 === ib.length && form[this.formIdx].section != null ? true : undefined,      // a fill into a named first section
         meter: ibar.meter, compound: !!ibar.compound, stop: false, nextStop: ik + 1 === ib.length && isStop(c.opts, this.formIdx, form),
         intensity: intensityFor(0, form.length, 0, c.choruses, c.opts && c.opts.variation), intro: true, tacet: c.intro && c.intro.tacet,
@@ -394,7 +396,7 @@
       var top = form[this.range().from], first = top.chords.length ? [{ pos: 0, chord: top.chords[0].chord }] : [];
       beats = top.beats;
       this.callParts("ending", { bar: this.barNo, index: 0, length: form.length, chorus: this.chorus, beats: beats, chords: first,
-        nextChords: first, tempo: this.tempo, last: true, ending: true, opts: c.opts, meter: top.meter, compound: !!top.compound }, L0);
+        nextChords: first, tempo: this.tempo, last: true, ending: true, opts: first1(c.opts), meter: top.meter, compound: !!top.compound }, L0);
       this.timeline.push({ L: L0, beats: beats, ending: true,
         info: { bar: this.barNo, index: 0, chorus: this.chorus, src: top.src, beats: beats, countIn: false, ending: true } });
       this.endL = L0; this.nextL += beats; this.done = true; return;
@@ -446,6 +448,7 @@
       fill: this.takeFill(), sectionEnd: sectionEnd,
       intensity: this.level(sec && c.opts.build !== false ? this.sectionLevel(si, this.formIdx, nextIdx) : intensityFor(cp, r.len, this.chorus, c.choruses, c.opts && c.opts.variation)),
       phrase: { bar: cp % 4, turnaround: r.len - 1 - cp < 2, top: this.formIdx === r.from } };
+    var H1 = global.BandHarmony; if (H1 && H1.blendOpts) bctx.opts = H1.blendOpts(this.blend, bctx.opts, bctx, this.blendRng);      // "walk+two", "rock+brushes": one of them for this bar
     bctx.finalChorus = c.choruses > 0 && this.chorus >= c.choruses - 1;
     if (role === "setup"){ bctx.nextStop = true; bctx.finalNext = true; if (!bctx.fill && (c.opts || {}).fills !== "none") bctx.fill = "large"; }
     if (role === "land"){ bctx.final = true; bctx.last = true; bctx.hold = plan.hold; this.landL = L0; }
@@ -513,7 +516,7 @@
     var t = this.timeOf(L) + (LAY[p.part] + (h() + h() - 1) * JITTER[p.part]) * hz;
     var vel = clamp((ev.vel == null ? 0.7 : ev.vel) * (1 + (h() * 2 - 1) * VEL_JITTER * hz), 0, 1);
     var o = p.o || this.c.opts || {};
-    if (ev.choke){ if (this.bank.choke) this.bank.choke(ev.choke, this.timeOf(L)); return; }
+    if (ev.choke){ if (this.bank.choke) this.bank.choke(ev.choke, this.timeOf(L), ev.damp); return; }
     if (p.part === "drums"){
       var piece = (ev.piece === "ride" && o.rideSound === "ride2") ? "ride2" : ev.piece, kv = this.c.kit && this.c.kit[ev.piece];
       this.bank.play("kit", { piece: piece, vel: vel, gain: kv == null ? 1 : kv * kv }, t, dest);

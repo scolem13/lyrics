@@ -1,9 +1,19 @@
 {title: End of Beginning}
+{tempo: 78}
+{time: 4/4}
 
 {comment: Intro}
-[|][N.C.][|]
+{start_of_grid}
+| N.C. | % |
+{end_of_grid}
+[N.C.][N.C.]
 
 {comment: Verse 1}
+{start_of_grid}
+| D | % | Bm | . A |
+| D | % | N.C. Bm . . | Em A |
+| 2/4 A | 4/4 Em A | A N.C . A |
+{end_of_grid}
 [D] Just one more tear to cry
 One teardrop from my [Bm]eye
 You better [A]save it for
@@ -12,11 +22,20 @@ When things aren't black and... [Bm]white
 [Em] Enter, [A]Troubadour: "[Em]Remember [A]24?"
 
 {comment: Chorus}
+{start_of_grid}
+| Gmaj7 | D A | Gmaj7 | Bm A |
+| Gmaj7 | D A | G | % |
+{end_of_grid}
 [Gmaj7] And when I'm [D]back in Chi[A]cago, I [Gmaj7]feel it
 Another [Bm]version of [A]me, I was in [Gmaj7]it
 I wave good[D]bye to the [A]end of be[G]ginning
 
 {comment: Verse 2}
+{start_of_grid}
+| D | % | N.C. Bm . . | . A |
+| D | % | Bm | Em A |
+| 2/4 A | 4/4 Em A | A N.C . A |
+{end_of_grid}
 [D] This song has started now
 And you're just finding[Bm] out
 Now isn't [A]that a laugh?
@@ -31,12 +50,20 @@ I wave good[D]bye to the [A]end of be[G]ginning
 [G](Goodbye, goodbye)
 
 {comment: Bridge}
+{start_of_grid}
+| A | A  Bm | A | A  Bm |
+| A | A  Bm | N.C. | % |
+{end_of_grid}
 [A] You take the man out of the city, not the ci[Bm]ty out the man
 [A] You take the man out of the city, not the ci[Bm]ty out the man
 [A] You take the man out of the city, not the ci[Bm]ty out the man
 [N.C.]You take the man out of the
 
 {comment: Chorus}
+{start_of_grid}
+| Gmaj7 | D A | Gmaj7 | Bm . A F#m7 |
+| Gmaj7 | D A | G | % | N.C. |
+{end_of_grid}
 [G] And when I'm [D]back in Chi[A]cago, I [G]feel it
 Another [Bm]version of [A]me, I was [F#m7]in [G]it
 I wave good[D]bye to the [A]end of be[G]ginning

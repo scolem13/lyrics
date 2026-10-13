@@ -13,6 +13,8 @@
         dacapo: !!h && /^d\.?\s*[cs]\b/i.test(h.textContent.trim()),
         // Fine is where that second pass ends.
         fine: !!h && /^fine$/i.test(h.textContent.trim()),
+        // Segno is where a dal segno (D.S.) goes back to, in place of the top.
+        segno: !!h && /^segno$/i.test(h.textContent.trim()),
         // Played once on the way down, an interlude is skipped on the repeat.
         interlude: !!h && /^interlude$/i.test(h.textContent.trim()),
         taken: false
@@ -22,7 +24,17 @@
 
   // A direction tells you what to do; it is not a place in the song, so
   // neither j nor k nor a click in the list ever lands on one.
-  function isDirection(h) { return h.dacapo || h.fine; }
+  function isDirection(h) { return h.dacapo || h.fine || h.segno; }
+  // Where the jump written at heads[n] goes: a D.S. to the section after the
+  // Segno above it, anything else (and a D.S. with no Segno) to the top.
+  function start(n) {
+    if (!heads[n] || !/^d\.?\s*s/i.test(heads[n].heading.textContent.trim())) return 0;
+    for (var i = n - 1; i >= 0; i--) {
+      if (!heads[i].segno) continue;
+      for (var to = i + 1; to < n; to++) if (!isDirection(heads[to])) return to;
+    }
+    return 0;
+  }
 
   // A Fine is where the repeat ends, so it means nothing until the da capo
   // has been read. Until then it is there to be seen, but greyed back.
@@ -72,7 +84,7 @@
       var nav = main.querySelector('.songnav');
       if (nav && nav.parentNode) nav.parentNode.insertBefore(section, nav);
       else main.appendChild(section);
-      heads.push({ section: section, heading: h, dacapo: false, fine: true,
+      heads.push({ section: section, heading: h, dacapo: false, fine: true, segno: false,
                    interlude: false, taken: false });
       supplied = true;
     } catch (e) { /* no Fine on this page; the song still works */ }
@@ -260,6 +272,10 @@
     gifts.forEach(function (g) {
       // Hidden, not removed: the lines already sung hold their place.
       g.classList.toggle('unsung', +g.getAttribute('data-day') > day);
+      // A gift that goes one way on the early days and another later is
+      // written once for each; only the day's own is on the page.
+      g.classList.toggle('other-days', day < +(g.getAttribute('data-from') || 1) ||
+                                       day > +(g.getAttribute('data-until') || 12));
     });
     if (ordinal) {
       ordinal.textContent = ORDINALS[day - 1];
@@ -349,10 +365,11 @@
       var h = heads[n];
       if (repeating && h.interlude) { n++; continue; }
       if (h.dacapo) {
-        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = 0; }
+        if (taken.indexOf(n) < 0) { taken.push(n); repeating = true; n = start(n); }
         else n++;
         continue;
       }
+      if (h.segno) { n++; continue; }
       if (h.fine) { if (repeating) break; n++; continue; }
       out.push({ head: n, taken: taken.slice() });
       n++;
@@ -392,13 +409,14 @@
         if (repeating && ahead.interlude) { next++; continue; }
         if (ahead.dacapo) {
           if (!ahead.taken) {           // read it once: back to the beginning
-            ahead.taken = true;
-            go(0, { dacapo: next });
+            ahead.taken = true;         // (or to the segno)
+            go(start(next), { dacapo: next });
             return;
           }
           next++;                        // read already: carry on past it
           continue;
         }
+        if (ahead.segno) { next++; continue; }
         if (ahead.fine) {
           if (repeating) return;         // the second pass ends here
           next++;                        // first time through, Fine is passed
@@ -411,7 +429,20 @@
       return;
     }
 
-    // Backwards is the same road travelled the other way.
+    // Backwards is the same road travelled the other way. Where a dal segno
+    // put us is not the top of the song, but going back from there is the
+    // same: give the marker back and return to where it was read.
+    var dc = -1;
+    for (i = heads.length - 1; i >= 0; i--) {
+      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
+    }
+    if (dc >= 0 && base > 0 && start(dc) === base) {
+      heads[dc].taken = false;
+      var from = dc - 1;
+      while (from >= 0 && isDirection(heads[from])) from--;
+      go(Math.max(0, from), { untake: dc });
+      return;
+    }
     var prev = base - 1;
     while (prev >= 0) {
       if (repeating && heads[prev].interlude) { prev--; continue; }
@@ -422,10 +453,6 @@
 
     // At the top of the song. If a da capo put us here, give the marker back
     // and return to the section it was read from.
-    var dc = -1;
-    for (i = heads.length - 1; i >= 0; i--) {
-      if (heads[i].dacapo && heads[i].taken) { dc = i; break; }
-    }
     if (dc < 0) { go(0); return; }
     heads[dc].taken = false;
     var back = dc - 1;

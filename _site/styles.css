@@ -12,6 +12,10 @@
   --chord-colour: #b4531f;
   /* The chord the band is playing now. */
   --chord-now: #0d6efd;
+  /* The words being sung (Display style: Sung words). */
+  --sung-now: #0d6efd;
+  --sung-line: #0d6efd;
+  --sung-stroke: .03em;
 }
 
 body { font-size: 1.15rem; }
@@ -240,6 +244,7 @@ body.lyrics #TOC { display: none; }
 /* Twelve Days: one verse, revealed a day at a time */
 body.day-reveal .day-verse { margin-top: 1rem; }
 body.day-reveal .gift.unsung { visibility: hidden; }
+body.day-reveal .gift.other-days { display: none; }
 /* The day headings are jump targets only -- the verse above them is the page. */
 body.day-reveal main.content section.level2 { height: 0; overflow: hidden; }
 
@@ -381,11 +386,20 @@ body.chords .ch.now {
   color: var(--chord-now);
   -webkit-text-stroke: .045em var(--chord-now);
 }
-/* Words alone: the words under the chord the band has just struck light up
-   and fade back over a second. */
-@keyframes carol-flash { from { color: var(--chord-now); } }
-body:not(.chords) .cw.flash { animation: carol-flash 1s ease-out; }
-@media (prefers-reduced-motion: reduce) { body:not(.chords) .cw.flash { animation-duration: .01s; } }
+/* Words alone: the words under the chord the band is on are marked
+   -- coloured, a stroke heavier, underlined -- and stay marked until the next
+   chord, then fade. Nothing here changes a width: the line must not
+   move as the mark travels along it. */
+body:not(.chords) .cw { transition: color .35s ease-out, text-decoration-color .35s ease-out; }
+body:not(.chords) .cw,
+body:not(.chords) .cw.flash { text-decoration: underline .14em transparent; text-underline-offset: .18em; }
+body:not(.chords) .cw:has(.ch.now) {
+  color: var(--sung-now);
+  -webkit-text-stroke: var(--sung-stroke) var(--sung-now);
+  text-decoration-color: var(--sung-line);
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) { body:not(.chords) .cw { transition: none; } }
 /* A click on a chord plays from there. */
 body.chords main.content .ch { cursor: pointer; }
 .band-field input[type=text] { width: 100%; max-width: 68%; }
