@@ -132,9 +132,9 @@
     cfg = cfg || {};
     var n = cfg.n || 4, d = cfg.d || 4, den = Math.max(8, d), per = n * den / d;
     var compound = d === 8 && n >= 6 && n % 3 === 0, beat = compound ? 3 : den / d;
-    var bars = [], cursor = { bar: 0, pos: 0 }, undo = [];
+    var bars = [], mel = [], cursor = { bar: 0, pos: 0 }, undo = [];
     function ensure(k){ while (bars.length <= k) bars.push({}); }
-    function snapshot(){ undo.push(JSON.stringify({ bars: bars, cursor: cursor })); if (undo.length > 300) undo.shift(); }
+    function snapshot(){ undo.push(JSON.stringify({ bars: bars, mel: mel, cursor: cursor })); if (undo.length > 300) undo.shift(); }
     function wipe(bar, from, to){ ensure(bar); Object.keys(bars[bar]).forEach(function (p){ if (+p >= from && +p < to) delete bars[bar][p]; }); }
     // clear `span` units from (bar, pos), running on into later bars
     function wipeSpan(bar, pos, span){ while (span > 0){ var take = Math.min(span, per - pos); wipe(bar, pos, pos + take); span -= take; bar++; pos = 0; } }
@@ -150,10 +150,10 @@
       span: spanOf,
       bars: function (){ return bars; },
       length: function (){ return bars.length; },
-      setLength: function (k){ k = Math.max(0, k | 0); ensure(k - 1); bars.length = k; },
+      setLength: function (k){ k = Math.max(0, k | 0); ensure(k - 1); bars.length = k; if (mel.length > k) mel.length = k; },
       cursor: function (){ return { bar: cursor.bar, pos: cursor.pos }; },
       setCursor: function (bar, pos){ cursor = { bar: Math.max(0, bar | 0), pos: Math.max(0, Math.min(per - 1, pos | 0)) }; },
-      clear: function (){ snapshot(); bars = []; cursor = { bar: 0, pos: 0 }; },
+      clear: function (){ snapshot(); bars = []; mel = []; cursor = { bar: 0, pos: 0 }; },
       // step entry: the chord takes `span` from the cursor, replacing what was there
       put: function (sym, span){
         span = spanOf(span); snapshot();
@@ -167,7 +167,7 @@
         wipeSpan(cursor.bar, cursor.pos, span); ensure(Math.ceil((cursor.bar * per + cursor.pos + span) / per) - 1);
         advance(span);
       },
-      back: function (){ if (!undo.length) return false; var s = JSON.parse(undo.pop()); bars = s.bars; cursor = s.cursor; return true; },
+      back: function (){ if (!undo.length) return false; var s = JSON.parse(undo.pop()); bars = s.bars; mel = s.mel || []; cursor = s.cursor; return true; },
       // quantized entry: `beats` into bar `bar` (beats may run past the bar), snapped to the nearest
       // multiple of `size`. Returns where it landed, or null when that is past the last bar.
       place: function (sym, bar, beats, size){
@@ -180,7 +180,7 @@
       },
       // take over a parsed chart (TuneChart.parse), unrolled into the order it is played
       load: function (parsed){
-        snapshot(); bars = [];
+        snapshot(); bars = []; mel = [];
         var order = parsed.playOrder && parsed.playOrder.length ? parsed.playOrder : parsed.bars.map(function (b, i){ return i; });
         order.forEach(function (bi){
           var b = parsed.bars[bi], o = {};
@@ -189,14 +189,21 @@
         });
         cursor = { bar: bars.length, pos: 0 };
       },
+      // a melody line over the bars: for each bar, [{ pos, dur, midi, tie }] in units (an eighth, or half of one for sixteenths);
+      // `tie` joins the note to the same pitch at the start of the next bar
+      setMelody: function (list){ snapshot(); mel = (list || []).map(function (b){ return (b || []).map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi, tie: !!n.tie }; }); }); ensure(mel.length - 1); },
+      clearMelody: function (){ if (!mel.length) return; snapshot(); mel = []; },
+      melody: function (){ return mel; },
+      hasMelody: function (){ return mel.some(function (b){ return b && b.length; }); },
       count: function (){ var k = 0; bars.forEach(function (b){ k += Object.keys(b).length; }); return k; },
       toAbc: function (o){
         o = o || {};
         // quarter-note units when nothing sits between the beats of an x/4 bar
-        var div = 1;
-        if (d === 4 && bars.every(function (b){ return Object.keys(b).every(function (p){ return +p % 2 === 0; }); })) div = 2;
+        var div = 1, tune = api.hasMelody(), fine = tune && mel.some(function (b){ return (b || []).some(function (m){ return m.pos % 1 || m.dur % 1; }); });
+        if (!tune && d === 4 && bars.every(function (b){ return Object.keys(b).every(function (p){ return +p % 2 === 0; }); })) div = 2;
         function z(len){ len /= div; return len <= 0 ? "" : "z" + (len === 1 ? "" : len); }
-        var out = bars.map(function (b){
+        var out = bars.map(function (b, bi){
+          if (tune) return tuneBar(b, mel[bi] || [], per, fine ? 2 : 1, spelling(o.key));
           var ps = Object.keys(b).map(Number).sort(function (x, y){ return x - y; }), s = [];
           if (!ps.length) return z(per);
           if (ps[0] > 0) s.push(z(ps[0]));
@@ -205,10 +212,154 @@
         });
         var lines = [];
         for (var i = 0; i < out.length; i += 4) lines.push(out.slice(i, i + 4).join(" | ") + (i + 4 >= out.length ? " |]" : " |"));
-        return "X:1\nT:" + (o.title || "Entered changes") + "\nM:" + n + "/" + d + "\nL:1/" + (den / div) + "\nK:" + (o.key || "C") + "\n" + lines.join("\n");
+        return "X:1\nT:" + (o.title || "Entered changes") + "\nM:" + n + "/" + d + "\nL:1/" + (den / div * (fine ? 2 : 1)) + "\nK:" + (o.key || "C") + "\n" + lines.join("\n");
       }
     };
     return api;
+  }
+
+
+  // ---- a played line: single notes into written rhythm ----
+  // line(): collects note-ons and note-offs (times in beats from the start of bar 1, any fractions) into a one-voice line:
+  //   notes struck together (within `chord` beats) leave only the highest; a new note ends the one before it.
+  function line(cfg){
+    var chord = cfg && cfg.chord != null ? cfg.chord : 0.06, open = {}, notes = [];
+    return {
+      on: function (m, t){ open[m] = { midi: m, on: t, off: null }; notes.push(open[m]); },
+      off: function (m, t){ if (open[m]){ open[m].off = t; delete open[m]; } },
+      reset: function (){ open = {}; notes = []; },
+      count: function (){ return notes.length; },
+      // [{ midi, on, off }], sorted, one at a time; notes still held end at `end`
+      notes: function (end){
+        var a = notes.map(function (n){ return { midi: n.midi, on: n.on, off: n.off == null ? end : n.off }; }).sort(function (x, y){ return x.on - y.on || y.midi - x.midi; }), out = [];
+        a.forEach(function (n){
+          var last = out[out.length - 1];
+          if (last && n.on - last.on < chord){ if (n.midi > last.midi){ last.midi = n.midi; last.off = n.off; } return; }
+          if (last && last.off > n.on) last.off = n.on;
+          out.push(n);
+        });
+        return out;
+      }
+    };
+  }
+  // quantizeLine(notes, o): the played notes [{ midi, on, off }] (beats) as written bars [[{ pos, dur, midi, tie }]] in units.
+  //   o.beat   units in a beat       o.per   units in a bar      o.bars  how many bars
+  //   o.swing  where the swung off-beat sits (0.5 straight .. 0.67 triplet); 0 or leaving it out reads the playing as straight
+  //   o.res    the finest grid, in units: 1 = eighths, 0.5 = sixteenths (default 1)
+  // A note lasts until the next one starts (written legato) unless there is a clear gap of three quarters of an eighth or more,
+  // which is written as a rest. The last note stops at its release.
+  function quantizeLine(notes, o){
+    var beat = o.beat || 2, per = o.per || 8, nbars = o.bars || 1, res = o.res || 1, total = per * nbars, sw = o.swing || 0, GAP = 0.75;
+    function u(t){ return (sw > 0.5 ? unswing(t, sw) : t) * beat; }
+    var q = [];
+    notes.forEach(function (n){
+      var a = u(n.on), on = Math.round(a / res) * res || 0;
+      if (on < 0){ if (a < -0.5 * beat) return; on = 0; }
+      if (on >= total) return;
+      var last = q[q.length - 1];
+      if (last && last.on === on) q.pop();                                    // two notes on one spot: the later one stays
+      q.push({ midi: n.midi, on: on, raw: u(n.off) });
+    });
+    var flat = [];
+    q.forEach(function (n, i){
+      var next = i + 1 < q.length ? q[i + 1].on : null, end;
+      if (next != null && next - n.raw < GAP) end = next;
+      else end = Math.max(n.on + res, Math.round(n.raw / res) * res);
+      if (next != null && end > next) end = next;
+      end = Math.min(end, total);
+      flat.push({ midi: n.midi, on: n.on, end: end });
+    });
+    var out = []; for (var b = 0; b < nbars; b++) out.push([]);
+    flat.forEach(function (n){
+      var at = n.on;
+      while (at < n.end - 1e-9){
+        var bar = Math.floor(at / per + 1e-9), stop = Math.min(n.end, (bar + 1) * per);
+        out[bar].push({ pos: at - bar * per, dur: stop - at, midi: n.midi, tie: stop < n.end - 1e-9 });
+        at = stop;
+      }
+    });
+    return out;
+  }
+  // how a key writes its notes: { sig: { letter: -1|0|1.. }, spell(midi) -> { letter, acc, oct } }. Notes in the key take its spelling;
+  // the others take whichever of sharp or flat is nearer the middle of the key (flat on a tie: bIII, bVI, bVII in major).
+  var NAT_LOF = { F: -1, C: 0, G: 1, D: 2, A: 3, E: 4, B: 5 }, NAT_PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  function spelling(key){
+    var centre = keyLof(key || "C"), sig = {};
+    Object.keys(NAT_LOF).forEach(function (L){ sig[L] = Math.ceil((centre - 1 - NAT_LOF[L]) / 7); });
+    return { sig: sig, spell: function (midi){
+      var pc = mod12(midi), l = mod12(pc * 7), best = null;
+      for (var k = -3; k <= 3; k++){ var c = l + 12 * k; if (best == null || Math.abs(c - centre - 1) < Math.abs(best - centre - 1)) best = c; }
+      var idx = ((best + 1) % 7 + 7) % 7, letter = LETTERS[idx], acc = Math.floor((best + 1) / 7);
+      return { letter: letter, acc: acc, oct: Math.floor((midi - acc) / 12) - 1 };
+    } };
+  }
+  var TICKS = [16, 12, 8, 6, 4, 3, 2, 1];                                      // written lengths, in the finest grid step
+  function tuneBar(chords, notes, per, scale, sp){
+    var cut = { 0: 1, }, i, state = {};
+    cut[per] = 1;
+    Object.keys(chords).forEach(function (p){ cut[p] = 1; });
+    notes.forEach(function (n){ cut[n.pos] = 1; cut[n.pos + n.dur] = 1; });
+    var pts = Object.keys(cut).map(Number).sort(function (a, b){ return a - b; }).filter(function (p){ return p <= per; }), toks = [], restFrom = null;
+    function flushRest(to){ if (restFrom != null){ var len = Math.round((to - restFrom) * scale); while (len > 0){ var t = TICKS.filter(function (x){ return x <= len; })[0]; toks.push(lead + "z" + (t === 1 ? "" : t)); lead = ""; len -= t; } restFrom = null; } }
+    var lead = "";
+    for (i = 0; i + 1 < pts.length; i++){
+      var a = pts[i], b = pts[i + 1];
+      if (chords[a] != null){ flushRest(a); lead = '"' + chords[a] + '"'; }
+      var n = null; notes.forEach(function (x){ if (x.pos <= a + 1e-9 && x.pos + x.dur >= b - 1e-9) n = x; });
+      if (!n){ if (restFrom == null) restFrom = a; continue; }
+      flushRest(a);
+      var sx = sp.spell(n.midi), key = sx.letter + sx.oct, cur = state[key] == null ? sp.sig[sx.letter] : state[key], show = cur !== sx.acc;
+      state[key] = sx.acc;
+      var pitch = (show ? (sx.acc > 0 ? "^" : sx.acc < 0 ? "_" : "=").repeat(Math.max(1, Math.abs(sx.acc))) : "") + (sx.oct >= 5 ? sx.letter.toLowerCase() : sx.letter) + (sx.oct >= 6 ? "'".repeat(sx.oct - 5) : sx.oct <= 3 ? ",".repeat(4 - sx.oct) : "");
+      var len = Math.round((b - a) * scale), more = b < n.pos + n.dur - 1e-9 || (n.tie && b >= n.pos + n.dur - 1e-9);
+      while (len > 0){
+        var t = TICKS.filter(function (x){ return x <= len; })[0]; len -= t;
+        toks.push(lead + pitch + (t === 1 ? "" : t) + (len > 0 || more ? "-" : "")); lead = "";
+      }
+    }
+    flushRest(per);
+    return toks.join(" ");
+  }
+
+
+  // the melody as the band plays it: per bar [{ pos, dur, midi }] in beats, a tie into the next bar made one long note. `mel` may have holes.
+  function playable(mel, upb){
+    var out = [], skip = {}, i, k;
+    mel = mel || [];
+    for (i = 0; i < mel.length; i++){
+      var b = mel[i]; if (!b){ out.push([]); continue; }
+      var o = [];
+      for (k = 0; k < b.length; k++){
+        if (skip[i + ":" + k]) continue;
+        var n = b[k], d = n.dur, at = n, bi = i;
+        while (at.tie && mel[bi + 1] && mel[bi + 1][0] && mel[bi + 1][0].midi === n.midi && mel[bi + 1][0].pos === 0){ at = mel[bi + 1][0]; d += at.dur; skip[(bi + 1) + ":0"] = 1; bi++; }
+        o.push({ pos: n.pos / upb, dur: d / upb, midi: n.midi });
+      }
+      out.push(o);
+    }
+    return out;
+  }
+  // A parsed chart (TuneChart.parse) with a melody over its bars (`mel`, per source bar, in units) as ABC: the same bars, repeats, endings and
+  // section names, with the notes written in. o = { title, sections: [name or null per bar] }. Written in eighths (sixteenths when the line needs them).
+  function melodyAbc(parsed, mel, o){
+    o = o || {};
+    var n = parsed.meterN || 4, d = parsed.meterD || 4, den = Math.max(8, d), per = n * den / d, key = parsed.keyField || "C", sp = spelling(key), i;
+    var fine = false; (mel || []).forEach(function (b){ (b || []).forEach(function (m){ if (m.pos % 1 || m.dur % 1) fine = true; }); });
+    var parts = [], cur = [];
+    function flush(){ if (cur.length) parts.push(cur.join(" ")); cur = []; }
+    parsed.bars.forEach(function (bar, bi){
+      var ch = {}; (bar.chords || []).forEach(function (c){ if (c.nc) return; var u = Math.round(c.onset / parsed.unitsPerBar * per); if (u < per) ch[u] = c.sym; });
+      var sec = o.sections && o.sections[bi];
+      if (sec){ flush(); parts.push("P:" + sec); }
+      var left = bar.left === "repeat-open" ? "|: " : "", end = bar.ending ? "[" + bar.ending + " " : "";
+      var text = tuneBar(ch, (mel && mel[bi]) || [], per, fine ? 2 : 1, sp);
+      var right = bar.right === "repeat-close" ? ":|" : bar.right === "final" ? "|]" : "|";
+      cur.push(left + end + text + " " + right);
+      if (cur.length >= 4) flush();
+    });
+    flush();
+    var body = []; parts.forEach(function (x){ body.push(x); });
+    return "X:1\nT:" + (o.title || parsed.title || "Tune") + "\nM:" + n + "/" + d + "\nL:1/" + (den * (fine ? 2 : 1)) + "\nK:" + key + "\n" + body.join("\n").replace(/\|: \[/g, "|: [") + "\n";
   }
 
   // a swung off-beat sits late in the beat: put a played position back on the even grid before snapping
@@ -231,5 +382,5 @@
   }
 
   global.ChordEntry = { connect: connect, QUALITIES: QUALITIES, analyse: analyse, symbol: symbol, keyLof: keyLof, lofName: lofName,
-    listener: listener, grid: grid, unswing: unswing };
+    listener: listener, grid: grid, unswing: unswing, line: line, quantizeLine: quantizeLine, spelling: spelling, playable: playable, melodyAbc: melodyAbc };
 })(typeof window !== "undefined" ? window : globalThis);

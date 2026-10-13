@@ -583,7 +583,42 @@
   // The band strikes a chord: which written one is that? The next one only --
   // unless the two lists have plainly parted company, when looking a couple
   // further finds the place again.
-  function strike(sym) {
+  //
+  // Where the song is written so that each row of a section's grid is one
+  // line of its words (as many rows as lines with a chord in them), the row
+  // says which line: a chord struck in a bar of row 3 is looked for among the
+  // chords of the third such line and nowhere else. Then a chord held for
+  // four bars and written once cannot run on into the next line's.
+  var lines = null;
+  function linesOf(stopIndex, list) {
+    var first = starts[stopIndex];
+    var end = stopIndex + 1 < starts.length ? starts[stopIndex + 1] : form.length;
+    var rowAt = [], row = 0, spans = [], line = null, loose = false;
+    for (var i = first; i < end; i++) { rowAt.push(row); if (form[i].phraseEnd) row++; }
+    list.forEach(function (el, n) {
+      var ln = el.closest('.ln');
+      if (!ln) loose = true;
+      if (ln !== line || !spans.length) { spans.push({ from: n, to: n + 1 }); line = ln; }
+      else spans[spans.length - 1].to = n + 1;
+    });
+    var rows = rowAt.length ? rowAt[rowAt.length - 1] + 1 : 0;
+    if (loose || rows < 2 || rows !== spans.length) return null;
+    return { first: first, rowAt: rowAt, spans: spans };
+  }
+  function strike(sym, index) {
+    var span = lines && index != null ? lines.spans[lines.rowAt[index - lines.first]] : null;
+    if (span) {
+      // One written chord may be passed over, since the words and the grid do
+      // not always name the same chords -- but not by a chord the band is only
+      // holding from the bar before, which is written once and already lit.
+      var from = Math.max(writtenAt, span.from);
+      var held = lines.last && lines.last.span === span && same(lines.last.sym, sym);
+      lines.last = { span: span, sym: sym };
+      for (var n = from; n < Math.min(span.to, from + (held ? 1 : 2)); n++) {
+        if (same(written[n].textContent, sym)) { writtenAt = n + 1; missed = 0; return written[n]; }
+      }
+      return null;
+    }
     var reach = missed >= 2 ? 3 : 1;
     for (var k = writtenAt; k < Math.min(written.length, writtenAt + reach); k++) {
       if (same(written[k].textContent, sym)) {
@@ -604,11 +639,12 @@
   // when playing begins part-way through it.
   function chordsOf(stopIndex, upTo) {
     written = writtenIn(stopIndex);
+    lines = linesOf(stopIndex, written);
     writtenAt = 0;
     missed = 0;
     light(null);
     for (var i = starts[stopIndex]; upTo != null && i < upTo; i++) {
-      barChords(i).forEach(function (c) { strike(c.chord.sym); });
+      barChords(i).forEach(function (c) { strike(c.chord.sym, i); });
     }
   }
   // Under another version the names no longer tell the two lists apart (a
@@ -635,7 +671,7 @@
     if (!nowBar || !written.length) return;
     barChords(nowBar.index).forEach(function (c) {
       if (c.pos !== beat) return;
-      var el = strike(c.chord.sym);
+      var el = strike(c.chord.sym, nowBar.index);
       if (el) light(el);
     });
   }
@@ -646,15 +682,15 @@
       var at = spots.filter(function (s) { return s.el === el; })[0];
       return starts[stopIndex] + (at ? at.rel : 0);
     }
-    var keep = [written, writtenAt, missed], found = -1;
-    written = writtenIn(stopIndex); writtenAt = 0; missed = 0;
+    var keep = [written, writtenAt, missed, lines], found = -1;
+    written = writtenIn(stopIndex); writtenAt = 0; missed = 0; lines = linesOf(stopIndex, written);
     var end = stopIndex + 1 < starts.length ? starts[stopIndex + 1] : form.length;
     for (var i = starts[stopIndex]; i < end && found < 0; i++) {
       barChords(i).forEach(function (c) {
-        if (found < 0 && strike(c.chord.sym) === el) found = i;
+        if (found < 0 && strike(c.chord.sym, i) === el) found = i;
       });
     }
-    written = keep[0]; writtenAt = keep[1]; missed = keep[2];
+    written = keep[0]; writtenAt = keep[1]; missed = keep[2]; lines = keep[3];
     return found < 0 ? starts[stopIndex] : found;
   }
   // ---- other versions of the changes ----
@@ -666,23 +702,23 @@
   function findSpots() {
     spots = [];
     if (document.body.classList.contains('day-reveal')) return;
-    var seen = {}, keep = [written, writtenAt, missed];
+    var seen = {}, keep = [written, writtenAt, missed, lines];
     stops.forEach(function (stop, k) {
       if (seen[stop.head]) return;
       seen[stop.head] = true;
-      written = writtenIn(k); writtenAt = 0; missed = 0;
+      written = writtenIn(k); writtenAt = 0; missed = 0; lines = linesOf(k, written);
       var all = written;
       var end = k + 1 < starts.length ? starts[k + 1] : form.length;
       for (var i = starts[k]; i < end; i++) {
         barChords(i).forEach(function (c, order, inBar) {
-          var el = strike(c.chord.sym);
+          var el = strike(c.chord.sym, i);
           if (el) spots.push({ el: el, text: el.textContent, head: stop.head,
                                n: all.indexOf(el), bar: i, rel: i - starts[k], pos: c.pos,
                                order: order, count: inBar.length, sym: c.chord.sym });
         });
       }
     });
-    written = keep[0]; writtenAt = keep[1]; missed = keep[2];
+    written = keep[0]; writtenAt = keep[1]; missed = keep[2]; lines = keep[3];
   }
   // A written chord that the version turns into the chord before it is
   // dimmed: nothing changes there.
