@@ -2,8 +2,33 @@
 {tempo: 148}
 {time: 2/4}
 {style: freylekhs}
+{key: Am}
+
+
+{start_of_verse: Intro}
+{start_of_grid}
+| Am | % | % | Am fill | Am | % | E7 fill | E7 fill |
+{end_of_grid}
+[Am] [Am] [Am] [Am] [Am] [Am] [E7] [E7]
+{end_of_verse}
+
+{comment: Segno}
 
 {start_of_verse: Verse 1}
+{start_of_abc: melody}
+M:2/4
+L:1/8
+K:A
+% lyrics: draft
+"Am"EE EE | "Am"AE EE | "Am"E2 D=C | "Am"D2 =C2 |
+w: Ha-nuk-kah, Oh | Ha-nuk-kah Come | light the me- | no-rah
+"Am"E z EE | "Am"A2 EE | "G"E2 D=C | "C"D2 =C2 |
+w: Let’s have a | par-ty We’ll | all dance the | ho-ra
+"Am"=CD ED | "Am"=C z CC | "G"D2 =CD | "C"E2 z2 |
+w: Gath-er round the | ta-ble, We’ll | give you a | treat.
+"Am"=C2 ED | "Am"=C z CC | "E7"D2 =CB, | "Am"A,2 z2 |]
+w: Drei-dels to | play with and | lat-kes to | eat
+{end_of_abc}
 {start_of_grid}
 | Am | % | % | % |
 | Am | % |
@@ -22,6 +47,23 @@ We’ll [C]give you a [C/B]treat.
 {end_of_verse}
 
 {start_of_verse: Verse 2}
+{start_of_abc: melody}
+M:2/4
+L:1/8
+K:A
+"Am"E2 E2- | "Am"E2 A,2 | "Am"E2 E2- | "Am"E3 z |
+w: while we * are play-ing  *
+"C"E2 DE | "G"=F2 ED | "C"E4- | "E7"E3 z |
+w: Can-dles  are burn-ing_  low. | *
+"Am"E z DE | "Dm"=F z ED | "Am"E z DE | "Dm"=F z ED |
+w: One for each | night, they_ shed  a sweet light To re-
+"Am"=C z B,C | "Dm"D z =CD | "Am"E4- | "Am"E2 z2 |
+w: mind  us of days  long a-go
+"Am"E z DE | "Dm"=F z ED | "Am"E z DE | "Dm"=F z ED |
+w: One for each | night, they_ shed  a sweet light To re-
+"Am"=C z B,C | "E7"D z =CB, | "Am"A,4- | "Am"A, z3 |]
+w: mind  us of days  long a-go
+{end_of_abc}
 {start_of_grid}
 | half Am | Am | % | % |
 | C | G | C | E7 |
@@ -39,6 +81,20 @@ To re[Am]mind us of [E7]days long a[Am]go.
 {end_of_verse}
 
 {start_of_chorus: Chorus}
+{start_of_abc: melody}
+M:2/4
+L:1/8
+K:A
+% lyrics: draft
+"Am"A4 | "Am"z2 E2 | "Dm"=F4 | "Dm"z4 |
+w: Ha- | nuk- | kah!
+"G"=G4 | "G"z2 D2 | "C"E4 | "C"z4 |
+w: Ha- | nuk- | kah
+"Am"A4 | "Am"z2 E2 | "Dm"=F4 | "Dm"z4 |
+w: Ha- | nuk- | kah!
+"E7"G4 | "E7"B4 | "Am"A4 | "Am"z4 |]
+w: Ha- | nuk- | kah
+{end_of_abc}
 {start_of_grid}
 | half Am | % | Dm | % | G | % | C | % |
 | Am | % | Dm | % | E7 | % | normal Am | % |
@@ -51,8 +107,9 @@ To re[Am]mind us of [E7]days long a[Am]go.
 
 {comment: Interlude}
 {start_of_grid}
-|: Am | Dm | Am | Dm | Am | E7 | Am | Am :|
+| Am | Dm | Am | Dm | Am | E7 | Am | Am |
+| Am | Dm | Am | Dm | Am | E7 fill | Am fill | Am fill |
 {end_of_grid}
 [Am] [Dm] [Am] [Dm] [Am] [E7] [Am] [x2]
 
-{comment: D.C. al Fine}
+{comment: D.S. al Fine}

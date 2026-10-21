@@ -138,6 +138,16 @@
     // travis: a pinch on 1, then between the thumb's notes: the and of 2, the and of 3, the and of 4.
     prine:   { pick: true, bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2){ h.push([b, "H"]); h.push([b + 0.5, "M"]); } return h; } },
     travis:  { pick: true, bars: function (beats){ var h = [[0, "H"]]; for (var b = 1; b < beats; b++) h.push([b + 0.5, b % 2 ? "M" : "H"]); return h; } },
+    // Stride: the pianist's left hand leaps between a low bass note on 1 and 3 (the root as an octave on 1, the fifth on 3) and the
+    // chord in the middle of the keyboard on 2 and 4 (the right hand's chord, here). The bass notes are left-hand events (stride: true);
+    // on the guitar it is boom-chick. In 3/4 the bass on 1 and chords on 2 and 3.
+    stride:  { stride: true, bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2) h.push([b, "S"]); return h; } },
+    // Stride in tenths: the same right hand, but the left hand spans a tenth on 1 (the root with the chord's third an octave above, one two-note
+    // event) and on 3 plays the fifth, or, when the next chord is different, walks a tenth up or down to a note a step from its root.
+    strideTenths: { stride: "tenths", bars: function (beats){ var h = []; for (var b = 1; b < beats; b++) if (beats % 2 || b % 2) h.push([b, "S"]); return h; } },
+    // The boogie-woogie right hand over the walking left hand (the bass has it here): short swung chords against the beat, a
+    // two-bar riff: 1, the and of 1, the and of 2 held; then the and of 1, 2, the and of 3 held.
+    boogie:  { bars: [ [[0, "S"], [0.5, "S"], [1.5, "L"]], [[0.5, "S"], [1, "S"], [2.5, "L"]] ] },
     alberti: { bars: everyEighth, arp: "alberti" },                                                   // low, high, middle, high
     arp:     { bars: everyEighth, arp: "wave" },
     arp2:    { bars: everyEighth, arp: "pair" }
@@ -761,6 +771,35 @@
           out({ pos: 0, dur: 0.85, midis: wb % 4 === 0 && wlo - 12 >= 36 ? [wlo - 12, wlo] : [wlo], vel: Math.round(clamp(0.54 + 0.08 * wi + [0.05, -0.02, 0.02, -0.03][wb % 4], 0.4, 0.74) * 1000) / 1000, inst: su.inst, of: wk, arp: true, hand: "L" });
         }
       }
+      // the stride left hand: a short low bass note on 1 and 3 (one in three), the root as an octave where a chord starts, else its fifth (C2 to A3: a single root where the octave would reach the chord)
+      if (g.stride && su.inst === "piano"){
+        for (var sb = 0; sb < beats; sb += (beats % 2 ? beats : 2)){
+          if (tied && sb === 0) continue;
+          var sc = H.chordAt(ctx.chords, sb), sk = keyAt(ctx.index, ctx.chords, sb); if (!sc || sc.nc || pinOf(su, sk)) continue;
+          var slo = 36 + (((sc.bass - 36) % 12) + 12) % 12, sNew = sb === 0 || ctx.chords.some(function (c){ return Math.abs(c.pos - sb) < 1e-6; });   // (C2..B2)
+          var sf = slo + (sc.fifth != null ? sc.fifth : 7); if (sf > 52) sf -= 12;
+          var sm = sNew ? (slo + 12 <= 57 ? [slo, slo + 12] : [slo]) : [sf];
+          if (g.stride === "tenths"){                                       // (C2..B2, the tenth's top no higher than D4, else the note alone)
+            var sNext = ctx.chords.some(function (c){ return c.pos > sb + 1e-6; }) ? null : firstChord(ctx.nextChords);
+            sm = [slo];
+            if (sc.third != null && slo + 12 + sc.third <= 62) sm = [slo, slo + 12 + sc.third];
+            if (!sNew){
+              sm = [sf];
+              if (beats % 2 === 0 && sNext && sNext.root !== sc.root){            // a tenth stepping to the next root
+                var sAmt = Math.max(0, Math.min(1, +(ctx.opts && ctx.opts.variation) || 0)), sCand = [];
+                [-1, 1, -2, 2].forEach(function (d){ sCand.push(36 + ((((sNext.root + d) - 36) % 12) + 12) % 12); });
+                sCand.sort(function (x, y){ return Math.abs(x - (slo + 7)) - Math.abs(y - (slo + 7)) || x - y; });
+                var sWalk = sAmt && rng() < 0.5 * sAmt ? sCand[Math.floor(rng() * sCand.length)] : sCand[0];
+                var sTones = [0, sNext.third != null ? sNext.third : 4, sNext.fifth != null ? sNext.fifth : 7];
+                var sDist = function (p){ return Math.min.apply(null, sTones.map(function (t){ var d = ((p - sNext.root - t) % 12 + 12) % 12; return Math.min(d, 12 - d); })); };
+                var sI = sDist(sWalk + 15) < sDist(sWalk + 16) ? 15 : 16;
+                sm = sWalk + sI <= 62 ? [sWalk, sWalk + sI] : [sWalk];
+              }
+            }
+          }
+          out({ pos: sb, dur: Math.min(0.8, beats - sb), midis: sm, vel: Math.round(clamp(spread(ctx, 0.62 + leanDyn(ctx, sb), 0.58) + phraseDyn(ctx, sb), 0.42, 0.78) * 1000) / 1000, inst: su.inst, of: sk, arp: true, hand: "L" });
+        }
+      }
       hits.forEach(function (h, i){
         if (h.push){
           var nk = (ctx.nextIndex != null ? ctx.nextIndex : ctx.index + 1) + ":0"; pick(ctx.nextChords[0].chord, su, nk); if (!st.prevV.length) return;
@@ -801,7 +840,7 @@
         var vel = (g.quiet ? (on ? 0.56 : 0.48) : h.len === "L" ? 0.60 : 0.58) + (rng() - 0.5) * 0.06;
         // the same shaping for the other patterns it suits (not the Latin ones or the tunes' own vamps, whose accents are the pattern)
         if (g.quiet) vel = spread(ctx, vel + leanDyn(ctx, h.pos), 0.52) + phraseDyn(ctx, h.pos);          // driving eighths, triplets
-        else if (su.grid === "oompah") vel += phraseDyn(ctx, h.pos);                                       // (how hard it is hit is the boom-chick slider's)
+        else if (su.grid === "oompah" || g.stride) vel += phraseDyn(ctx, h.pos);                                       // (how hard it is hit is the boom-chick slider's)
         else if (g.hold) vel += phraseDyn(ctx, h.pos) + leanDyn(ctx, h.pos, 0.5);                          // the hymn
         // quarter notes are not all alike: the bar leans on its strong beats, the phrase swells towards its third bar and the
         // last beats of a phrase grow into the next one; how far apart loud and soft are follows how hard the band is playing
@@ -833,6 +872,10 @@
         out(grip(e));
         left(e, h, chord, ck, v, changeAt);
       });
+      if (g.stride === "tenths"){                                           // a tenth that would reach the chords on 2 and 4 is the low note alone
+        var sLow = 127; ev.forEach(function (x){ if (x.hand !== "L") for (var q = 0; q < x.midis.length; q++) sLow = Math.min(sLow, x.midis[q]); });
+        ev.forEach(function (x){ if (x.hand === "L" && x.midis.length > 1 && x.midis[x.midis.length - 1] > sLow - 4) x.midis = [x.midis[0]]; });
+      }
       st.started = true;
       return ev;
     }

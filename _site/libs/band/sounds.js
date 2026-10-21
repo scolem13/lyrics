@@ -50,7 +50,8 @@
 
 (function (global) {
   var SF_DEFAULT = "https://cdn.jsdelivr.net/gh/paulrosen/midi-js-soundfonts/MusyngKite/";
-  var PIECES = ["kick","snare","rim","hatClosed","hatFoot","hatOpen","ride","ride2","rideBell","crash","tomHi","tomMid","tomLo","sticks"];
+  var PIECES = ["kick","snare","rim","hatClosed","hatFoot","hatOpen","ride","ride2","rideBell","crash","tomHi","tomMid","tomLo","sticks",
+                "tom3","cowbell","stacker","click","clickHi"];   // (the last five: for written grooves, groove.js)
 
   // ======================================================================================
   // INSTRUMENT DEFINITIONS — edit this block (and nothing else) to change the sounds.
@@ -155,7 +156,10 @@
                 zones: soundfontZones(sf, "church_organ", 36, 84, 3) },
       kit:    { family: "kit", gain: 1.25,
                 zones: soundfontKit(sf, { kick:36, rim:37, snare:38, hatClosed:42, hatFoot:44, hatOpen:46,
-                                          crash:49, ride:51, ride2:59, rideBell:53, tomLo:43, tomMid:45, tomHi:48, sticks:31, clap:39, tamb:54 }),
+                                          crash:49, ride:51, ride2:59, rideBell:53, tomLo:43, tomMid:45, tomHi:48, sticks:31, clap:39, tamb:54,
+                                          tom3:45, cowbell:56, stacker:52, click:33, clickHi:34 }),
+                // tom3 (a written groove's fourth tom, between the mid and floor toms) is the mid tom's file played lower;
+                // the stacker is GM's china cymbal; click and clickHi GM's metronome click and bell. Levels not yet listened to.
                 // per-piece trim (the soundfont's kick is ~8x hotter than its ride); group/chokes =
                 // the closed hat and the foot cut a ringing open hat; the cymbals can be damped by choke("cymbals").
                 // A drum has one head: struck again, its last note lets go (damp = how fast) instead of piling up under
@@ -164,7 +168,9 @@
                           rim:{ gain:1.15, chokes:"snare", damp:0.015 }, sticks:{ gain:0.50 },
                           ride:{ gain:1.95, group:"cymbals" }, ride2:{ gain:2.4, group:"cymbals" }, rideBell:{ gain:1.5, group:"cymbals" }, crash:{ gain:1.9, group:"cymbals" },
                           hatClosed:{ gain:1.6, chokes:"hat" }, hatFoot:{ gain:1.6, chokes:"hat" }, hatOpen:{ gain:1.4, group:"hat" },
-                          tomHi:{ gain:0.95, group:"tomHi", chokes:"tomHi", damp:0.04 }, tomMid:{ gain:0.95, group:"tomMid", chokes:"tomMid", damp:0.04 }, tomLo:{ gain:0.95, group:"tomLo", chokes:"tomLo", damp:0.04 } } },
+                          tomHi:{ gain:0.95, group:"tomHi", chokes:"tomHi", damp:0.04 }, tomMid:{ gain:0.95, group:"tomMid", chokes:"tomMid", damp:0.04 }, tomLo:{ gain:0.95, group:"tomLo", chokes:"tomLo", damp:0.04 },
+                          tom3:{ gain:0.95, rate:0.94, group:"tom3", chokes:"tom3", damp:0.04 }, cowbell:{ gain:0.8 }, stacker:{ gain:1.3, group:"cymbals" },
+                          click:{ gain:0.9 }, clickHi:{ gain:0.9 } } },
       // Congas. General MIDI has only three conga sounds (62 mute high, 63 open high, 64 low), so heel, toe, slap and the bass tone are
       // stand-ins made from them: the same file at another level (and, for the toe and the bass, another pitch). The pieces share
       // files, which are fetched once. A first guess, not yet listened to. The conga is the higher drum, the tumba the lower.

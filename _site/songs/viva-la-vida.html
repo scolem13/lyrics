@@ -1086,6 +1086,18 @@ window.carolTypeChoice = function () {
   try { window.localStorage.removeItem('carols-chords'); } catch (e) {}
   if (hasChords && remembered('chords')) document.body.classList.add('chords');
   if (remembered('big')) document.body.classList.add('big');
+  // Pronunciation notes (IPA, and an English sound-alike), where a song has them.
+  var keepInWindow = remember;  // (a later block declares another `remember`)
+  var hasPron = !!document.querySelector('.pr.ipa, .pr.say');
+  var pronBody = { ipa: 'show-ipa', say: 'show-say' }, pronButtons = {};
+  Object.keys(pronBody).forEach(function (n) {
+    if (remembered(n)) document.body.classList.add(pronBody[n]);
+  });
+  function togglePron(n) {
+    var on = document.body.classList.toggle(pronBody[n]);
+    keepInWindow(n, on);
+    if (pronButtons[n]) pronButtons[n].setAttribute('aria-pressed', String(on));
+  }
 
   function toggleChords() {
     remember('chords', document.body.classList.toggle('chords'));
@@ -1142,6 +1154,10 @@ window.carolTypeChoice = function () {
                    ['Next', 'j', function () { step(1); }],
                    ['Beginning', 'g', toBeginning]];
       if (hasChords) specs.push(['Chords', 'c', toggleChords]);
+      if (hasPron) {
+        if (document.querySelector('.pr.ipa')) specs.push(['IPA', 'i', function () { togglePron('ipa'); }]);
+        if (document.querySelector('.pr.say')) specs.push(['Say it', 'e', function () { togglePron('say'); }]);
+      }
       specs.push([linked ? 'Linked' : 'Not linked', 'l', toggleLink]);
       specs.forEach(function (spec) {
         var b = document.createElement('button');
@@ -1152,6 +1168,14 @@ window.carolTypeChoice = function () {
         key.textContent = spec[1];
         b.appendChild(key);
         b.addEventListener('click', function () { spec[2](); b.blur(); });
+        if (spec[1] === 'i' || spec[1] === 'e') {
+          var pn = spec[1] === 'i' ? 'ipa' : 'say';
+          b.className = 'link-button';
+          b.setAttribute('aria-pressed', String(document.body.classList.contains(pronBody[pn])));
+          b.title = pn === 'ipa' ? 'Show or hide the IPA under each line'
+                                 : 'Show or hide the English sound-alike under each line';
+          pronButtons[pn] = b;
+        }
         if (spec[1] === 'l') {
           b.className = 'link-button';
           b.setAttribute('aria-pressed', String(linked));
@@ -1254,6 +1278,16 @@ window.carolTypeChoice = function () {
 
     if ((k === 'c' || k === 'C') && hasChords) {
       toggleChords();
+      e.preventDefault();
+      return;
+    }
+    if ((k === 'i' || k === 'I') && hasPron && document.querySelector('.pr.ipa')) {
+      togglePron('ipa');
+      e.preventDefault();
+      return;
+    }
+    if ((k === 'e' || k === 'E') && hasPron && document.querySelector('.pr.say')) {
+      togglePron('say');
       e.preventDefault();
       return;
     }

@@ -19,20 +19,44 @@ P:Verse 2
 P:Bridge
 "A7"z4 | "D"z4 | "A7"z4 | "D"z4 |
 "B7"z4 | "E"z4 | "B7"z4 | "E"z2 "E7"z2 |
-P:Interlude
+P:Verse 3
+"A"z4 | "D"z4 | "A"z4 | "D"z4 |
 "A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |
-P:Outro
+P:Tag
 "A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |
 "A"z2 "F#m"z2 | "Bm7"z2 "E7"z2 | "A"z4 | z4 |]
 {end_of_abc}
 
+{comment: Intro}
+{start_of_grid}
+| A F#m | Bm7 E7 | A F#m | Bm7 E7 |
+{end_of_grid}
+
 {comment: Verse 1}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:A
+"A"CD E z E3 E | "D"FG A2 A4 | "A"CD E2 E2 EE | "D"FE D2 D4 |
+w: Bet-ter watch out, you | bet-ter not cry, | You bet-ter not pout I'm | tel-ling you why,
+"A"C2 E2 "F#m"A,2 C2 | "Bm7"B,2 D2- "E7"D2 G,2 | "A"A,8 | z6 ED |]
+w: San-ta Claus is | com- ing * to | town | He's mak-
+{end_of_abc}
 Oh, you [A]better watch out
 You [D]better not cry
 You [A]better not pout I'm [D]telling you why
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town
 
 {comment: Verse 2}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:A
+"A"CD E z E3 E | "D"FG A2 A4 | "A"CD E2 E2 EE | "D"FE D2 D4 |
+w: ing- a list And he's check-ing  it twice He's gon-  na find out who's naug-hty  or nice
+"A"C2 E2 "F#m"A,2 C2 | "Bm7"B,2 D2- "E7"D2 G,2 | "A"A,8 | "A7"z8 |]
+w: San-ta Claus is com-ing * to town
+{end_of_abc}
 He's [A]making a list
 And he's [D]checking it twice
 He's [A]gonna find out who's [D]naughty or nice
@@ -44,6 +68,12 @@ He [A7]knows when you're a[D]wake
 He [B7]knows if you've been [E]bad or good
 So be [B7]good for goodness [E]sake [E7]
 
-{comment: Outro}
+{comment: Verse 3}
+Oh, you [A]better watch out
+You [D]better not cry
+You [A]better not pout I'm [D]telling you why
+[A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town
+
+{comment: Tag}
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!

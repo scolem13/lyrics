@@ -19,7 +19,7 @@
 // Stop time (ctx.stop): one hit on beat 1 — kick, snare and a closed hat — then nothing; a
 // { pos, choke:"cymbals" } event asks the player to damp whatever cymbal is still ringing. The
 // bar after it comes back in with a crash.
-// A cymbal grabbed with the hand: "^choke" on a bar of the chart (ctx.form[i].choke) puts a crash on its beat 1 and stops it
+// A cymbal grabbed with the hand: "^choke" on a bar of the chart (ctx.form[i].choke, or opts.chokeBars = [form index, ...]) puts a crash on its beat 1 and stops it
 // before beat 2; opts.endChoke does the same to the last hit of the tune. The choke event carries `damp`, the time the hand takes.
 // Fills. opts.fills says how often: "auto" (unset; into every chorus and section, and at some phrase ends), "busy" (more of
 // them), "sections" (only into a chorus, a new section and the top of the form) or "none" (only the ones asked for). A fill
@@ -223,6 +223,9 @@
     ridetime: { bars: [ cymBeats(0.58).concat([[1.5, "cymOff", 0.42], [3.5, "cymOff", 0.42], [1, "hatFoot", 0.46], [3, "hatFoot", 0.46]]) ],
                 three: [[0, "cym", 0.58], [1, "cym", 0.58], [1.5, "cymOff", 0.42], [2, "cym", 0.58], [1, "hatFoot", 0.44], [2, "hatFoot", 0.44]], fills: false },
     shuffle:  { bars: [ cymEighths(0.56, 0.38).concat([[0, "kick", 0.58], [2, "kick", 0.54], [1, "snare", 0.62], [3, "snare", 0.62]]) ], fills: true },
+    // jump blues (Louis Jordan's Tympany Five): the shuffle with the kick feathered on all four beats and a hard backbeat on the snare
+    jump:     { bars: [ cymEighths(0.58, 0.40).concat([[0, "kick", 0.52], [1, "kick", 0.42], [2, "kick", 0.48], [3, "kick", 0.42], [1, "snare", 0.72], [3, "snare", 0.72], [1, "hatFoot", 0.40], [3, "hatFoot", 0.40]]) ],
+                three: cymEighths(0.58, 0.40).slice(0, 6).concat([[0, "kick", 0.52], [1, "kick", 0.42], [2, "kick", 0.42], [1, "snare", 0.66], [2, "snare", 0.66]]), fills: true },
     // The hi-hat lesson (lessons/hihat-grooves.qmd): the hi-hat written out piece by piece, whatever the Cymbal menu says (hat:true keeps the
     // foot when the menu is on the hi-hat). Each is one bar, no fills unless asked. sixteenths:true marks the sixteenth positions
     // (x.25, x.75) straight and six, so the player leaves them alone and the drum staff writes real sixteenths (notation.js).
@@ -442,9 +445,11 @@
     // A written groove (opts.written): its bars in turn, exactly as written, every note where the groove puts it.
     function writtenBar(ctx){
       var w = written(ctx), B = global.BandGroove, sw = ctx.opts.writtenSwing;
-      var bars = B.toEvents(w, { swing: sw == null ? true : sw, pieces: ctx.opts.writtenPieces }), beats = ctx.beats || 4;
-      var out = bars[(ctx.index || 0) % bars.length].filter(function (e){ return e.pos < beats; })
-        .map(function (e){ var o = { pos:e.pos, piece:e.piece, vel:e.vel, straight:true }; if (e.art) o.art = e.art; return o; });
+      var bars = B.toEvents(w, { swing: sw == null ? true : sw, pieces: ctx.opts.writtenPieces, tempo: ctx.tempo }), beats = ctx.beats || 4;
+      // a grace note before the next bar's first beat (a flam on 1) is played at the end of this bar: the player takes nothing before a bar line
+      var here = bars[(ctx.index || 0) % bars.length].filter(function (e){ return e.pos >= 0 && e.pos < beats; }), next = ctx.last && ctx.finalChorus ? [] : bars[((ctx.index || 0) + 1) % bars.length];
+      next.forEach(function (e){ if (e.pos < 0) here.push(Object.assign({}, e, { pos: Math.round((e.pos + beats) * 1e6) / 1e6 })); });
+      var out = here.map(function (e){ var o = { pos:e.pos, piece:e.piece, vel:e.vel, straight:true }; if (e.art) o.art = e.art; if (e.grace) o.grace = true; return o; });
       // a click with it (opts.writtenClick = 4, 8 or 16: on those note values, the bar's first one louder)
       var ck = +ctx.opts.writtenClick, d = w.d || 4;
       if (ck){ var stepB = (ctx.compound ? 8 / 3 : d) / ck;                                 // one click's length in beats
@@ -458,7 +463,8 @@
     // before beat 2. `damp` is how fast the hand stops it (the player hands it to the sample bank); slower than a stop-time cut.
     var GRAB = 0.05;
     function choked(ctx, ev){
-      var fb = !ctx.intro && ctx.form && ctx.form[ctx.index]; if (!fb || !fb.choke || ctx.stop) return ev;
+      var fb = !ctx.intro && ctx.form && ctx.form[ctx.index], cb = ctx.opts && ctx.opts.chokeBars;
+      if (!(fb && fb.choke) && !(!ctx.intro && cb && cb.indexOf && cb.indexOf(ctx.index) >= 0) || ctx.stop) return ev;
       var g = ctx.opts && ctx.opts.groove; if (g === "click" || g === "none") return ev;
       ev = ev.filter(function (e){ return !(e.pos === 0 && /^(ride|ride2|rideBell|crash|hatClosed|hatOpen)$/.test(e.piece)); });
       if (!ev.some(function (e){ return e.pos === 0 && e.piece === "kick" && e.vel >= 0.4; })) ev.push({ pos:0, piece:"kick", vel:0.62 });

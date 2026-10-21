@@ -95,23 +95,11 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html",
-    "href": "songs/santa-claus-is-coming-to-town.html",
-    "title": "3. Santa Claus is Coming to Town",
-    "section": "",
-    "text": "Oh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "3. Santa Claus is Coming to Town"
-    ]
-  },
-  {
     "objectID": "songs/santa-claus-is-coming-to-town.html#verse-1",
     "href": "songs/santa-claus-is-coming-to-town.html#verse-1",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "",
-    "text": "Oh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
+    "section": "Verse 1",
+    "text": "Verse 1\n\n\n\n\n\n\nOh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -123,7 +111,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html#verse-2",
     "title": "3. Santa Claus is Coming to Town",
     "section": "Verse 2",
-    "text": "Verse 2\n\nHe's Amaking a list And he's Dchecking it twice He's Agonna find out who's Dnaughty or nice ASanta F#mClaus is Bm7coming E7 to Atown",
+    "text": "Verse 2\n\n\n\n\n\n\nHe's Amaking a list And he's Dchecking it twice He's Agonna find out who's Dnaughty or nice ASanta F#mClaus is Bm7coming E7 to Atown",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -143,11 +131,23 @@
     ]
   },
   {
-    "objectID": "songs/santa-claus-is-coming-to-town.html#outro",
-    "href": "songs/santa-claus-is-coming-to-town.html#outro",
+    "objectID": "songs/santa-claus-is-coming-to-town.html#verse-3",
+    "href": "songs/santa-claus-is-coming-to-town.html#verse-3",
     "title": "3. Santa Claus is Coming to Town",
-    "section": "Outro",
-    "text": "Outro\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n\n\n← Winter Wonderland Frosty the Snowman →",
+    "section": "Verse 3",
+    "text": "Verse 3\n\nOh, you Abetter watch out You Dbetter not cry You Abetter not pout I'm Dtelling you why ASanta F#mClaus is Bm7coming E7 to Atown",
+    "crumbs": [
+      "Programme",
+      "Conrad Tree Lighting",
+      "3. Santa Claus is Coming to Town"
+    ]
+  },
+  {
+    "objectID": "songs/santa-claus-is-coming-to-town.html#tag",
+    "href": "songs/santa-claus-is-coming-to-town.html#tag",
+    "title": "3. Santa Claus is Coming to Town",
+    "section": "Tag",
+    "text": "Tag\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n\n\n← Winter Wonderland Frosty the Snowman →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -758,7 +758,31 @@
     "href": "songs/o-hanukkah.html",
     "title": "5. O Hanukkah",
     "section": "",
-    "text": "AmHanukkah, Oh Hanukkah Come light the menorah AmLet’s have a party We’Gll all dance the Chora AmGather round the Gtable, We’ll Cgive you a C/Btreat. AmDreidels to play with E7and Amlatkes to eat",
+    "text": "AmAmAmAmAmAmE7E7",
+    "crumbs": [
+      "Programme",
+      "Conrad Tree Lighting",
+      "5. O Hanukkah"
+    ]
+  },
+  {
+    "objectID": "songs/o-hanukkah.html#intro",
+    "href": "songs/o-hanukkah.html#intro",
+    "title": "5. O Hanukkah",
+    "section": "",
+    "text": "AmAmAmAmAmAmE7E7",
+    "crumbs": [
+      "Programme",
+      "Conrad Tree Lighting",
+      "5. O Hanukkah"
+    ]
+  },
+  {
+    "objectID": "songs/o-hanukkah.html#segno",
+    "href": "songs/o-hanukkah.html#segno",
+    "title": "5. O Hanukkah",
+    "section": "Segno",
+    "text": "Segno",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -769,8 +793,8 @@
     "objectID": "songs/o-hanukkah.html#verse-1",
     "href": "songs/o-hanukkah.html#verse-1",
     "title": "5. O Hanukkah",
-    "section": "",
-    "text": "AmHanukkah, Oh Hanukkah Come light the menorah AmLet’s have a party We’Gll all dance the Chora AmGather round the Gtable, We’ll Cgive you a C/Btreat. AmDreidels to play with E7and Amlatkes to eat",
+    "section": "Verse 1",
+    "text": "Verse 1\n\n\n\n\n\n\nAmHanukkah, Oh Hanukkah Come light the menorah AmLet’s have a party We’Gll all dance the Chora AmGather round the Gtable, We’ll Cgive you a C/Btreat. AmDreidels to play with E7and Amlatkes to eat",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -782,7 +806,7 @@
     "href": "songs/o-hanukkah.html#verse-2",
     "title": "5. O Hanukkah",
     "section": "Verse 2",
-    "text": "Verse 2\n\nAnd Amwhile we are Amplaying, The Ccandles are Gburning Clow. E7 AmOne for each Dmnight, they Amshed a sweet Dmlight To Amremind us of E7days long aAmgo. AmOne for Dmeach night, they Amshed a sweet Dmlight To reAmmind us of E7days long aAmgo.",
+    "text": "Verse 2\n\n\n\n\n\n\nAnd Amwhile we are Amplaying, The Ccandles are Gburning Clow. E7 AmOne for each Dmnight, they Amshed a sweet Dmlight To Amremind us of E7days long aAmgo. AmOne for Dmeach night, they Amshed a sweet Dmlight To reAmmind us of E7days long aAmgo.",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -794,7 +818,7 @@
     "href": "songs/o-hanukkah.html#chorus",
     "title": "5. O Hanukkah",
     "section": "Chorus",
-    "text": "Chorus\n\nAmO Hanukkah! Hanukkah AmO Hanukkah! Hanukkah",
+    "text": "Chorus\n\n\n\n\n\n\nAmO Hanukkah! Hanukkah AmO Hanukkah! Hanukkah",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -826,11 +850,11 @@
     ]
   },
   {
-    "objectID": "songs/o-hanukkah.html#d.c.-al-fine",
-    "href": "songs/o-hanukkah.html#d.c.-al-fine",
+    "objectID": "songs/o-hanukkah.html#d.s.-al-fine",
+    "href": "songs/o-hanukkah.html#d.s.-al-fine",
     "title": "5. O Hanukkah",
-    "section": "D.C. al Fine",
-    "text": "D.C. al Fine\n\n\n\n\n\n\n← Frosty the Snowman Jingle Bell Rock →",
+    "section": "D.S. al Fine",
+    "text": "D.S. al Fine\n\n\n\n\n\n\n← Frosty the Snowman Jingle Bell Rock →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1206,7 +1230,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "",
-    "text": "O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
+    "text": "O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1218,7 +1242,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-1",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "",
-    "text": "O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
+    "text": "O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1230,7 +1254,7 @@
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-2",
     "title": "9. O Tannenbaum (O Christmas Tree )",
     "section": "Verse 2",
-    "text": "Verse 2\n\nDDu grünst nicht Gnur zur A7Sommerzeit EmNein auch im A7Winter, Dwenn es schneit O DTannenbaum, A7o DTannenbaum Wie Emtreu sind A7deine ABlätDter",
+    "text": "Verse 2\n\nDDu grünst nicht Gnur zur A7Sommerzeitduː ˈɡryːnst nɪçt ˈnuːɐ̯ tsuːɐ̯ ˈzɔmɐˌtsaɪtdoo GREWNST nihyt NOOR tsoor ZOM-uh-tsite EmNein auch im A7Winter, Dwenn es schneitˈnaɪn ʔaʊx ʔɪm ˈvɪntɐ vɛn ʔɛs ˈʃnaɪtNINE owkh im VIN-tuh ven ess SHNITE O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",

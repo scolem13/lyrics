@@ -194,7 +194,17 @@
     allblues:   { rise: true, bars: [ [[0, 0.95, "R"], [1, 0.45, "5"], [1.5, 0.45, "6"]], [[0, 0.95, "7"], [1, 0.45, "6"], [1.5, 0.45, "5"]] ] },   // All Blues in 6/8: G. D E | F. E D
     chameleon:  { below: true, bars: [ [[0, 1.4, "R"], [3, 0.45, "L2"], [3.5, 0.45, "L"]] ] },                  // Chameleon: the root, then two chromatic eighths up into the next root
     maiden:     { bars: [ [[0, 1.4, "R"], [1.5, 1.4, "R"], [3, 1.9, "R"]], [[1.5, 1.4, "5"], [3, 0.9, "R"]] ] },  // Maiden Voyage: roots on the comping rhythm
-    takefive:   { bars: [ [[0, 1.4, "R"], [1.5, 1.4, "5"], [3, 0.9, "R"], [4, 0.9, "R"]] ] }                     // Take Five: 3 + 2
+    takefive:   { bars: [ [[0, 1.4, "R"], [1.5, 1.4, "5"], [3, 0.9, "R"], [4, 0.9, "R"]] ] },                    // Take Five: 3 + 2
+    // Boogie-woogie: the pianist's left hand walking up the chord in swung eighths and back down, root 3 5 6 b7 6 5 3, every bar
+    // (Pinetop Smith, Albert Ammons, Meade Lux Lewis). arp: a chord that arrives mid-bar starts on its root.
+    boogie:     { rise: true, top: 12, arp: true, bars: [ [[0, 0.45, "R"], [0.5, 0.45, "3"], [1, 0.45, "5"], [1.5, 0.45, "6"], [2, 0.45, "7"], [2.5, 0.45, "6"], [3, 0.45, "5"], [3.5, 0.45, "3"]] ] },
+    // Rolling octaves: the root and the root an octave up, one pair to the beat in swung eighths (R 8 R 8 ...), the same in three.
+    // arp: a chord that arrives mid-bar starts on its root, then the pairs go on from there.
+    boogieOct:  { rise: true, top: 12, arp: true, bars: [ [[0, 0.45, "R"], [0.5, 0.45, "8"], [1, 0.45, "R"], [1.5, 0.45, "8"], [2, 0.45, "R"], [2.5, 0.45, "8"], [3, 0.45, "R"], [3.5, 0.45, "8"]] ] },
+    // Jimmy Yancey's figure, the habanera-like left hand of his slow blues: the root on 1, the fifth on the and of 1, the root on the and of 2,
+    // the fifth on 3 and the root on 4 (R 5 . R | 5 . . R: 1, and of 1, and of 2, 3, 4). Written from memory of the records, so it needs checking by ear;
+    // the real thing sits on a dotted figure and leans on the sixth and the flat seventh in turnarounds, which this leaves out.
+    yancey:     { rise: true, top: 12, arp: true, bars: [ [[0, 0.9, "R"], [0.5, 0.45, "5"], [1.5, 0.45, "R"], [2, 0.9, "5"], [3, 0.9, "R"]] ] }
   };
   // what a tune's line gives way to after the first chorus when opts.figures === "head"
   var AFTER = { sowhat: "walk", killerjoe: "walk", songfather: "bossa", footprints: "walk", allblues: "walk", chameleon: "riff", maiden: "bossa", takefive: "walk" };

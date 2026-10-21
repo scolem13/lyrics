@@ -559,3 +559,24 @@ html:not(.teacher) .teacher-only { display: none !important; }
 .band-version select { width: 100%; font-size: .8rem; }
 .band-version-note { font-size: .76rem; line-height: 1.35; color: #495057; margin-top: .3rem; white-space: pre-line; }
 @media print { .teacher-flag { display: none; } }
+
+/* Pronunciation notes under a line sung in another language: IPA, and a
+   sound-alike for an English speaker. Hidden until the sidebar (or i / e)
+   asks, so the page reads as lyrics by default. */
+.pr { display: none; text-indent: 0; }
+body.show-ipa .pr.ipa, body.show-say .pr.say {
+  display: block;
+  line-height: 1.25;
+  margin: .05rem 0 .1rem;
+  color: #5a6570;
+}
+body.show-ipa .pr.ipa {
+  font-family: "Charis SIL", "Gentium Plus", "Doulos SIL", "Noto Serif", "DejaVu Sans", "Lucida Sans Unicode", serif;
+  font-size: .8em;
+}
+body.show-say .pr.say { font-size: .8em; font-style: italic; }
+body.show-say .pr.say + .pr.ipa, body.show-ipa .pr.ipa + .pr.say { margin-top: 0; }
+body.show-ipa .pr.ipa::before { content: "["; opacity: .5; }
+body.show-ipa .pr.ipa::after { content: "]"; opacity: .5; }
+body.show-ipa .ln, body.show-say .ln { margin-bottom: .35rem; }
+.pron-key { font-size: .8rem; color: #6c757d; margin: .1rem 0 .4rem; line-height: 1.3; }

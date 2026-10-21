@@ -8,7 +8,7 @@
 //   var player = BandPlayer.create({
 //     parsed,                      // TuneChart.parse output (or setChart later)
 //     tempo: 120, transpose: 0,
-//     countIn: 1,                  // bars of stick clicks: 0, 1 or 2 (2 = "1 . 2 . | 1 2 3 4")
+//     countIn: 1,                  // bars of stick clicks: 0 to 4 (2 = "1 . 2 . | 1 2 3 4")
 //     choruses: 0,                 // 0 = loop until stopped; N = N choruses, the ending, then onEnd
 //                                  // The ending (BandHarmony.endingPlan): a tune that comes to rest is ended inside its own last bars.
 //                                  // The bar before its last chord is a set-up (a fill, nothing pushed or left ringing: ctx.nextStop and
@@ -189,6 +189,7 @@
     comp.threshold.value = -12; comp.knee.value = 8; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.16;
     var clip = softClip(ctx);
     master.connect(comp); comp.connect(out); out.connect(clip); clip.connect(ctx.destination);
+    if (global.AudioTap && !(global.OfflineAudioContext && ctx instanceof global.OfflineAudioContext)) global.AudioTap.register(ctx, out, "Backing Track");
     var verb = ctx.createConvolver(), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), wet = ctx.createGain();
     verb.buffer = roomIR(ctx); hp.type = "highpass"; hp.frequency.value = 250; lp.type = "lowpass"; lp.frequency.value = 5500;
     wet.gain.value = WET; verb.connect(hp); hp.connect(lp); lp.connect(wet); wet.connect(master);
@@ -227,7 +228,7 @@
     this.nextL = 0; this.barNo = 0; this.chorus = 0; this.pass = 0; this.prev = null;
     var r0 = this.range(), sb = c.startBar | 0;
     this.formIdx = (sb < this.form.length && r0.has(sb)) ? sb : r0.from;   // first pass may start part-way in
-    this.countIn = this.countInLeft = clamp(c.countIn | 0, 0, 2);
+    this.countIn = this.countInLeft = clamp(c.countIn | 0, 0, 4);
     this.intro = this.formIdx === 0 ? introBars(this.form, c.intro) : []; this.introAt = 0;      // only from the top of the form
     this.gap = null; this.gapAt = 0;                        // the bars between two passes (c.between), while they are being played
     this.pending = []; this.timeline = []; this.wantEnding = false; this.done = false; this.endL = null;
@@ -618,7 +619,7 @@
   function settings(cfg){
     var v = cfg.volumes || {};
     return { parsed: cfg.parsed || null, tempo: clamp(+cfg.tempo || 120, 30, 400), transpose: cfg.transpose | 0,
-      countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 2), choruses: Math.max(0, cfg.choruses | 0),
+      countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 4), choruses: Math.max(0, cfg.choruses | 0),
       opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, cfg.kit),
       volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, congas: v.congas == null ? 1 : v.congas, drums: v.drums == null ? 1 : v.drums },
       intro: cfg.intro || null, between: cfg.between || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
@@ -739,7 +740,7 @@
       setFollow: function (x){ var was = c.follow; c.follow = x == null ? null : clamp(+x || 0, 0, 1); if (was == null && c.follow != null) redo(); },
       setInstruments: function (list){ c.instruments = list.slice(); if (shared) load().catch(function (){}); },   // before the first play this only records the list
       setKitVolume: function (piece, v){ c.kit[piece] = clamp(+v, 0, 1.5); },
-      setCountIn: function (n){ c.countIn = clamp(n | 0, 0, 2); },
+      setCountIn: function (n){ c.countIn = clamp(n | 0, 0, 4); },
       sections: function (){ return session ? session.sections.slice() : sectionsOf(buildForm(c.parsed, c.transpose)); },
       setHold: function (on){ c.hold = !!on; redo(); if (session && !c.hold) session.advance = null; },
       // (bars written ahead are thrown back first: they were written without knowing this)
@@ -804,10 +805,21 @@
     var a = audio(), inst = o.inst || "piano", ms = (midis || []).slice().sort(function (x, y){ return x - y; }), n = ms.length;
     if (!n) return Promise.resolve();
     if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
-    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
+    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); if (global.AudioTap) global.AudioTap.register(a.ctx, chordOut, "Backing Track chord"); }
     return a.bank.load([inst]).then(function (){
       var t = a.ctx.currentTime + 0.03, roll = o.roll != null ? o.roll : (inst === "guitar" || (global.BandSounds.family && global.BandSounds.family(inst) === "guitar") ? 0.045 : 0.012);
-      ms.forEach(function (m, i){ a.bank.play(inst, { midi: m, vel: o.vel == null ? 0.66 : o.vel, dur: o.dur || 1.6 }, t + (n > 1 ? roll * i / (n - 1) : 0), chordOut); });
+      return ms.map(function (m, i){ return a.bank.play(inst, { midi: m, vel: o.vel == null ? 0.66 : o.vel, dur: o.dur || 1.6 }, t + (n > 1 ? roll * i / (n - 1) : 0), chordOut); });
+    });
+  }
+  // Let go of the keys: damp the notes a chord() promise resolved to, before their dur is up.
+  //   BandPlayer.chord([60], { dur: 4 }).then(function (v){ held = v; });  ...  BandPlayer.release(held)
+  function release(voices, rel){
+    var now = audio().ctx.currentTime; rel = rel || 0.12;
+    (voices || []).forEach(function (v){
+      if (!v || !v.g) return;
+      var at = Math.max(now, v.t + 0.1);                    // a tapped key still sounds
+      v.g.gain.cancelScheduledValues(at); v.g.gain.setTargetAtTime(0, at, rel / 3);
+      try { v.src.stop(at + rel * 2 + 0.02); } catch (e) {}
     });
   }
 
@@ -819,7 +831,7 @@
     o = o || {};
     var bankName = o.bank || (/^(conga|tumba)/.test(piece) ? "congas" : "kit");
     var a = audio(); if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
-    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
+    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); if (global.AudioTap) global.AudioTap.register(a.ctx, chordOut, "Backing Track chord"); }
     return a.bank.load([bankName]).then(function (){ a.bank.play(bankName, { piece: piece, vel: o.vel == null ? 0.8 : o.vel }, a.ctx.currentTime + 0.02, chordOut); });
   }
 
@@ -827,11 +839,11 @@
   //   BandPlayer.clickLoad() -> Promise(AudioContext)     BandPlayer.clickAt(ctxTime, accent)
   function clickLoad(){
     var a = audio(); if (a.ctx.state === "suspended" && a.ctx.resume) a.ctx.resume();
-    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); }
+    if (!chordOut){ chordOut = a.ctx.createGain(); chordOut.gain.value = 0.8; chordOut.connect(a.ctx.destination); if (global.AudioTap) global.AudioTap.register(a.ctx, chordOut, "Backing Track chord"); }
     return a.bank.load(["kit"]).then(function (){ return a.ctx; });
   }
   function clickAt(at, accent){ var a = audio(); a.bank.play("kit", { piece: "sticks", vel: accent ? 0.85 : 0.55 }, at, chordOut); }
 
-  global.BandPlayer = { hit: hit, chord: chord, clickLoad: clickLoad, clickAt: clickAt, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor,
+  global.BandPlayer = { hit: hit, chord: chord, release: release, clickLoad: clickLoad, clickAt: clickAt, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor,
     Session: Session };                                      // (for tests: the bars a session generates, without sound)
 })(typeof window !== "undefined" ? window : globalThis);
