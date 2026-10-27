@@ -3,11 +3,30 @@
 {time: 3/4}
 {setup: O Tannenbaum}
 
+{comment: Intro}
+# The last beat is the "O" that starts Verse 1.
+{start_of_abc: melody}
+M:3/4
+L:1/8
+K:D
+A | "D"D/ z D/ D2 "A7"E2 | "D"F/ z F/ F2 z F | "Em"E F "A7"G2 C2 | E2 D2 A,2 |]
+{end_of_abc}
+{start_of_grid}
+| D . A7 | D | Em A7 . | A7 |
+{end_of_grid}
+
 {comment: Verse 1}
 {start_of_grid}
 | D . A7 | D | Em A7 . | A D . |
 | D . A7 | D | Em A7 . | A D . |
 {end_of_grid}
+{start_of_abc: melody}
+M:3/4
+L:1/8
+K:D
+"D"D/ z D/ D2 "A7"E2 | "D"F/ z F/ F3 F | "Em"E F "A7"G2 C2 | "A"E2 "D"D z A,2 |
+"D"D/ z D/ D2 "A7"E2 | "D"F/ z F/ F3 F | "Em"E F "A7"G2 C2 | "A"E2 "D"D2 z2 |]
+{end_of_abc}
 O [D]Tannenbaum, [A7]o [D]Tannenbaum
 {ipa: ʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊm}
 {say: OH TAH-nuhn-bowm OH TAH-nuhn-bowm}
@@ -44,6 +63,14 @@ Wie [Em]treu sind [A7]deine [A]Blät[D]ter
 | D . A7 | D | Em A7 . | A D . |
 | D . A7 | D | Em A7 . | A D . |
 {end_of_grid}
+# The pickup is shown, not played (Verse 2 has no melody to carry it).
+{start_of_abc: melody}
+M:3/4
+L:1/8
+K:D
+A,2 | "D"D/ z D/ D2 "A7"E2 | "D"F/ z F/ F2 z F | "Em"E F "A7"G2 C2 | "A"E2 "D"D2 z2 |
+"D"z6 | z6 | z6 | z6 |]
+{end_of_abc}
 
 {comment: Verse 3}
 {start_of_grid}

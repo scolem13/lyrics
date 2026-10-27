@@ -135,7 +135,7 @@
     "href": "songs/santa-claus-is-coming-to-town.html#tag",
     "title": "3. Santa Claus is Coming to Town",
     "section": "Tag",
-    "text": "Tag\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n\n\n← Winter Wonderland Frosty the Snowman →",
+    "text": "Tag\n\n\n\n\n\n\nASanta F#mClaus is Bm7coming E7 to Atown! ASanta F#mClaus is Bm7coming E7 to Atown!\n\n\n\n\n← Winter Wonderland Frosty the Snowman →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -143,23 +143,11 @@
     ]
   },
   {
-    "objectID": "songs/we-wish-you-a-merry-christmas.html",
-    "href": "songs/we-wish-you-a-merry-christmas.html",
-    "title": "12. We Wish You a Merry Christmas",
-    "section": "",
-    "text": "We Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "12. We Wish You a Merry Christmas"
-    ]
-  },
-  {
     "objectID": "songs/we-wish-you-a-merry-christmas.html#verse-1",
     "href": "songs/we-wish-you-a-merry-christmas.html#verse-1",
     "title": "12. We Wish You a Merry Christmas",
-    "section": "",
-    "text": "We Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nWe Ebwish you a Merry AbChristmas We Fwish you a Merry BbChristmas We G7wish you a Merry CmChristmas And a AbHappy BbNew EbYear!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -459,7 +447,7 @@
     "href": "songs/winter-wonderland.html#coda",
     "title": "2. Winter Wonderland",
     "section": "Coda",
-    "text": "Coda\n\nF9Walking in a Bb7winter wonderlEband F9Walking in a Bb7winter wonderlEband\n\n\n\n\n← Deck The Halls Santa Claus is Coming to Town →",
+    "text": "Coda\n\n\n\n\n\n\nF9Walking in a Bb7winter wonderlEband F9Walking in a Bb7winter wonderlEband\n\n\n\n\n← Deck The Halls Santa Claus is Coming to Town →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -646,23 +634,11 @@
     ]
   },
   {
-    "objectID": "songs/feliz-navidad.html",
-    "href": "songs/feliz-navidad.html",
-    "title": "11. Feliz Navidad",
-    "section": "",
-    "text": "Feliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "11. Feliz Navidad"
-    ]
-  },
-  {
     "objectID": "songs/feliz-navidad.html#verse",
     "href": "songs/feliz-navidad.html#verse",
     "title": "11. Feliz Navidad",
-    "section": "",
-    "text": "Feliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
+    "section": "Verse",
+    "text": "Verse\n\nFeliz NavidadEm7A7 Feliz NavidadDBm7 Feliz NavidadEm7 Próspero A7año y feliciDdad",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1006,11 +982,11 @@
     ]
   },
   {
-    "objectID": "songs/la-navidad.html",
-    "href": "songs/la-navidad.html",
+    "objectID": "songs/la-navidad.html#segno",
+    "href": "songs/la-navidad.html#segno",
     "title": "7. La Navidad",
-    "section": "",
-    "text": "La NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
+    "section": "Segno",
+    "text": "Segno",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1021,8 +997,8 @@
     "objectID": "songs/la-navidad.html#verse",
     "href": "songs/la-navidad.html#verse",
     "title": "7. La Navidad",
-    "section": "",
-    "text": "La NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
+    "section": "Verse",
+    "text": "Verse\n\nLa NaviGdad. Todos celeCbramos! La NaviDdad. Let us celeGbrate!",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1054,11 +1030,11 @@
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#d.c.-al-coda",
-    "href": "songs/la-navidad.html#d.c.-al-coda",
+    "objectID": "songs/la-navidad.html#d.s.-al-coda",
+    "href": "songs/la-navidad.html#d.s.-al-coda",
     "title": "7. La Navidad",
-    "section": "D.C. al Coda",
-    "text": "D.C. al Coda",
+    "section": "D.S. al Coda",
+    "text": "D.S. al Coda",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1202,23 +1178,11 @@
     "text": "Verse 3\n\nFSilent night, Holy Cnight, C7Son of FGod love’s pure light A#Radiant beams Ffrom thy holy A#face, With the Fdawn of redeeming grace CJeC7sus Lord Fat Dmthy Fbirth, CJesus FLord at thy birth.\n\n\n\n← Programme"
   },
   {
-    "objectID": "songs/o-tannenbaum-o-christmas-tree.html",
-    "href": "songs/o-tannenbaum-o-christmas-tree.html",
-    "title": "9. O Tannenbaum (O Christmas Tree )",
-    "section": "",
-    "text": "O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "9. O Tannenbaum (O Christmas Tree )"
-    ]
-  },
-  {
     "objectID": "songs/o-tannenbaum-o-christmas-tree.html#verse-1",
     "href": "songs/o-tannenbaum-o-christmas-tree.html#verse-1",
     "title": "9. O Tannenbaum (O Christmas Tree )",
-    "section": "",
-    "text": "O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
+    "section": "Verse 1",
+    "text": "Verse 1\n\n\n\n\n\n\nO DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh O DTannenbaum, A7o DTannenbaumʔoː ˈtanənbaʊm ʔoː ˈtanənbaʊmOH TAH-nuhn-bowm OH TAH-nuhn-bowm Wie Emtreu sind A7deine ABlätDterviː ˈtrɔʏ zɪnt ˈdaɪnə ˈblɛtɐvee TROY zint DY-nuh BLET-uh",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1418,11 +1382,11 @@
     ]
   },
   {
-    "objectID": "songs/jingle-bell-rock.html",
-    "href": "songs/jingle-bell-rock.html",
+    "objectID": "songs/jingle-bell-rock.html#segno",
+    "href": "songs/jingle-bell-rock.html#segno",
     "title": "6. Jingle Bell Rock",
-    "section": "",
-    "text": "GJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmSnowin’ and D7blowin’ up Ambushels of D7fun DNow the jingle hop Amhas beD7gun",
+    "section": "Segno",
+    "text": "Segno",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1433,8 +1397,8 @@
     "objectID": "songs/jingle-bell-rock.html#verse-1",
     "href": "songs/jingle-bell-rock.html#verse-1",
     "title": "6. Jingle Bell Rock",
-    "section": "",
-    "text": "GJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmSnowin’ and D7blowin’ up Ambushels of D7fun DNow the jingle hop Amhas beD7gun",
+    "section": "Verse 1",
+    "text": "Verse 1\n\nGJingle bell, Gmaj7jingle bell, G6jingle bell Grock G6Jingle bells Gswing and Amjingle bells D7ring AmSnowin’ and D7blowin’ up Ambushels of D7fun DNow the jingle hop Amhas beD7gun",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1514,11 +1478,11 @@
     ]
   },
   {
-    "objectID": "songs/jingle-bell-rock.html#d.c.",
-    "href": "songs/jingle-bell-rock.html#d.c.",
+    "objectID": "songs/jingle-bell-rock.html#d.s.",
+    "href": "songs/jingle-bell-rock.html#d.s.",
     "title": "6. Jingle Bell Rock",
-    "section": "D.C.",
-    "text": "D.C.",
+    "section": "D.S.",
+    "text": "D.S.",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",

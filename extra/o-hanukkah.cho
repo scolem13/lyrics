@@ -9,6 +9,13 @@
 {start_of_grid}
 | Am | % | % | Am fill | Am | % | E7 fill | E7 fill |
 {end_of_grid}
+{start_of_abc: melody}
+M:2/4
+L:1/8
+K:A
+"Am".A4 | "Am".A4 | "Am"A z3 | "Am".A4 |
+"Am"A3 A | "Am"=F2 z E | "E7"ED =CB, | "E7"A, z3 |]
+{end_of_abc}
 [Am] [Am] [Am] [Am] [Am] [Am] [E7] [E7]
 {end_of_verse}
 

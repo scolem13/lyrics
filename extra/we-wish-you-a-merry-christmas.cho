@@ -2,6 +2,17 @@
 {tempo: 146}
 {time: 3/4}
 
+{comment: Intro}
+{start_of_abc: melody}
+M:3/4
+L:1/8
+K:Eb
+C2 | "G7"G z G A G F | "Cm"E2 C2 B, B, | "Ab"C2 F2 "Bb"D2 | "Eb"E2 z4 |]
+{end_of_abc}
+{start_of_grid}
+| G7 | Cm | Ab . Bb | Eb |
+{end_of_grid}
+
 {start_of_verse: Verse 1}
 {start_of_grid}
 | Eb | Ab | F | Bb |

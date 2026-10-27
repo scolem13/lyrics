@@ -28,6 +28,12 @@ P:Tag
 {end_of_abc}
 
 {comment: Intro}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:A
+"A"C2 E2 "F#m"A,2 C2 | "Bm7"B,2 D2- "E7"D2 G,2 | "A"A,4- "F#m"A,4 | "Bm7"z4 "E7"z4 |]
+{end_of_abc}
 {start_of_grid}
 | A F#m | Bm7 E7 | A F#m | Bm7 E7 |
 {end_of_grid}
@@ -75,5 +81,15 @@ You [A]better not pout I'm [D]telling you why
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town
 
 {comment: Tag}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:A
+% lyrics: draft
+"A"C2 E2 "F#m"A,2 C2 | "Bm7"B,2 D2- "E7"D2 G,2 | "A"A,8 | z8 |
+w: San-ta Claus is com-ing * to town!
+"A"C2 E2 "F#m"A,2 C2 | "Bm7"B,2 .D2- "E7".D2 B2 | "A"A8 | z8 |]
+w: San-ta Claus is com-ing * to town!
+{end_of_abc}
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!
 [A]Santa [F#m]Claus is [Bm7]coming [E7] to [A]town!

@@ -4,6 +4,17 @@
 {key: D}
 {style: strum}
 
+{comment: Intro}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:D
+"Em7"z2 z2 GA B/2 z/2 A | "A7"z A AA G z GF | "D"z8 | z8 |]
+{end_of_abc}
+{start_of_grid}
+| Em7 | A7 | D | stop D |
+{end_of_grid}
+
 {comment: Verse}
 # Eight bars. The words start on the and of one of the bars before each verse
 {start_of_grid}

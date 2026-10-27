@@ -64,6 +64,8 @@
 //                                  // when there is no room left in this one. Returns "now" | "next" | null (not playing).
 // A melody: a page may put bar.melody = [{ pos, dur, midi }] (beats) on the bars of the parsed chart; it is played on the comping
 // instrument unless opts.melody === false (opts.melodyLevel 0..1).
+// A written part: bar.written = { bass: [{ pos, dur, midi }], comp: [...] } on a parsed bar; in that bar the part plays those notes
+// (an empty list: it rests) instead of making its own. The notes are the page's; the part's sound, fader and octave stay.
 // A section's own style: a form bar may carry `style` (a BandCatalog style id or name; "^style bossa" or a %%style line under a
 // P: line in the ABC). Those bars are played with that style's line, rhythm, groove, feel, voicings and sounds in place of the
 // page's (styleOptsFor); everything else in opts still applies. opts.sectionOverrides ({ section index: options })
@@ -378,6 +380,12 @@
     evs.forEach(function (e){ if (!e) return; if (e.midi != null) e.midi += 12 * n; if (e.midis) e.midis = e.midis.map(function (m){ return m + 12 * n; }); });
     return evs;
   }
+  function writtenEvents(p, notes, opts){
+    var inst = (opts && opts.comp) === "guitar" ? "guitar" : "piano";
+    return notes.map(function (n){ var e = { pos: n.pos, dur: Math.max(0.1, n.dur * 0.95), vel: 0.78 };
+      if (p === "bass") e.midi = n.midi; else { e.midis = [n.midi].concat(n.also || []); e.inst = inst; }
+      return e; });
+  }
   Session.prototype.callParts = function (method, bctx, L0){
     var self = this; this.nowOpts = bctx.opts && bctx.opts !== this.c.opts ? bctx.opts : null;
     var rec = { bar: bctx.bar, index: bctx.index, chorus: bctx.chorus, length: bctx.length, beats: bctx.beats, tempo: bctx.tempo,
@@ -389,7 +397,9 @@
       // the drummer listens: how busy and how loud the bass and the chords are in this bar, half and half with the conductor's intensity
       if (p === "drums" && method === "bar"){ var n = 0, vs = 0; ["bass", "comp"].forEach(function (q){ (rec.parts[q] || []).forEach(function (e){ if (e.hand === "L") return; n++; vs += e.vel || 0.6; }); });
         if (n){ var dens = clamp(n / (2 * (bctx.beats || 4)) * 1.3, 0, 1), loud = clamp((vs / n - 0.5) / 0.3, 0, 1); bctx.energy = clamp(0.5 * (bctx.intensity == null ? 0.5 : bctx.intensity) + 0.25 * dens + 0.25 * loud, 0, 1); } }
-      try { var evs = octaves(p, part[method](bctx) || [], bctx.opts || self.c.opts), dyn = 0.86 + 0.28 * (bctx.intensity == null ? 0.5 : bctx.intensity);
+      var wr = method === "bar" && bctx.written && bctx.written[p];
+      if (wr) part[method](bctx);                       // (still asked, so its own state moves on: the bar after picks up from here)
+      try { var evs = wr ? writtenEvents(p, wr, bctx.opts || self.c.opts) : octaves(p, part[method](bctx) || [], bctx.opts || self.c.opts), dyn = 0.86 + 0.28 * (bctx.intensity == null ? 0.5 : bctx.intensity);
         evs.forEach(function (e){ if (e && e.vel != null) e.vel = Math.round(clamp(e.vel * dyn, 0.03, 1) * 1000) / 1000; });   // louder as the band builds
         if (p !== "congas" || evs.length) rec.parts[p] = evs;       // (no congas part in the record unless they play)
         self.collect(p, evs, L0, bctx.beats, bctx.compound, bctx.unit); }
@@ -512,7 +522,7 @@
     var bctx = { bar: this.barNo, index: this.formIdx, length: form.length, chorus: this.chorus, beats: beats,
       chords: fb.chords, nextChords: form[nextIdx].chords, tempo: this.tempo / u, unit: u, last: last, loopEnd: atEnd, opts: this.barOpts(fb, this.formIdx), form: form, nextIndex: nextIdx,
       meter: fb.meter, compound: !!fb.compound, stop: isStop(c.opts, this.formIdx, form), nextStop: !last && isStop(c.opts, nextIdx, form),
-      fill: this.takeFill(), sectionEnd: sectionEnd,
+      fill: this.takeFill(), sectionEnd: sectionEnd, written: fb.written || null,
       intensity: this.level(sec && c.opts.build !== false ? this.sectionLevel(si, this.formIdx, nextIdx) : intensityFor(cp, r.len, this.chorus, c.choruses, c.opts && c.opts.variation)),
       phrase: { bar: cp % 4, turnaround: r.len - 1 - cp < 2, top: this.formIdx === r.from } };
     var H1 = global.BandHarmony; if (H1 && H1.blendOpts) bctx.opts = H1.blendOpts(this.blend, bctx.opts, bctx, this.blendRng);      // "walk+two", "rock+brushes": one of them for this bar

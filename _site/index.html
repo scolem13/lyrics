@@ -1680,7 +1680,19 @@ window.carolTypeChoice = function () {
   }
 
   // A tune written out in the song: keep its chord symbols where they fall.
+  // A score with several voices (V:): only the first one is the tune.
+  function firstVoice(abc) {
+    var first = null, keep = true;
+    return abc.split('\n').filter(function (line) {
+      var v = /^\s*V:\s*(\S+)/.exec(line);
+      if (v) { if (first === null) first = v[1]; keep = v[1] === first; return false; }
+      if (/^%%score/.test(line)) return false;
+      return keep;
+    }).join('\n');
+  }
+
   function tuneBars(abc) {
+    abc = firstVoice(abc);
     var p = window.TuneChart.parse(abc), out = [];
     (p.playOrder && p.playOrder.length ? p.playOrder
        : p.bars.map(function (_, i) { return i; })).forEach(function (i) {

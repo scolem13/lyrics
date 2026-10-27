@@ -1,9 +1,15 @@
 {title: Winter Wonderland}
 {tempo: 128}
 {time: 4/4}
-
+{key: Eb}
 
 {comment: Intro}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:Eb
+"Gm"dd dc- "D9"c2 z c | "Gm7"BB B"C9#5"A- A3 z | "F9"GG GG "Bb7"FF FF | "Eb"E4 z4 |]
+{end_of_abc}
 {start_of_grid}
 | Gm D9 | Gm7 . . C9#5 . . . . | F9 Bb7 | Eb |
 {end_of_grid}
@@ -55,6 +61,15 @@ To [Gm]face una[D9]fraid, the [Gm7]plans that we [C9#5]made
 {comment: D.S. al Coda}
 
 {comment: Coda}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:Eb
+"F9"GG GG "Bb7"FF FF | "Eb"E6 z2 | "F9"G G3 G2 G2 | "Bb7"F F3 F2 .F2 |
+w: Walk-ing in a win-ter won-der-land Walk-ing in a win-ter won-der-
+"Eb"E8 | "Eb"z8 |]
+w: land
+{end_of_abc}
 {start_of_grid}
 | F9 Bb7 | Eb | half F9 | Bb7 | Eb | % |
 {end_of_grid}

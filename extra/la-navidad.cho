@@ -1,12 +1,32 @@
 {title: La Navidad}
 {key: G}
-{tempo: 120}
+{tempo: 138}
 {x_timestamp_notes: 1}
 {x_source_file: navidad.mp3}
 {x_beats_per_bar: 4}
 {x_section: 0:00.948 Intro}
 {x_section: 1:15.756 Fine}
 {x_bars: 0 0.92 2.547 4.295 5.945 75.756 76.968 78.665}
+
+{comment: Intro}
+{start_of_abc: melody}
+M:4/4
+L:1/8
+K:G
+%%score 1 2
+V:1 clef=treble
+"G"[G,Bd] [Ac] [Bd] [ce] z [Bd]2 z | "D7"d d d c z B2 z | "G"d c d e z d2 c | "G"d z3 z4 |]
+V:2 clef=bass
+G,,8 | D,8 | G,,6 z D, | z8 |]
+{end_of_abc}
+{start_of_grid}
+| G | D7 | G | G |
+{end_of_grid}
+# Intro as first entered (in C, saved at tempo 138), before transposing to G:
+# V:1  [C,EG] [DF] [EG] [FA] z [EG]2 z | G G G F z E2 z | G F G A z G2 F | G z3 z4 |
+# V:2  C,,8 | G,,8 | C,,6 z G,, | z8 |
+
+{comment: Segno}
 
 {comment: Verse}
 {x_at: 0:07.668}
@@ -38,7 +58,7 @@ Todo el mundo!
 | D . . . | D7 . . . | . . . . | . . . . |
 {end_of_grid}
 
-{comment: D.C. al Coda}
+{comment: D.S. al Coda}
 
 {comment: Outro}
 {start_of_grid}

@@ -994,6 +994,8 @@
       if (bar.section != null && bar.section !== "") fbar.section = String(bar.section);      // P:Verse in the ABC: a section starts on this bar
       // a written melody for this bar (a page puts it on the parsed bar): [{ pos (beats), dur (beats), midi }]; the player plays it on the comping instrument
       if (bar.melody && bar.melody.length) fbar.melody = bar.melody.map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0) }; });
+      // a part written out for this bar ({ bass: [{ pos, dur, midi }], comp: [...] }): the player plays it instead of making that part up
+      if (bar.written) { fbar.written = {}; Object.keys(bar.written).forEach(function (k){ fbar.written[k] = bar.written[k].map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0), also: (n.also || []).map(function (m){ return m + (transpose || 0); }) }; }); }); }
       var pkNotes = pk && pk.melody && pk.melody.length ? pk.melody.map(function (n){ return { pos: n.pos, dur: n.dur, midi: n.midi + (transpose || 0), pickup: true }; }) : null;
       if (pkNotes && endsWithPickup) fbar.melody = (fbar.melody || []).concat(pkNotes);          // (sounds at the end of the last bar, into the top)
       if (pkNotes && !pickedFirst) fbar.pickup = pkNotes;                          // (the first bar: the player sounds it at the end of the count-in)
