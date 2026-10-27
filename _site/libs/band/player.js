@@ -36,6 +36,7 @@
 //   player.load() / play() -> Promise     player.stop()     player.isPlaying() state() context()
 //   player.setTempo(bpm) setTranspose(semis) setChart(parsed) setVolume(part, v)
 //   player.setOpts(obj) setCountIn(n) setChoruses(n)
+//   player.setSwing(x)   // the listener's swing: a ratio 0.5..0.75 for every swung note, null = Auto (the style's own, by tempo); player.swing()
 //   player.setInstruments([names]) // the sample sets to have loaded (the page asks for the ones its menus need)
 //   player.setKitVolume(piece, v)  // fader for one kit piece, 0..1.5 (1 = as mixed); cfg.kit = { piece: v } to start with
 // Sounds: opts.bassSound "electric" plays the bass part on "ebass"; opts.compSound (any sound of the comping instrument's family, BandSounds.family) e.g. "epiano" plays
@@ -86,6 +87,7 @@
   var PARTS = ["bass", "comp", "comp2", "drums", "congas"];        // comp2 = a second chord player (opts.second; silent without it); congas = opts.congas, same
   var LOOKAHEAD = 0.15, LOOKAHEAD_HIDDEN = 1.6;   // seconds scheduled ahead (more when the tab is hidden: timers get throttled)
   var TICK_MS = 25, START_DELAY = 0.12, RING = 3.0, GEN_MARGIN = 0.1;
+  var PART_LABEL = { bass: "Bass", comp: "Chords", comp2: "Second chords", drums: "Drums", congas: "Congas" };   // the Mixer's strips
   var TRIM   = { bass: 1.0, comp: 1.0, comp2: 1.0, drums: 1.0, congas: 1.0 };        // default balance at fader = 1 (tuned by measurement)
   var SEND   = { bass: 0.02, comp: 0.16, comp2: 0.16, drums: 0.11, congas: 0.14 };     // room-reverb send per part
   var JITTER = { bass: 0.003, comp: 0.004, comp2: 0.004, drums: 0.002, congas: 0.003 };  // random timing looseness, seconds
@@ -150,7 +152,20 @@
   // Swing: where in the beat the off-beat eighth lands. Triplet feel at medium tempos,
   // straightening as it gets fast (0.667 at 120, 0.61 at 200, 0.55 at 300).
   function swingFor(bpm){ return 0.68 - 0.08 * clamp((bpm - 100) / 120, 0, 1) - 0.05 * clamp((bpm - 220) / 80, 0, 1); }
-  function warp(pos, s){ var b = Math.floor(pos), f = pos - b; return b + (f <= 0.5 ? f * (s / 0.5) : s + (f - 0.5) * ((1 - s) / 0.5)); }
+  // warp(pos, s, div): div 16 swings the sixteenths (the second of each eighth's pair); anything else, the eighths of each beat.
+  function warp(pos, s, div){ var u = div === 16 ? 0.5 : 1, b = Math.floor(pos / u + 1e-9) * u, f = (pos - b) / u; return b + u * (f <= 0.5 ? f * (s / 0.5) : s + (f - 0.5) * ((1 - s) / 0.5)); }
+  // The one swing setting. swingAt(opts, bpm, override) -> { div: 8|16, s }: where the late note of each pair lands (0.5 = even, 0.667 = triplets).
+  //   override (opts.swingSet, from player.setSwing) = a ratio 0.5..0.75 the listener chose, for every note not written straight;
+  //   null = the style's own (opts.styleSwing, from the style's `swing` in catalog.js: a ratio, { div, amount } or { div, curve:"jazz" }),
+  //   else even for feel "straight" and the tempo curve (swingFor) for the rest. A style with no `swing` plays as it always did.
+  function swingAt(opts, bpm, override){
+    var o = opts || {}, st = o.styleSwing, div = st && st.div === 16 ? 16 : 8;
+    if (override == null) override = o.swingSet;
+    if (override != null && isFinite(+override)) return { div: div, s: clamp(+override, 0.5, 0.75) };
+    if (typeof st === "number") return { div: 8, s: clamp(st, 0.5, 0.75) };
+    if (st && typeof st === "object"){ if (st.amount != null) return { div: div, s: clamp(+st.amount, 0.5, 0.75) }; if (st.curve === "jazz") return { div: div, s: swingFor(bpm) }; }
+    return { div: 8, s: o.feel === "straight" ? 0.5 : swingFor(bpm) };
+  }
 
   // ---- form: chart → bars the parts can read (BandHarmony's job; plain fallback keeps the drums alive) ----
   function plainForm(parsed){
@@ -189,19 +204,27 @@
     comp.threshold.value = -12; comp.knee.value = 8; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.16;
     var clip = softClip(ctx);
     master.connect(comp); comp.connect(out); out.connect(clip); clip.connect(ctx.destination);
-    if (global.AudioTap && !(global.OfflineAudioContext && ctx instanceof global.OfflineAudioContext)) global.AudioTap.register(ctx, out, "Backing Track");
+    if (global.AudioTap && !(global.OfflineAudioContext && ctx instanceof global.OfflineAudioContext)) global.AudioTap.register(ctx, out, "Backing Track", { group: "Backing Track", mixLabel: "Master", master: true });
     var verb = ctx.createConvolver(), hp = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter(), wet = ctx.createGain();
     verb.buffer = roomIR(ctx); hp.type = "highpass"; hp.frequency.value = 250; lp.type = "lowpass"; lp.frequency.value = 5500;
     wet.gain.value = WET; verb.connect(hp); hp.connect(lp); lp.connect(wet); wet.connect(master);
-    var ins = {};
-    PARTS.forEach(function (p){
-      var g = ctx.createGain(), s = ctx.createGain();
-      g.gain.value = faderGain(p, volumes[p]); s.gain.value = SEND[p];
-      g.connect(master); g.connect(s); s.connect(verb); ins[p] = g;
+    // each part: its fader (the page's volumes) -> a gain of the navbar Mixer's own (mx) -> master and the room send.
+    // The melody (bar.melody) has a part of its own here, played on the comping instrument but not through its fader.
+    var ins = {}, mx = {}, tapped = {}, live = !(global.OfflineAudioContext && ctx instanceof global.OfflineAudioContext);
+    PARTS.concat(["melody"]).forEach(function (p){
+      var g = ctx.createGain(), m = ctx.createGain(), s = ctx.createGain(), sp = p === "melody" ? "comp" : p;
+      g.gain.value = p === "melody" ? faderGain("comp", volumes.melody) : faderGain(p, volumes[p]); s.gain.value = SEND[sp];
+      g.connect(m); m.connect(master); m.connect(s); s.connect(verb); ins[p] = g; mx[p] = m;
     });
+    // the drum kit's groups (KIT_GROUPS) each pass through a gain of their own into the drums fader, so the Mixer can meter them
+    var kitN = {};
+    function kitNode(id){ if (!kitN[id]){ kitN[id] = ctx.createGain(); kitN[id].connect(ins.drums); } return kitN[id]; }
     return {
-      ins: ins,
-      setVolume: function (p, v){ if (ins[p]) ins[p].gain.setTargetAtTime(faderGain(p, v), ctx.currentTime, 0.02); },
+      ins: ins, ctx: ctx, kitNode: kitNode,
+      kitIn: function (piece){ for (var i = 0; i < KIT_GROUPS.length; i++) if (KIT_GROUPS[i].pieces.indexOf(piece) >= 0) return kitNode(KIT_GROUPS[i].id); return ins.drums; },
+      // a part's Mixer strip, the first time it sounds in this performance (silent parts get none)
+      tap: function (p, label, hooks){ if (tapped[p] || !live || !global.AudioTap || !mx[p]) return; tapped[p] = true; global.AudioTap.register(ctx, mx[p], label, Object.assign({ gain: mx[p].gain, group: "Backing Track", order: ["bass", "comp", "comp2", "drums", "congas", "melody"].indexOf(p) }, hooks || {})); },
+      setVolume: function (p, v){ if (ins[p]) ins[p].gain.setTargetAtTime(faderGain(p === "melody" ? "comp" : p, v), ctx.currentTime, 0.02); },
       fadeOut: function (sec){ var t = ctx.currentTime; out.gain.cancelScheduledValues(t); out.gain.setValueAtTime(out.gain.value, t); out.gain.linearRampToValueAtTime(0, t + sec); },
       dispose: function (){ try { clip.disconnect(); } catch (e) {} }
     };
@@ -557,14 +580,15 @@
   // Hand one event to the sample bank: swing is already in L; add the human touches here.
   Session.prototype.fire = function (p, L){
     if (p.part === "ctl"){ if (this.bank.control) this.bank.control(p.ev.sound, p.ev.ctl, p.ev.value, this.timeOf(L), (p.ev.glide || 0) * this.spb * (p.unit || 1)); return; }
-    var ev = p.ev, h = p.part === "comp2" ? this.human2 : p.part === "congas" ? this.humanC : this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, dest = this.bus.ins[p.part];
+    var ev = p.ev, h = p.part === "comp2" ? this.human2 : p.part === "congas" ? this.humanC : this.human, hz = this.c.humanize == null ? 1 : this.c.humanize, mel = !!(ev.melody && this.bus.ins.melody), dest = this.bus.ins[mel ? "melody" : p.part];
+    if (this.bus.tap){ var tp = mel ? "melody" : p.part; this.bus.tap(tp, mel ? "Melody" : PART_LABEL[p.part] || p.part, this.c.mixHooks ? this.c.mixHooks(tp, this.bus) : null); }
     var t = this.timeOf(L) + (LAY[p.part] + (h() + h() - 1) * JITTER[p.part]) * hz;
     var vel = clamp((ev.vel == null ? 0.7 : ev.vel) * (1 + (h() * 2 - 1) * VEL_JITTER * hz), 0, 1);
     var o = p.o || this.c.opts || {};
     if (ev.choke){ if (this.bank.choke) this.bank.choke(ev.choke, this.timeOf(L), ev.damp); return; }
     if (p.part === "drums"){
       var piece = (ev.piece === "ride" && o.rideSound === "ride2") ? "ride2" : ev.piece, kv = this.c.kit && this.c.kit[ev.piece];
-      this.bank.play("kit", { piece: piece, vel: vel, gain: kv == null ? 1 : kv * kv }, t, dest);
+      this.bank.play("kit", { piece: piece, vel: vel, gain: kv == null ? 1 : kv * kv }, t, this.bus.kitIn ? this.bus.kitIn(ev.piece) : dest);
     }
     else if (p.part === "congas") this.bank.play("congas", { piece: ev.piece, vel: vel }, t, dest);
     else if (p.part === "bass") this.bank.play(o.bassSound === "electric" ? "ebass" : "bass", { midi: ev.midi, vel: vel, dur: (ev.dur || 0.9) * this.spb * (p.unit || 1) }, t, dest);
@@ -574,6 +598,7 @@
       var sound = ev.inst || "piano", S = global.BandSounds;
       if (p.part === "comp2") o = Object.assign({}, o, { compSound: (o.second && o.second.compSound) || sound });        // the second player's own sound
       if (o.compSound && o.compSound !== sound && S && S.family && S.family(o.compSound) === sound) sound = o.compSound;      // the same voicings on another sound of that family
+      if (ev.melody && o.melodySound) sound = o.melodySound;                                                                // the tune on a sound of its own (the Mixer's Melody menu)
       // a strum is a slower roll: low string first on a downstroke, high string first on an upstroke
       if (ev.strum){ spread = Math.min(0.028, 0.12 * this.spb) * (ev.strum === "up" ? 0.6 : 1) * hz; if (ev.strum === "up") ms.reverse(); }
       for (var i = 0; i < n; i++) this.bank.play(sound, ev.mute ? { midi: ms[i], vel: vel, dur: dur, cutoff: 1100 } : { midi: ms[i], vel: vel, dur: dur }, t + (n > 1 ? spread * i / (n - 1) : 0), dest);
@@ -586,11 +611,10 @@
     var far = hL + GEN_MARGIN + this.aheadBeats();
     while (!this.done && this.nextL <= far) this.generate();
     if (hL > this.firedL) this.firedL = hL;
-    var straight = this.c.opts && this.c.opts.feel === "straight";                 // straight eighths: no warp
-    var sw = swingFor(this.tempo), keep = [];
+    var keep = [], ov = this.c.opts && this.c.opts.swingSet;
     for (var i = 0; i < this.pending.length; i++){
-      var p = this.pending[i], s = (p.o ? p.o.feel === "straight" : straight) ? 0.5 : sw;      // (a bar in its section's own style has its own feel)
-      var L = p.L0 + (p.ev.straight ? p.ev.pos : warp(p.ev.pos, p.compound ? 2 / 3 : s)) * (p.unit || 1);
+      var p = this.pending[i], sa = swingAt(p.o || this.c.opts, this.tempo, ov);      // (a bar in its section's own style has its own feel)
+      var L = p.L0 + (p.ev.straight ? p.ev.pos : p.compound ? warp(p.ev.pos, 2 / 3) : warp(p.ev.pos, sa.s, sa.div)) * (p.unit || 1);
       if (L <= hL) this.fire(p, L); else keep.push(p);
     }
     this.pending = keep;
@@ -620,13 +644,20 @@
     var v = cfg.volumes || {};
     return { parsed: cfg.parsed || null, tempo: clamp(+cfg.tempo || 120, 30, 400), transpose: cfg.transpose | 0,
       countIn: cfg.countIn == null ? 1 : clamp(cfg.countIn | 0, 0, 4), choruses: Math.max(0, cfg.choruses | 0),
-      opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, cfg.kit),
-      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, congas: v.congas == null ? 1 : v.congas, drums: v.drums == null ? 1 : v.drums },
+      opts: Object.assign({}, cfg.opts), humanize: cfg.humanize, kit: Object.assign({}, KIT_DEFAULT, cfg.kit),
+      volumes: { bass: v.bass == null ? 1 : v.bass, comp: v.comp == null ? 1 : v.comp, comp2: v.comp2 == null ? 1 : v.comp2, congas: v.congas == null ? 1 : v.congas, drums: v.drums == null ? 1 : v.drums, melody: v.melody == null ? 1 : v.melody },
       intro: cfg.intro || null, between: cfg.between || null, hold: !!cfg.hold, startBar: Math.max(0, cfg.startBar | 0), cycle: cfg.cycle || null, tempoSteps: cfg.tempoSteps || null,
       instruments: cfg.instruments || ["bass", "piano", "kit"], ahead: !!cfg.ahead };
   }
   function newSeed(seed){ return seed == null ? (Math.random() * 0x7fffffff) | 0 : seed | 0; }
 
+  // the drum kit's groups of pieces, as the Backing Track's Drum kit mix has them (def: the fader's usual place, 1 = as mixed)
+  var KIT_GROUPS = [ { id: "kick", label: "Kick", pieces: ["kick"] }, { id: "snare", label: "Snare", pieces: ["snare", "rim", "clap"] },
+    { id: "hat", label: "Hi-hat", pieces: ["hatClosed", "hatFoot", "hatOpen", "tamb"] }, { id: "ride", label: "Ride", pieces: ["ride", "rideBell"], def: 0.53 },
+    { id: "crash", label: "Crash", pieces: ["crash"], def: 0.53 }, { id: "toms", label: "Toms", pieces: ["tomHi", "tomMid", "tomLo"] } ];
+  // kit pieces that start below 1 (the sampled cymbals ring loudly): 0.53, the Backing Track's Ride and Crash faders' usual place
+  var KIT_DEFAULT = {}; KIT_GROUPS.forEach(function (g){ if (g.def) g.pieces.forEach(function (p){ KIT_DEFAULT[p] = g.def; }); });
+  function chordSounds(){ var S = global.BandSounds; if (!S || !S.sounds) return []; return S.sounds("piano").concat(S.sounds("guitar")).map(function (x){ return { id: x.id, label: x.label }; }); }
   function create(cfg){
     cfg = cfg || {};
     var c = settings(cfg), state = "idle", session = null, bus = null, timer = null, raf = null, token = 0, loadP = null;
@@ -715,6 +746,32 @@
 
     if (typeof document !== "undefined") document.addEventListener("visibilitychange", function (){ if (session) tick(); });
 
+    // What the navbar Mixer offers on a part's strip (AudioTap.register options): its sound (bass, chords, melody) and, for the drums,
+    // a fader per group of kit pieces. A page with its own menus (the Backing Track) takes the change through cfg.onMixer(part, change)
+    // and returns true, so its menus stay the truth; else the player changes itself and loads the samples it needs.
+    function want(name){ if (c.instruments.indexOf(name) < 0){ c.instruments = c.instruments.concat([name]); if (shared) load().catch(function (){}); } }
+    function change(part, o){
+      if (cfg.onMixer && cfg.onMixer(part, o)) return;
+      if (o.kit){ o.kit.pieces.forEach(function (p){ c.kit[p] = clamp(+o.kit.v, 0, 1.5); }); return; }
+      if (o.bassSound) want(o.bassSound === "electric" ? "ebass" : "bass");
+      if (o.compSound) want(o.compSound);
+      if (o.melodySound) want(o.melodySound);
+      Object.assign(c.opts, o); c.optsRev = (c.optsRev | 0) + 1; redo();
+    }
+    function mixHooks(part, bus){
+      var S = global.BandSounds, fam = function (id){ return S && S.family ? S.family(id) || id : id; };
+      if (part === "bass") return { voices: function (){ return [{ id: "upright", label: "Upright bass" }, { id: "electric", label: "Electric bass" }]; },
+        voice: function (){ return c.opts.bassSound === "electric" ? "electric" : "upright"; }, setVoice: function (v){ change("bass", { bassSound: v }); } };
+      if (part === "comp") return { voices: chordSounds, voice: function (){ return c.opts.compSound || c.opts.comp || "piano"; },
+        setVoice: function (v){ change("comp", { comp: fam(v) === "guitar" ? "guitar" : "piano", compSound: v }); } };
+      if (part === "melody") return { voices: chordSounds, voice: function (){ return c.opts.melodySound || c.opts.compSound || c.opts.comp || "piano"; },
+        setVoice: function (v){ change("melody", { melodySound: v }); } };
+      if (part === "drums") return { sub: KIT_GROUPS.map(function (g){ return { label: g.label, ctx: bus && bus.ctx, node: bus && bus.kitNode ? bus.kitNode(g.id) : null,
+        get: function (){ var v = c.kit[g.pieces[0]]; return v == null ? 1 : v; },
+        set: function (v){ change("drums", { kit: { id: g.id, pieces: g.pieces, v: v } }); } }; }) };
+      return null;
+    }
+    c.mixHooks = mixHooks;
     return {
       load: load, play: play, stop: stop,
       isPlaying: function (){ return state === "playing"; },
@@ -732,6 +789,8 @@
       setTranspose: function (n){ c.transpose = n | 0; if (session) session.refreshForm(); redo(); },
       setChart: function (parsed){ c.parsed = parsed; if (session) session.refreshForm(); redo(); },
       setVolume: function (part, v){ if (!(part in c.volumes)) return; c.volumes[part] = v; if (bus) bus.setVolume(part, v); },
+      setSwing: function (x){ c.opts.swingSet = x == null || x === "auto" || !isFinite(+x) ? null : clamp(+x, 0.5, 0.75); c.optsRev = (c.optsRev | 0) + 1; redo(); },
+      swing: function (){ return c.opts.swingSet == null ? null : c.opts.swingSet; },
       setOpts: function (o){ Object.assign(c.opts, o); c.optsRev = (c.optsRev | 0) + 1; redo(); },
       // Write the music a pass of the form ahead of the playing (cfg.ahead), so it can be shown before it sounds.
       // cfg.onRewind(barNo) says that the bars from barNo on were discarded and will come again through onBarEvents.
@@ -740,6 +799,7 @@
       setFollow: function (x){ var was = c.follow; c.follow = x == null ? null : clamp(+x || 0, 0, 1); if (was == null && c.follow != null) redo(); },
       setInstruments: function (list){ c.instruments = list.slice(); if (shared) load().catch(function (){}); },   // before the first play this only records the list
       setKitVolume: function (piece, v){ c.kit[piece] = clamp(+v, 0, 1.5); },
+      mixHooks: function (part){ return mixHooks(part); },
       setCountIn: function (n){ c.countIn = clamp(n | 0, 0, 4); },
       sections: function (){ return session ? session.sections.slice() : sectionsOf(buildForm(c.parsed, c.transpose)); },
       setHold: function (on){ c.hold = !!on; redo(); if (session && !c.hold) session.advance = null; },
@@ -747,6 +807,9 @@
       next: function (){ if (!session) return false; redo(); session.advance = -1; if (session.held) session.fillNow("medium", true); return true; },
       goSection: function (i){ if (!session || !session.sections[i]) return false; redo();
         if (!c.hold) session.jump = session.sections[i].from; else { session.advance = i | 0; if (session.held) session.fillNow("medium", true); } return true; },
+      // Jump to a form bar (0-based) while playing: the bars written ahead are thrown back and the band goes on from there
+      // at the next bar it writes. Outside hold mode only (in hold mode use goSection). Not playing: setStartBar.
+      jumpTo: function (i){ if (!session || c.hold) return false; redo(); session.jump = Math.max(0, i | 0); return true; },
       fill: function (size){ if (!session) return null; redo(); return session.fillNow(size === "small" || size === "large" ? size : "medium"); },
       setIntro: function (o){ c.intro = o || null; },             // takes effect at the next play()
       setBetween: function (o){ c.between = o || null; redo(); },  // live
@@ -790,7 +853,7 @@
       if (!o.stems) return result;
       result.stems = {};
       return PARTS.filter(function (p){ return (p !== "comp2" || secondSound(c.opts)) && (p !== "congas" || congasOn(c.opts)); }).reduce(function (chain, p){
-        return chain.then(function (){ var solo = { bass: 0, comp: 0, comp2: 0, drums: 0, congas: 0 }; solo[p] = c.volumes[p];
+        return chain.then(function (){ var solo = { bass: 0, comp: 0, comp2: 0, drums: 0, congas: 0, melody: 0 }; solo[p] = c.volumes[p]; if (p === "comp") solo.melody = c.volumes.melody;   // the melody's stem is the comping one's, as before
           return one(solo).then(function (buf){ result.stems[p] = buf; }); });
       }, Promise.resolve()).then(function (){ return result; });
     });
@@ -844,6 +907,6 @@
   }
   function clickAt(at, accent){ var a = audio(); a.bank.play("kit", { piece: "sticks", vel: accent ? 0.85 : 0.55 }, at, chordOut); }
 
-  global.BandPlayer = { hit: hit, chord: chord, release: release, clickLoad: clickLoad, clickAt: clickAt, create: create, renderOffline: renderOffline, swingFor: swingFor, warp: warp, intensityFor: intensityFor,
+  global.BandPlayer = { KIT_GROUPS: KIT_GROUPS, hit: hit, chord: chord, release: release, clickLoad: clickLoad, clickAt: clickAt, create: create, renderOffline: renderOffline, swingFor: swingFor, swingAt: swingAt, warp: warp, intensityFor: intensityFor,
     Session: Session };                                      // (for tests: the bars a session generates, without sound)
 })(typeof window !== "undefined" ? window : globalThis);

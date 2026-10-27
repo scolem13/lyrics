@@ -855,7 +855,8 @@
         if (cfg.kind !== "chords"){
           var last = lay[lay.length - 1], end = last ? last.start + last.len : 0, ns = ln.notes(end), geo = g.geoList(), pk = 0;
           // notes before the first downbeat (more than the early margin): with pickup "auto" they are written as a short bar in front of bar 1
-          if (cfg.pickup === "auto" && ns.length && ns[0].on < -RULES.early){
+          // (with pickupBeats given, a note more than half of it before the downbeat is enough: a half-beat pickup is not lost to the early margin)
+          if (cfg.pickup === "auto" && ns.length && ns[0].on < (cfg.pickupBeats ? -cfg.pickupBeats / 2 : -RULES.early)){
             pk = cfg.pickupBeats || Math.min(cfg.count, Math.ceil(-ns[0].on - 1e-6));
             ns = ns.map(function (n){ return Object.assign({}, n, { on: n.on + pk, off: n.off + pk }); });
             geo = [g.pickupGeo(pk)].concat(geo); g.insertPickup(pk); pickupBeats = pk; tr.pickup = pk;
@@ -957,7 +958,8 @@
     if (!nav || !nav.requestMIDIAccess) return Promise.reject(new Error("no-web-midi"));
     return nav.requestMIDIAccess().then(function (a){
       function msg(e){
-        var d = e.data, cmd = d[0] & 0xf0, t = e.timeStamp || global.performance.now();
+        var d = e.data, cmd = d[0] & 0xf0, now = global.performance.now(), t = e.timeStamp;
+        if (!(t > 0) || Math.abs(t - now) > 1000) t = now;   // some systems stamp MIDI from another clock: hours off, a take of thousands of bars
         if (cmd === 0x90 && d[2] > 0) h.on(d[1], d[2] / 127, t); else if (cmd === 0x80 || cmd === 0x90) h.off(d[1], t);
       }
       function bind(){ var names = []; a.inputs.forEach(function (i){ i.onmidimessage = msg; names.push(i.name || "MIDI input"); }); if (h.inputs) h.inputs(names); }

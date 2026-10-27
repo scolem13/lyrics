@@ -5,41 +5,45 @@ body-classes: lyrics has-chords
 
 ## Intro
 
+<div class="abc-wrap"><div class="abc" data-abc="M:4/4&#10;L:1/8&#10;K:C&#10;&quot;C&quot;c&#x27;egc&#x27; &quot;Em7&quot;bdgb | &quot;F&quot;acfa &quot;G&quot;gfed | &quot;C&quot;eGce &quot;Em7&quot;dcBG | &quot;F&quot;ACFA &quot;Gsus&quot;G2 d2 |&#10;&quot;Gsus&quot;g2 c2 d2 a2 | &quot;Gsus&quot;g2 c2 d2 a2 | &quot;Gsus&quot;g2 c2 d2 a2 | &quot;Gsus&quot;g2 c2 d2 CD |"></div></div>
+
+## Segno
+
 ::: {.cline}
-<span class="ln"><span class="ibar"><span class="ch">C</span><span class="ch">G</span><span class="ch">G7</span></span></span>
+
 :::
 
 ## Verse
 
 ::: {.cline}
-<span class="ln"><span class="cw">Oh, the </span><span class="cw"><span class="ch">C</span>bells are </span><span class="cw"><span class="ch">C/E</span>ringing </span><span class="nb"><span class="cw"><span class="ch">F</span>out to</span><span class="cw"><span class="ch">G</span>day</span></span></span>
-<span class="ln"><span class="cw">In a </span><span class="cw"><span class="ch">C</span>joyous </span><span class="cw"><span class="ch">C/E</span>Christmas </span><span class="cw"><span class="ch">F</span>kind of </span><span class="cw"><span class="ch">G</span>way.</span></span>
-<span class="ln"><span class="cw">They’re </span><span class="cw"><span class="ch">C</span>ringing, </span><span class="cw"><span class="ch">C/E</span>ringing!</span></span>
-<span class="ln"><span class="cw"><span class="ch">F</span>Ding dong </span><span class="cw"><span class="ch">F/E</span>ding dong!</span></span>
-<span class="ln"><span class="cw"><span class="ch">Dm</span>Merry Christmas </span><span class="nb"><span class="cw"><span class="ch">G</span>Bells!</span><span class="cw bare"><span class="ch">G7</span></span></span></span>
+<span class="ln"><span class="cw">Oh, the </span><span class="cw"><span class="ch">C</span>bells are </span><span class="cw"><span class="ch">Em7</span>ringing </span><span class="nb"><span class="cw"><span class="ch">F</span>out to</span><span class="cw"><span class="ch">G</span>day</span></span></span>
+<span class="ln"><span class="cw">In a </span><span class="cw"><span class="ch">C</span>joyous </span><span class="cw"><span class="ch">Em7</span>Christmas </span><span class="cw"><span class="ch">F</span>kind of </span><span class="cw"><span class="ch">Gsus</span>way.</span></span>
+<span class="ln"><span class="cw">They’re </span><span class="nb"><span class="cw"><span class="ch">C</span>ring</span><span class="cw"><span class="ch">C/E</span>ing, </span></span><span class="nb"><span class="cw"><span class="ch">G</span>ring</span><span class="cw"><span class="ch">Am</span>ing!</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">Am7</span>Ding </span><span class="cw"><span class="ch">G</span>dong </span><span class="cw"><span class="ch">F</span>ding </span><span class="cw"><span class="ch">C/E</span>dong!</span></span>
+<span class="ln"><span class="cw"><span class="ch">F</span>Merry </span><span class="nb"><span class="cw"><span class="ch">C/E</span>Christ</span><span class="cw"><span class="ch">Dm7</span>mas </span></span><span class="nb"><span class="cw"><span class="ch">C</span>Bells!</span><span class="cw bare"><span class="ch">Gsus</span></span></span><span class="cw bare"><span class="ch">G</span></span></span>
 :::
 
 ## Verse
 
 ::: {.cline}
-<span class="ln"><span class="cw">Oh, the </span><span class="cw"><span class="ch">C</span>sound they </span><span class="cw"><span class="ch">C/E</span>make is </span><span class="nb"><span class="cw"><span class="ch">F</span>sweet to</span><span class="cw"><span class="ch">G</span>day,</span></span></span>
-<span class="ln"><span class="cw">And I </span><span class="cw"><span class="ch">C</span>hope that </span><span class="cw"><span class="ch">C/E</span>you can </span><span class="cw"><span class="ch">F</span>hear them </span><span class="cw"><span class="ch">G</span>play.</span></span>
-<span class="ln"><span class="cw">They’re </span><span class="cw"><span class="ch">C</span>ringing, </span><span class="cw"><span class="ch">C/E</span>ringing!</span></span>
-<span class="ln"><span class="cw"><span class="ch">F</span>Ding dong </span><span class="cw"><span class="ch">F/E</span>ding dong!</span></span>
-<span class="ln"><span class="cw"><span class="ch">Dm</span>Merry </span><span class="cw"><span class="ch">G7</span>Christmas </span><span class="cw"><span class="ch">C</span>Bells!</span></span>
+<span class="ln"><span class="cw">Oh, the </span><span class="cw"><span class="ch">C</span>sound they </span><span class="cw"><span class="ch">Em7</span>make is </span><span class="nb"><span class="cw"><span class="ch">F</span>sweet to</span><span class="cw"><span class="ch">G</span>day,</span></span></span>
+<span class="ln"><span class="cw">And I </span><span class="cw"><span class="ch">C</span>hope that </span><span class="cw"><span class="ch">Em7</span>you can </span><span class="cw"><span class="ch">F</span>hear them </span><span class="cw"><span class="ch">Gsus</span>play.</span></span>
+<span class="ln"><span class="cw">They’re </span><span class="nb"><span class="cw"><span class="ch">C</span>ring</span><span class="cw"><span class="ch">C/E</span>ing, </span></span><span class="nb"><span class="cw"><span class="ch">G</span>ring</span><span class="cw"><span class="ch">Am</span>ing!</span></span></span>
+<span class="ln"><span class="cw"><span class="ch">Am7</span>Ding </span><span class="cw"><span class="ch">G</span>dong </span><span class="cw"><span class="ch">F</span>ding </span><span class="cw"><span class="ch">C/E</span>dong!</span></span>
+<span class="ln"><span class="cw"><span class="ch">Dm7</span>Merry </span><span class="cw"><span class="ch">C/G</span>Christmas </span><span class="nb"><span class="cw"><span class="ch">Gsus</span>Bells</span><span class="cw"><span class="ch">C</span>! </span></span><span class="cw bare"><span class="ch">C/E</span></span></span>
 :::
 
 ## Chorus
 
 ::: {.cline}
-<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">F</span>ring, they </span><span class="cw"><span class="ch">C</span>sing, they </span><span class="cw"><span class="ch">F</span>jingle</span></span>
-<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">Am</span>ding </span><span class="nb"><span class="cw"><span class="ch">Dm</span>dong</span><span class="cw"><span class="ch">G</span> ding</span></span></span>
-<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">F</span>ring, they </span><span class="cw"><span class="ch">C</span>sing, they </span><span class="cw"><span class="ch">F</span>jingle, </span><span class="cw"><span class="ch">Dm</span>jingle</span></span>
-<span class="ln"><span class="cw"><span class="ch">G</span>Ding Dong</span></span>
-<span class="ln"><span class="cw"><span class="ch">G7</span>Ding Dong</span></span>
+<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">F</span>ring, they </span><span class="cw"><span class="ch">C/E</span>sing, they </span><span class="nb"><span class="cw"><span class="ch">Dm7</span>jin</span><span class="cw"><span class="ch">G</span>gle</span></span></span>
+<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">C</span>ding dong ding</span></span>
+<span class="ln"><span class="cw">They </span><span class="cw"><span class="ch">F</span>ring, they </span><span class="cw"><span class="ch">C/E</span>sing, they </span><span class="cw"><span class="ch">Dm7</span>jingle, </span><span class="cw"><span class="ch">F</span>jingle</span></span>
+<span class="ln"><span class="cw"><span class="ch">Gsus</span>Ding Dong</span></span>
+<span class="ln"><span class="cw">Ding Dong</span></span>
 :::
 
-## D.C. al Coda
+## D.S. al Coda
 
 ::: {.cline}
 
@@ -47,15 +51,21 @@ body-classes: lyrics has-chords
 
 ## Coda
 
+<div class="abc-wrap"><div class="abc" data-abc="M:4/4&#10;L:1/8&#10;K:C&#10;&quot;Am7&quot;x4 &quot;G&quot;x4 | &quot;Am7&quot;x2 &quot;G&quot;x2 &quot;Fmaj7&quot;x2 &quot;C/E&quot;x2 | &quot;Dm7&quot;x8 | &quot;F/G&quot;x4 &quot;G&quot;x4 |&#10;&quot;C&quot;c&#x27;egc&#x27; &quot;Em7&quot;bdgb | &quot;F&quot;acfa &quot;G&quot;gfed | &quot;C&quot;CDEG cdeg | &quot;C&quot;c&#x27;8 |]"></div></div>
+
 ::: {.cline}
-<span class="ln"><span class="cw">They’re ringing, ringing!</span></span>
-<span class="ln"><span class="cw">Ding dong ding dong!</span></span>
-<span class="ln"><span class="cw">Me….rry Christmas Bells…!</span></span>
-<span class="ln"><span class="cw">Ding Dong!</span></span>
+<span class="ln"><span class="cw">They’re </span><span class="cw"><span class="ch">Am7</span>ringing, </span><span class="cw"><span class="ch">G</span>ringing!</span></span>
+<span class="ln"><span class="cw"><span class="ch">Am7</span>Ding </span><span class="cw"><span class="ch">G</span>dong </span><span class="cw"><span class="ch">Fmaj7</span>ding </span><span class="cw"><span class="ch">C/E</span>dong!</span></span>
+<span class="ln"><span class="cw"><span class="ch">Dm7</span>Me….rry </span><span class="cw"><span class="ch">F/G</span>Christmas </span><span class="cw"><span class="ch">G</span>Bells…!</span></span>
+<span class="ln"><span class="cw"><span class="ch">C</span>Ding Dong!</span></span>
 :::
 
 ```{=html}
-<script type="application/json" id="band-source">{"slug": "merry-christmas-bells", "title": "Merry Christmas Bells", "cho": "{title: Merry Christmas Bells}\n\n{comment: Intro}\n[C][G][G7]\n\n{comment: Verse}\nOh, the [C]bells are [C/E]ringing [F]out to[G]day\nIn a [C]joyous [C/E]Christmas [F]kind of [G]way.\nThey’re [C]ringing, [C/E]ringing!\n[F]Ding dong [F/E]ding dong!\n[Dm]Merry Christmas [G]Bells![G7]\n\n{comment: Verse}\nOh, the [C]sound they [C/E]make is [F]sweet to[G]day,\nAnd I [C]hope that [C/E]you can [F]hear them [G]play.\nThey’re [C]ringing, [C/E]ringing!\n[F]Ding dong [F/E]ding dong!\n[Dm]Merry [G7]Christmas [C]Bells!\n\n{comment: Chorus}\nThey [F]ring, they [C]sing, they [F]jingle\nThey [Am]ding [Dm]dong[G] ding\nThey [F]ring, they [C]sing, they [F]jingle, [Dm]jingle\n[G]Ding Dong\n[G7]Ding Dong\n\n{comment: D.C. al Coda}\n\n{comment: Coda}\nThey’re ringing, ringing!\nDing dong ding dong!\nMe….rry Christmas Bells…!\nDing Dong!\n"}</script>
+<script type="application/json" id="band-chart">{"sections": [{"name": "Intro", "bars": [{"c": ["C", "Em7"]}, {"c": ["F", "G"]}, {"c": ["C", "Em7"]}, {"c": ["F", "Gsus"], "end": true}, {"c": ["Gsus"]}, {"c": ["Gsus"]}, {"c": ["Gsus"]}, {"c": ["Gsus"], "end": true}], "melody_abc": "M:4/4\nL:1/8\nK:C\n\"C\"c'egc' \"Em7\"bdgb | \"F\"acfa \"G\"gfed | \"C\"eGce \"Em7\"dcBG | \"F\"ACFA \"Gsus\"G2 d2 |\n\"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 CD |"}, {"name": "Segno", "bars": null}, {"name": "Verse", "bars": [{"c": ["C", "Em7"]}, {"c": ["F", "G"]}, {"c": ["C", "Em7"]}, {"c": ["F", "Gsus"], "end": true}, {"c": ["C", "C/E", "G", "Am"]}, {"c": ["Am7", "G", "F", "C/E"]}, {"c": ["F", ".", "C/E", "Dm7", "C", ".", "Gsus", "."]}, {"c": ["Gsus", "G"], "end": true}]}, {"name": "Verse", "bars": [{"c": ["C", "Em7"]}, {"c": ["F", "G"]}, {"c": ["C", "Em7"]}, {"c": ["F", "Gsus"], "end": true}, {"c": ["C", "C/E", "G", "Am"]}, {"c": ["Am7", "G", "F", "C/E"]}, {"c": ["Dm7", "C/G", "Gsus", "C"]}, {"c": ["C", ".", ".", "C/E"], "end": true}]}, {"name": "Chorus", "bars": [{"c": ["F"]}, {"c": ["C/E"]}, {"c": ["Dm7", "G"]}, {"c": ["C"], "end": true}, {"c": ["F"]}, {"c": ["C/E"]}, {"c": ["Dm7", "F"]}, {"c": ["Gsus"], "end": true}, {"c": ["Gsus"]}, {"c": ["Gsus"]}, {"c": ["Gsus"], "end": true}]}, {"name": "D.S. al Coda", "bars": null}, {"name": "Coda", "bars": [{"c": ["Am7", "G"]}, {"c": ["Am7", "G", "Fmaj7", "C/E"]}, {"c": ["Dm7"]}, {"c": ["F/G", "G"], "end": true}, {"c": ["C", "Em7"]}, {"c": ["F", "G"]}, {"c": ["C"]}, {"c": ["C"], "rit": true, "end": true}], "melody_abc": "M:4/4\nL:1/8\nK:C\n\"Am7\"x4 \"G\"x4 | \"Am7\"x2 \"G\"x2 \"Fmaj7\"x2 \"C/E\"x2 | \"Dm7\"x8 | \"F/G\"x4 \"G\"x4 |\n\"C\"c'egc' \"Em7\"bdgb | \"F\"acfa \"G\"gfed | \"C\"CDEG cdeg | \"C\"c'8 |]"}], "tempo": "138", "time": "4/4", "key": "C", "setup": {"v": 1, "name": "Merry Christmas Bells", "style": "folk", "unlock": true, "feel": "straight", "bass": "eighths+roots+riff+yancey", "groove": "brushes+funk+strum", "bmix": {"eighths": 15}, "gmix": {"funk": 25, "strum": 75}, "congas": "none", "rhythm": "oompah+pad+travis+ballRock+ballBroken+ballSync", "mix": {}, "vmix": {}, "voicing": "standard", "fields": {"bt-tabview": "order", "bt-fills": "sections", "bt-hold": "through", "bt-bass-sound": "electric", "bt-walk": "100", "bt-comp": "wurli", "bt-vmove": "move", "bt-ext": "0", "bt-variation": "0.6", "bt-boom": "35", "bt-figs": "always", "bt-timefeel": "normal", "bt-timeparts": "bass drums", "bt-countin": "1", "bt-ride": "hat", "bt-ride-sound": "ride", "bt-roman": "off", "bt-chartfor": "concert", "bt-vol-bass": "125", "bt-vol-comp": "100", "bt-vol-drums": "100", "bt-vol-congas": "90", "bt-second": "", "bt-second-rhythm": "auto", "bt-second-voicing": "", "bt-vol-comp2": "80", "bt-leslie": "fast", "bt-swell": "auto", "bt-swell-pos": "70", "bt-oct-bass": "0", "bt-oct-comp": "0", "bt-oct-comp2": "0", "bt-kit-kick": "100", "bt-kit-snare": "100", "bt-kit-hat": "100", "bt-kit-ride": "53", "bt-kit-crash": "53", "bt-kit-toms": "100"}, "checks": {"bt-push": false, "bt-endchoke": false, "bt-intro-nodrums": false, "bt-ext-six": true, "bt-ext-nine": true, "bt-ext-thirteen": true}}}</script>
+```
+
+```{=html}
+<script type="application/json" id="band-source">{"slug": "merry-christmas-bells", "title": "Merry Christmas Bells", "cho": "{title: Merry Christmas Bells}\n{key: C}\n{time: 4/4}\n{tempo: 138}\n\n{comment: Intro}\n{start_of_abc}\nM:4/4\nL:1/8\nK:C\n\"C\"c'egc' \"Em7\"bdgb | \"F\"acfa \"G\"gfed | \"C\"eGce \"Em7\"dcBG | \"F\"ACFA \"Gsus\"G2 d2 |\n\"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 a2 | \"Gsus\"g2 c2 d2 CD |\n{end_of_abc}\n{start_of_grid}\n| C Em7 | F G | C Em7 | F Gsus |\n| Gsus | % | % | % |\n{end_of_grid}\n\n{comment: Segno}\n\n{comment: Verse}\nOh, the [C]bells are [Em7]ringing [F]out to[G]day\nIn a [C]joyous [Em7]Christmas [F]kind of [Gsus]way.\nThey’re [C]ring[C/E]ing, [G]ring[Am]ing!\n[Am7]Ding [G]dong [F]ding [C/E]dong!\n[F]Merry [C/E]Christ[Dm7]mas [C]Bells![Gsus] [G]\n{start_of_grid}\n| C Em7 | F G | C Em7 | F Gsus |\n| C C/E G Am | Am7 G F C/E | F . C/E Dm7 C . Gsus . | Gsus G |\n{end_of_grid}\n\n{comment: Verse}\nOh, the [C]sound they [Em7]make is [F]sweet to[G]day,\nAnd I [C]hope that [Em7]you can [F]hear them [Gsus]play.\nThey’re [C]ring[C/E]ing, [G]ring[Am]ing!\n[Am7]Ding [G]dong [F]ding [C/E]dong!\n[Dm7]Merry [C/G]Christmas [Gsus]Bells[C]! [C/E]\n{start_of_grid}\n| C Em7 | F G | C Em7 | F Gsus |\n| C C/E G Am | Am7 G F C/E | Dm7 C/G Gsus C | C . . C/E |\n{end_of_grid}\n\n{comment: Chorus}\nThey [F]ring, they [C/E]sing, they [Dm7]jin[G]gle\nThey [C]ding dong ding\nThey [F]ring, they [C/E]sing, they [Dm7]jingle, [F]jingle\n[Gsus]Ding Dong\nDing Dong\n{start_of_grid}\n| F | C/E | Dm7 G | C |\n| F | C/E | Dm7 F | Gsus |\n| Gsus | % | % |\n{end_of_grid}\n\n{comment: D.S. al Coda}\n\n{comment: Coda}\n{start_of_abc}\nM:4/4\nL:1/8\nK:C\n\"Am7\"x4 \"G\"x4 | \"Am7\"x2 \"G\"x2 \"Fmaj7\"x2 \"C/E\"x2 | \"Dm7\"x8 | \"F/G\"x4 \"G\"x4 |\n\"C\"c'egc' \"Em7\"bdgb | \"F\"acfa \"G\"gfed | \"C\"CDEG cdeg | \"C\"c'8 |]\n{end_of_abc}\nThey’re [Am7]ringing, [G]ringing!\n[Am7]Ding [G]dong [Fmaj7]ding [C/E]dong!\n[Dm7]Me….rry [F/G]Christmas [G]Bells…!\n[C]Ding Dong!\n{start_of_grid}\n| Am7 G | Am7 G Fmaj7 C/E | Dm7 | F/G G |\n| C Em7 | F G | C | C rit |\n{end_of_grid}\n", "tempo": "138", "time": "4/4", "key": "C"}</script>
 ```
 
 ::: {.songnav}

@@ -1,33 +1,72 @@
 {title: Merry Christmas Bells}
+{key: C}
+{time: 4/4}
+{tempo: 138}
 
 {comment: Intro}
-[C][G][G7]
+{start_of_abc}
+M:4/4
+L:1/8
+K:C
+"C"c'egc' "Em7"bdgb | "F"acfa "G"gfed | "C"eGce "Em7"dcBG | "F"ACFA "Gsus"G2 d2 |
+"Gsus"g2 c2 d2 a2 | "Gsus"g2 c2 d2 a2 | "Gsus"g2 c2 d2 a2 | "Gsus"g2 c2 d2 CD |
+{end_of_abc}
+{start_of_grid}
+| C Em7 | F G | C Em7 | F Gsus |
+| Gsus | % | % | % |
+{end_of_grid}
+
+{comment: Segno}
 
 {comment: Verse}
-Oh, the [C]bells are [C/E]ringing [F]out to[G]day
-In a [C]joyous [C/E]Christmas [F]kind of [G]way.
-They’re [C]ringing, [C/E]ringing!
-[F]Ding dong [F/E]ding dong!
-[Dm]Merry Christmas [G]Bells![G7]
+Oh, the [C]bells are [Em7]ringing [F]out to[G]day
+In a [C]joyous [Em7]Christmas [F]kind of [Gsus]way.
+They’re [C]ring[C/E]ing, [G]ring[Am]ing!
+[Am7]Ding [G]dong [F]ding [C/E]dong!
+[F]Merry [C/E]Christ[Dm7]mas [C]Bells![Gsus] [G]
+{start_of_grid}
+| C Em7 | F G | C Em7 | F Gsus |
+| C C/E G Am | Am7 G F C/E | F . C/E Dm7 C . Gsus . | Gsus G |
+{end_of_grid}
 
 {comment: Verse}
-Oh, the [C]sound they [C/E]make is [F]sweet to[G]day,
-And I [C]hope that [C/E]you can [F]hear them [G]play.
-They’re [C]ringing, [C/E]ringing!
-[F]Ding dong [F/E]ding dong!
-[Dm]Merry [G7]Christmas [C]Bells!
+Oh, the [C]sound they [Em7]make is [F]sweet to[G]day,
+And I [C]hope that [Em7]you can [F]hear them [Gsus]play.
+They’re [C]ring[C/E]ing, [G]ring[Am]ing!
+[Am7]Ding [G]dong [F]ding [C/E]dong!
+[Dm7]Merry [C/G]Christmas [Gsus]Bells[C]! [C/E]
+{start_of_grid}
+| C Em7 | F G | C Em7 | F Gsus |
+| C C/E G Am | Am7 G F C/E | Dm7 C/G Gsus C | C . . C/E |
+{end_of_grid}
 
 {comment: Chorus}
-They [F]ring, they [C]sing, they [F]jingle
-They [Am]ding [Dm]dong[G] ding
-They [F]ring, they [C]sing, they [F]jingle, [Dm]jingle
-[G]Ding Dong
-[G7]Ding Dong
+They [F]ring, they [C/E]sing, they [Dm7]jin[G]gle
+They [C]ding dong ding
+They [F]ring, they [C/E]sing, they [Dm7]jingle, [F]jingle
+[Gsus]Ding Dong
+Ding Dong
+{start_of_grid}
+| F | C/E | Dm7 G | C |
+| F | C/E | Dm7 F | Gsus |
+| Gsus | % | % |
+{end_of_grid}
 
-{comment: D.C. al Coda}
+{comment: D.S. al Coda}
 
 {comment: Coda}
-They’re ringing, ringing!
-Ding dong ding dong!
-Me….rry Christmas Bells…!
-Ding Dong!
+{start_of_abc}
+M:4/4
+L:1/8
+K:C
+"Am7"x4 "G"x4 | "Am7"x2 "G"x2 "Fmaj7"x2 "C/E"x2 | "Dm7"x8 | "F/G"x4 "G"x4 |
+"C"c'egc' "Em7"bdgb | "F"acfa "G"gfed | "C"CDEG cdeg | "C"c'8 |]
+{end_of_abc}
+They’re [Am7]ringing, [G]ringing!
+[Am7]Ding [G]dong [Fmaj7]ding [C/E]dong!
+[Dm7]Me….rry [F/G]Christmas [G]Bells…!
+[C]Ding Dong!
+{start_of_grid}
+| Am7 G | Am7 G Fmaj7 C/E | Dm7 | F/G G |
+| C Em7 | F G | C | C rit |
+{end_of_grid}

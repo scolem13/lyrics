@@ -11,23 +11,11 @@
     ]
   },
   {
-    "objectID": "songs/merry-christmas-bells.html",
-    "href": "songs/merry-christmas-bells.html",
+    "objectID": "songs/merry-christmas-bells.html#segno",
+    "href": "songs/merry-christmas-bells.html#segno",
     "title": "8. Merry Christmas Bells",
-    "section": "",
-    "text": "CGG7",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "8. Merry Christmas Bells"
-    ]
-  },
-  {
-    "objectID": "songs/merry-christmas-bells.html#intro",
-    "href": "songs/merry-christmas-bells.html#intro",
-    "title": "8. Merry Christmas Bells",
-    "section": "",
-    "text": "CGG7",
+    "section": "Segno",
+    "text": "Segno",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -39,7 +27,7 @@
     "href": "songs/merry-christmas-bells.html#verse",
     "title": "8. Merry Christmas Bells",
     "section": "Verse",
-    "text": "Verse\n\nOh, the Cbells are C/Eringing Fout toGday In a Cjoyous C/EChristmas Fkind of Gway. They’re Cringing, C/Eringing! FDing dong F/Eding dong! DmMerry Christmas GBells!G7",
+    "text": "Verse\n\nOh, the Cbells are Em7ringing Fout toGday In a Cjoyous Em7Christmas Fkind of Gsusway. They’re CringC/Eing, GringAming! Am7Ding Gdong Fding C/Edong! FMerry C/EChristDm7mas CBells!GsusG",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -51,7 +39,7 @@
     "href": "songs/merry-christmas-bells.html#verse-1",
     "title": "8. Merry Christmas Bells",
     "section": "Verse",
-    "text": "Verse\n\nOh, the Csound they C/Emake is Fsweet toGday, And I Chope that C/Eyou can Fhear them Gplay. They’re Cringing, C/Eringing! FDing dong F/Eding dong! DmMerry G7Christmas CBells!",
+    "text": "Verse\n\nOh, the Csound they Em7make is Fsweet toGday, And I Chope that Em7you can Fhear them Gsusplay. They’re CringC/Eing, GringAming! Am7Ding Gdong Fding C/Edong! Dm7Merry C/GChristmas GsusBellsC! C/E",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -63,7 +51,7 @@
     "href": "songs/merry-christmas-bells.html#chorus",
     "title": "8. Merry Christmas Bells",
     "section": "Chorus",
-    "text": "Chorus\n\nThey Fring, they Csing, they Fjingle They Amding DmdongG ding They Fring, they Csing, they Fjingle, Dmjingle GDing Dong G7Ding Dong",
+    "text": "Chorus\n\nThey Fring, they C/Esing, they Dm7jinGgle They Cding dong ding They Fring, they C/Esing, they Dm7jingle, Fjingle GsusDing Dong Ding Dong",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -71,11 +59,11 @@
     ]
   },
   {
-    "objectID": "songs/merry-christmas-bells.html#d.c.-al-coda",
-    "href": "songs/merry-christmas-bells.html#d.c.-al-coda",
+    "objectID": "songs/merry-christmas-bells.html#d.s.-al-coda",
+    "href": "songs/merry-christmas-bells.html#d.s.-al-coda",
     "title": "8. Merry Christmas Bells",
-    "section": "D.C. al Coda",
-    "text": "D.C. al Coda",
+    "section": "D.S. al Coda",
+    "text": "D.S. al Coda",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -87,7 +75,7 @@
     "href": "songs/merry-christmas-bells.html#coda",
     "title": "8. Merry Christmas Bells",
     "section": "Coda",
-    "text": "Coda\n\nThey’re ringing, ringing! Ding dong ding dong! Me….rry Christmas Bells…! Ding Dong!\n\n\n\n← La Navidad O Tannenbaum (O Christmas Tree ) →",
+    "text": "Coda\n\n\n\n\n\n\nThey’re Am7ringing, Gringing! Am7Ding Gdong Fmaj7ding C/Edong! Dm7Me….rry F/GChristmas GBells…! CDing Dong!\n\n\n\n\n← La Navidad O Tannenbaum (O Christmas Tree ) →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1066,11 +1054,11 @@
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#fine",
-    "href": "songs/la-navidad.html#fine",
+    "objectID": "songs/la-navidad.html#d.c.-al-coda",
+    "href": "songs/la-navidad.html#d.c.-al-coda",
     "title": "7. La Navidad",
-    "section": "Fine",
-    "text": "Fine",
+    "section": "D.C. al Coda",
+    "text": "D.C. al Coda",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",
@@ -1078,23 +1066,11 @@
     ]
   },
   {
-    "objectID": "songs/la-navidad.html#interlude",
-    "href": "songs/la-navidad.html#interlude",
+    "objectID": "songs/la-navidad.html#outro",
+    "href": "songs/la-navidad.html#outro",
     "title": "7. La Navidad",
-    "section": "Interlude",
-    "text": "Interlude",
-    "crumbs": [
-      "Programme",
-      "Conrad Tree Lighting",
-      "7. La Navidad"
-    ]
-  },
-  {
-    "objectID": "songs/la-navidad.html#d.c.-al-fine",
-    "href": "songs/la-navidad.html#d.c.-al-fine",
-    "title": "7. La Navidad",
-    "section": "D.C. al Fine",
-    "text": "D.C. al Fine\n\n\n\n\n\n← Jingle Bell Rock Merry Christmas Bells →",
+    "section": "Outro",
+    "text": "Outro\n\n\n\n\n\n\n← Jingle Bell Rock Merry Christmas Bells →",
     "crumbs": [
       "Programme",
       "Conrad Tree Lighting",

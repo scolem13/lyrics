@@ -11,7 +11,7 @@
 // pos is in beats from the bar start. An off-beat eighth is written x.5 and the PLAYER
 // swings it; triplet positions carry straight:true so they are left alone.
 // piece is a kit-piece NAME (kick snare rim hatClosed hatFoot hatOpen ride rideBell crash
-// tomHi tomMid tomLo sticks) — which sample that is lives in sounds.js, not here.
+// tomHi tomMid tomLo sticks brushTap brushSwish brushSweep) — which sample that is lives in sounds.js, not here.
 // ctx is the shared bar context (see player.js); this part reads index, length, beats,
 // tempo, last and opts: bassFeel ("walk" | "two"), feel ("swing" | "straight": a straight-
 // eighths groove with cross-stick on 2 and 4) and ride ("ride" | "hat" | "bell": which
@@ -215,6 +215,23 @@
     // brushes (played on the hi-hat and cross-stick: the kit has no brush samples): very light time for a carol or a folk song
     brushes: { bars: [ cymEighths(0.36, 0.26).concat([[0, "kick", 0.46], [2, "kick", 0.40], [1, "rim", 0.38], [3, "rim", 0.40]]) ],
                three: cymEighths(0.34, 0.24).slice(0, 6).concat([[0, "kick", 0.46], [1, "rim", 0.32], [2, "rim", 0.36]]), fills: false },
+    // Real brushes (brushTap, brushSwish, brushSweep: sounds.js makes them). Swing: the left hand sweeps a circle on the snare, a swish on every beat
+    // leaning on 2 and 4, the right hand taps the ride pattern (1, 2, the skip after 2, 3, 4, the skip after 4), the foot closes the hat on 2 and 4
+    // and the kick is only felt.
+    brushswing: { bars: [ [[0, "brushSwish", 0.30], [1, "brushSwish", 0.42], [2, "brushSwish", 0.30], [3, "brushSwish", 0.42],
+                           [0, "brushTap", 0.36], [1, "brushTap", 0.46], [1.5, "brushTap", 0.32], [2, "brushTap", 0.36], [3, "brushTap", 0.46], [3.5, "brushTap", 0.32],
+                           [1, "hatFoot", 0.40], [3, "hatFoot", 0.40], [0, "kick", 0.26], [1, "kick", 0.20], [2, "kick", 0.24], [3, "kick", 0.20]] ],
+                  three: [[0, "brushSwish", 0.30], [1, "brushSwish", 0.40], [2, "brushSwish", 0.34], [0, "brushTap", 0.36], [1, "brushTap", 0.44], [1.5, "brushTap", 0.30], [2, "brushTap", 0.38],
+                          [1, "hatFoot", 0.38], [2, "hatFoot", 0.38], [0, "kick", 0.26]], fills: false },
+    // The ballad: the circle slowed to one long sweep on 1 and another on 3, a tap on 2 and 4, a soft kick on 1 and the foot on 2 and 4. In 3/4 one
+    // sweep to the bar and a tap on 2 and 3. No fills.
+    brushballad: { bars: [ [[0, "brushSweep", 0.36], [2, "brushSweep", 0.32], [1, "brushTap", 0.30], [3, "brushTap", 0.32], [0, "kick", 0.30], [1, "hatFoot", 0.30], [3, "hatFoot", 0.30]] ],
+                    three: [[0, "brushSweep", 0.36], [1, "brushTap", 0.28], [2, "brushTap", 0.30], [0, "kick", 0.30], [1, "hatFoot", 0.28], [2, "hatFoot", 0.28]], fills: false },
+    // Straight brushes for a country or folk song: a swish on every beat that leans on 2 and 4 (the backbeat), a tap on the off-beat eighths and
+    // the kick on 1 and 3. In 3/4 the swish leans on 2 and 3.
+    brushfolk: { bars: [ [[0, "brushSwish", 0.34], [1, "brushSwish", 0.52], [2, "brushSwish", 0.34], [3, "brushSwish", 0.52],
+                          [0.5, "brushTap", 0.22], [1.5, "brushTap", 0.24], [2.5, "brushTap", 0.22], [3.5, "brushTap", 0.24], [0, "kick", 0.46], [2, "kick", 0.42]] ],
+                 three: [[0, "brushSwish", 0.34], [1, "brushSwish", 0.48], [2, "brushSwish", 0.46], [0.5, "brushTap", 0.20], [1.5, "brushTap", 0.22], [2.5, "brushTap", 0.22], [0, "kick", 0.46]], fills: false },
     // 12/8 time (a slow doo-wop or blues ballad), also played as triplets over a bar of 4/4: see compoundBar
     twelve8: { triplet: true },
     // Three steps toward swing time, for someone learning it: the beat alone, the ride pattern alone, and the blues shuffle
@@ -445,7 +462,7 @@
     // A written groove (opts.written): its bars in turn, exactly as written, every note where the groove puts it.
     function writtenBar(ctx){
       var w = written(ctx), B = global.BandGroove, sw = ctx.opts.writtenSwing;
-      var bars = B.toEvents(w, { swing: sw == null ? true : sw, pieces: ctx.opts.writtenPieces, tempo: ctx.tempo }), beats = ctx.beats || 4;
+      var bars = B.toEvents(w, { swing: sw == null ? B.swingFor(w, ctx.opts, ctx.tempo) : sw, pieces: ctx.opts.writtenPieces, tempo: ctx.tempo }), beats = ctx.beats || 4;
       // a grace note before the next bar's first beat (a flam on 1) is played at the end of this bar: the player takes nothing before a bar line
       var here = bars[(ctx.index || 0) % bars.length].filter(function (e){ return e.pos >= 0 && e.pos < beats; }), next = ctx.last && ctx.finalChorus ? [] : bars[((ctx.index || 0) + 1) % bars.length];
       next.forEach(function (e){ if (e.pos < 0) here.push(Object.assign({}, e, { pos: Math.round((e.pos + beats) * 1e6) / 1e6 })); });

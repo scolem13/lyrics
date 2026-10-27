@@ -14,6 +14,8 @@
 //   bank.load(["bass","piano","kit"], onProgress)      -> Promise (idempotent; onProgress(done,total))
 //   bank.play("bass",  { midi:41, vel:0.8, dur:0.45 }, when, destNode)
 //   bank.play("kit",   { piece:"ride", vel:0.6 },      when, destNode)
+//   bank.play("clguitar", { midi:72, dur:1, bend:[[0,0],[0.4,2]] }, when)   // spec.bend: a pitch path, [seconds from the
+//       note's start, semitones from spec.midi] in order, a straight slide between points (a bend, scoop, fall, shake); sampled only
 //   bank.play("congas", { piece:"congaSlap", vel:0.6 }, when, destNode)   // the congas are a kit of their own (pieces: see the definition)
 //   bank.choke("cymbals", when, damp)                  // damp ringing cymbals (a stop-time hit; damp = seconds, slower for a hand)
 //   bank.stopAll()                                     // fade + cut everything sounding or scheduled
@@ -43,6 +45,8 @@
 //       "stop", "swell" = 0..1 (the pedal), "click" = 0..1 (key click, from the next note). bank.control(name, control, value, when, glide) is the same at a time on the
 //       bank's clock, which is how the player works the pedal and the switch while the band plays.
 //
+// The MODX: an instrument routed to it (modx.js, the MODX page) is sent out as MIDI instead of sounding here.
+//
 // An instrument may be SYNTHESIZED instead of sampled (def.synth "tonewheel", ORGAN.md beside this file): no zones, nothing
 // to load. An instrument may have an AMP CHAIN (def.chain): its notes are summed and sent through the chain's
 // stages before they reach the mix, one chain for the instrument and not one per note. That is what an
@@ -51,7 +55,8 @@
 (function (global) {
   var SF_DEFAULT = "https://cdn.jsdelivr.net/gh/paulrosen/midi-js-soundfonts/MusyngKite/";
   var PIECES = ["kick","snare","rim","hatClosed","hatFoot","hatOpen","ride","ride2","rideBell","crash","tomHi","tomMid","tomLo","sticks",
-                "tom3","cowbell","stacker","click","clickHi"];   // (the last five: for written grooves, groove.js)
+                "tom3","cowbell","stacker","click","clickHi",
+                "brushTap","brushSwish","brushSweep"];   // (click..clickHi: for written grooves, groove.js; the brushes are made, not sampled: brushBuffer)
 
   // ======================================================================================
   // INSTRUMENT DEFINITIONS — edit this block (and nothing else) to change the sounds.
@@ -157,7 +162,11 @@
       kit:    { family: "kit", gain: 1.25,
                 zones: soundfontKit(sf, { kick:36, rim:37, snare:38, hatClosed:42, hatFoot:44, hatOpen:46,
                                           crash:49, ride:51, ride2:59, rideBell:53, tomLo:43, tomMid:45, tomHi:48, sticks:31, clap:39, tamb:54,
-                                          tom3:45, cowbell:56, stacker:52, click:33, clickHi:34 }),
+                                          tom3:45, cowbell:56, stacker:52, click:33, clickHi:34 }).concat([
+                  { piece: "brushTap", make: "tap" }, { piece: "brushSwish", make: "swish" }, { piece: "brushSweep", make: "sweep" } ]),
+                // The brushes have no samples: each is noise shaped when the kit loads (brushBuffer). The tap is the wires of the brush
+                // slapped on the head, the swish a short stroke across it, the sweep a long one (a circle on the snare). A new stroke
+                // takes over from the last (one hand, one head). First guesses, not yet listened to.
                 // tom3 (a written groove's fourth tom, between the mid and floor toms) is the mid tom's file played lower;
                 // the stacker is GM's china cymbal; click and clickHi GM's metronome click and bell. Levels not yet listened to.
                 // per-piece trim (the soundfont's kick is ~8x hotter than its ride); group/chokes =
@@ -170,18 +179,21 @@
                           hatClosed:{ gain:1.6, chokes:"hat" }, hatFoot:{ gain:1.6, chokes:"hat" }, hatOpen:{ gain:1.4, group:"hat" },
                           tomHi:{ gain:0.95, group:"tomHi", chokes:"tomHi", damp:0.04 }, tomMid:{ gain:0.95, group:"tomMid", chokes:"tomMid", damp:0.04 }, tomLo:{ gain:0.95, group:"tomLo", chokes:"tomLo", damp:0.04 },
                           tom3:{ gain:0.95, rate:0.94, group:"tom3", chokes:"tom3", damp:0.04 }, cowbell:{ gain:0.8 }, stacker:{ gain:1.3, group:"cymbals" },
-                          click:{ gain:0.9 }, clickHi:{ gain:0.9 } } },
+                          click:{ gain:0.9 }, clickHi:{ gain:0.9 },
+                          brushTap:{ gain:1.0, group:"brush", chokes:"brush", damp:0.02 }, brushSwish:{ gain:1.0, group:"brush", chokes:"brush", damp:0.03 },
+                          brushSweep:{ gain:1.0, group:"brush", chokes:"brush", damp:0.05 } } },
       // Congas. General MIDI has only three conga sounds (62 mute high, 63 open high, 64 low), so heel, toe, slap and the bass tone are
       // stand-ins made from them: the same file at another level (and, for the toe and the bass, another pitch). The pieces share
       // files, which are fetched once. A first guess, not yet listened to. The conga is the higher drum, the tumba the lower.
       congas: { family: "congas", gain: 1.3,
                 zones: soundfontKit(sf, { congaOpen:63, congaSlap:62, congaMute:62, congaHeel:62, congaToe:62, congaBass:64,
-                                          tumbaOpen:64, tumbaMute:64, tumbaBass:64 }),
+                                          tumbaOpen:64, tumbaMute:64, tumbaBass:64, bongoHi:60, bongoLo:61 }),
                 // Each drum has one head. A hand that lands and stays (heel, toe, slap, muted, bass) stops the open tone
                 // that was ringing on that drum; an open tone struck again takes over from the last. The other drum rings on.
                 pieces: { congaOpen:{ gain:0.95, group:"conga", chokes:"conga", damp:0.03 }, congaSlap:{ gain:1.0, group:"conga", chokes:"conga" }, congaMute:{ gain:0.60, group:"conga", chokes:"conga" },
                           congaHeel:{ gain:0.30, rate:0.90, group:"conga", chokes:"conga" }, congaToe:{ gain:0.40, rate:1.12, group:"conga", chokes:"conga" }, congaBass:{ gain:0.50, rate:0.90, group:"conga", chokes:"conga" },
-                          tumbaOpen:{ gain:0.95, group:"tumba", chokes:"tumba", damp:0.03 }, tumbaMute:{ gain:0.50, group:"tumba", chokes:"tumba" }, tumbaBass:{ gain:0.50, rate:0.88, group:"tumba", chokes:"tumba" } } }
+                          tumbaOpen:{ gain:0.95, group:"tumba", chokes:"tumba", damp:0.03 }, tumbaMute:{ gain:0.50, group:"tumba", chokes:"tumba" }, tumbaBass:{ gain:0.50, rate:0.88, group:"tumba", chokes:"tumba" },
+                          bongoHi:{ gain:0.95 }, bongoLo:{ gain:0.95 } } }       // (the bongos, GM 60 / 61: for a written groove's Bo lane; levels not yet listened to)
     };
   }
 
@@ -199,6 +211,28 @@
   // kit: piece name -> the soundfont's percussion note
   function soundfontKit(sf, map){
     return Object.keys(map).map(function (piece){ return { url: sf + "percussion-mp3/" + noteName(map[piece]) + ".mp3", piece: piece }; });
+  }
+  // A brush stroke as a buffer: white noise (a fixed seed, so every load sounds the same) run through a high-pass and a low-pass, under an
+  // envelope. kind "tap" = 0.14 s: a bright slap that dies at once, with a little of the head under it; "swish" = 0.24 s and "sweep" = 0.6 s:
+  // a stroke that builds to its middle and fades, the long one rougher at the start (the wires catching).
+  function brushBuffer(ctx, kind){
+    var sr = ctx.sampleRate, dur = kind === "tap" ? 0.14 : kind === "swish" ? 0.24 : 0.6, n = Math.round(sr * dur);
+    var buf = ctx.createBuffer(1, n, sr), d = buf.getChannelData(0), seed = kind === "tap" ? 7 : kind === "swish" ? 11 : 13;
+    var hp = kind === "tap" ? 2500 : 1600, lp = kind === "tap" ? 9000 : 7500;
+    var ah = Math.exp(-2 * Math.PI * hp / sr), al = 1 - Math.exp(-2 * Math.PI * lp / sr), px = 0, ph = 0, pl = 0, peak = 0, i, t, x, e;
+    for (i = 0; i < n; i++){
+      seed = (Math.imul(seed, 1103515245) + 12345) | 0; x = (seed >>> 8) / 8388608 - 1;
+      ph = ah * (ph + x - px); px = x; pl += al * (ph - pl);
+      t = i / sr;
+      if (kind === "tap") e = Math.min(1, t / 0.002) * Math.exp(-t / 0.022);
+      else { var mid = dur * (kind === "swish" ? 0.35 : 0.4); e = t < mid ? Math.pow(Math.sin(Math.PI / 2 * t / mid), 2) : Math.exp(-(t - mid) / (dur * 0.22)); }
+      d[i] = pl * e;
+      if (kind === "tap") d[i] += 0.5 * Math.sin(2 * Math.PI * 190 * t) * Math.exp(-t / 0.03) * 0.35;
+      if (Math.abs(d[i]) > peak) peak = Math.abs(d[i]);
+    }
+    var fade = Math.min(n, Math.round(0.008 * sr)), g = peak > 0 ? 0.9 / peak : 1;
+    for (i = 0; i < n; i++) d[i] *= g * (i > n - fade ? (n - i) / fade : 1);
+    return buf;
   }
   function resolveBase(){
     try { if (typeof global.getSoundfontUrl === "function")
@@ -263,9 +297,37 @@
     }
     return { buffer: buf, offset: offset };
   }
+  // A fetch that never answers used to leave "Loading the sounds…" up for ever. Each try now has FETCH_TIMEOUT ms (headers AND body)
+  // before it is aborted; a sample under the default soundfont host is then tried once at each fallback host (global.BAND_SOUND_FALLBACKS,
+  // a list of base URLs, replaces the built-in list). A sample that fails everywhere is skipped (the band plays without it) and
+  // recorded in BandSounds.failures and warned on the console; loadOne throws only when an instrument has no sample at all.
+  var FETCH_TIMEOUT = 15000;
+  var SF_FALLBACKS = ["https://gleitz.github.io/midi-js-soundfonts/MusyngKite/", "https://raw.githubusercontent.com/gleitz/midi-js-soundfonts/gh-pages/MusyngKite/"];
+  var failures = [];
+  function fetchOnce(url, ms){
+    var ctl = typeof AbortController === "function" ? new AbortController() : null, timer = null, timedOut = false;
+    var killer = new Promise(function (res, rej){ timer = setTimeout(function (){ timedOut = true; if (ctl) try { ctl.abort(); } catch (e) {} rej(new Error("timed out after " + (ms / 1000) + " s: " + url)); }, ms); });
+    var work = fetch(url, ctl ? { signal: ctl.signal } : undefined)
+      .then(function (r){ if (!r.ok) throw new Error(r.status + " " + url); return r.arrayBuffer(); });
+    work.catch(function (){});                                   // (the loser of the race must not be an unhandled rejection)
+    return Promise.race([work, killer]).then(function (ab){ clearTimeout(timer); return ab; },
+                                             function (e){ clearTimeout(timer); throw timedOut ? new Error("timed out after " + (ms / 1000) + " s: " + url) : e; });
+  }
+  function candidates(url){
+    var list = [url], fb = global.BAND_SOUND_FALLBACKS || SF_FALLBACKS;
+    if (url.indexOf(SF_DEFAULT) === 0) fb.forEach(function (b){ if (b !== SF_DEFAULT) list.push(b + url.slice(SF_DEFAULT.length)); });
+    return list;
+  }
+  function fetchAny(url){
+    var list = candidates(url), i = 0, last;
+    function next(){
+      if (i >= list.length) throw last;
+      return fetchOnce(list[i++], global.BAND_FETCH_TIMEOUT || FETCH_TIMEOUT).catch(function (e){ last = e; return next(); });
+    }
+    return Promise.resolve().then(next);
+  }
   function fetchBuffer(ctx, url){
-    if (!CACHE[url]) CACHE[url] = fetch(url)
-      .then(function (r){ if (!r.ok) throw new Error(r.status + " " + url); return r.arrayBuffer(); })
+    if (!CACHE[url]) CACHE[url] = fetchAny(url)
       .then(function (ab){ return decode(ctx, ab); })
       .then(function (buf){ return prepare(ctx, buf); })
       .catch(function (e){ delete CACHE[url]; throw e; });        // allow a retry
@@ -363,6 +425,7 @@
       strips.forEach(function (s){ if (s.inst === name){ tuneEQ(s); tuneAmp(s); } }); return true; });
     // a control of an instrument's chain, at a time: the swell pedal's position, the rotary speaker's speed
     function control2(inst, name, value, when, glide){
+      if (global.BandModx) global.BandModx.control(inst, name, value, when, ctx);
       strips.forEach(function (s){ if (s.inst === inst) s.amp.forEach(function (n){ if (n.ctl) n.ctl(name, value, Math.max(when || 0, ctx.currentTime), glide || 0); }); });
     }
     // The scanner vibrato: a delay swept up and back by a triangle wave (the scanner runs along a delay line and returns);
@@ -478,9 +541,10 @@
       var def = defs[name]; if (!def) return Promise.reject(new Error("BandSounds: unknown instrument " + name));
       if (def.synth){ ready[name] = true; return (loading[name] = Promise.resolve()); }       // synthesized: nothing to fetch
       var p = Promise.all(def.zones.map(function (z){
+        if (z.make && !z.buffer){ z.buffer = brushBuffer(ctx, z.make); z.offset = 0; }
         if (z.buffer){ tick(); return null; }
         return fetchBuffer(ctx, z.url).then(function (r){ z.buffer = r.buffer; z.offset = r.offset; },
-                                            function (e){ if (global.console) console.warn("BandSounds: sample failed —", e && e.message); })
+                                            function (e){ failures.push({ url: z.url, message: e && e.message }); if (global.console) console.warn("BandSounds: sample failed (skipped) —", e && e.message); })
           .then(tick);
       })).then(function (){
         if (!def.zones.some(function (z){ return z.buffer; })) throw new Error("BandSounds: no samples loaded for " + name);
@@ -513,6 +577,7 @@
     // spec = { midi | piece, vel?, dur? (seconds; omit = let the sample ring), release? }
     function play(inst, spec, when, dest){
       var def = defs && defs[inst];
+      if (def && global.BandModx && global.BandModx.routed(inst, ctx)) return global.BandModx.play(inst, spec, when, ctx);   // played on the MODX (modx.js)
       if (!def || !ready[inst]){ if (defs && def) load([inst]).catch(function (){}); return null; }   // lazy-load, skip this hit
       var vel = clamp(spec.vel == null ? 0.7 : spec.vel, 0, 1); if (!(vel > 0)) return null;
       if (def.synth === "tonewheel") return spec.midi == null ? null : tonewheel(inst, def, spec, Math.max(when || 0, ctx.currentTime), ampFor(inst, def, dest || ctx.destination));
@@ -526,6 +591,11 @@
       var src = ctx.createBufferSource(); src.buffer = z.buffer;
       if (pc.rate) src.playbackRate.value = pc.rate;       // a piece played from another piece's sample, a little higher or lower
       if (spec.midi != null && z.midi != null) src.playbackRate.value = Math.pow(2, (spec.midi - z.midi) / 12);
+      if (spec.bend && spec.bend.length){                   // pitch path: slide the playback rate from point to point
+        var r0 = src.playbackRate.value;
+        src.playbackRate.setValueAtTime(r0 * Math.pow(2, (spec.bend[0][1] || 0) / 12), t);
+        spec.bend.forEach(function (b){ src.playbackRate.linearRampToValueAtTime(r0 * Math.pow(2, b[1] / 12), t + Math.max(0, b[0])); });
+      }
       var g = ctx.createGain(), tail = src; g.gain.value = 0;
       if (def.tone || spec.cutoff){                         // softer notes are darker (one sample layer, many dynamics); spec.cutoff = a fixed low-pass in Hz (a palm mute)
         var f = ctx.createBiquadFilter(); f.type = "lowpass"; f.Q.value = 0.5;
@@ -551,6 +621,7 @@
 
     function stopAll(){
       var now = ctx.currentTime;
+      if (global.BandModx) global.BandModx.stop();
       live.forEach(function (v){
         try { v.g.gain.cancelScheduledValues(now); v.g.gain.setTargetAtTime(0, now, 0.01); v.src.stop(now + 0.08); } catch (e) {}
       });
@@ -561,7 +632,14 @@
   }
 
   global.BandSounds = {
-    create: create, define: define, resolveBase: resolveBase, pieces: PIECES.slice(),
+    create: create, define: define, failures: failures, fetchBuffer: fetchBuffer, resolveBase: resolveBase, pieces: PIECES.slice(),
     family: family, sounds: sounds, setEQ: setEQ, getEQ: getEQ, setAmp: setAmp, getAmp: getAmp, stageKind: stageKind, setTonebars: setTonebars, getTonebars: getTonebars, setControl: setControl, getControl: getControl, tonewheelParts: tonewheelParts, EQ_DEFAULT: EQ_DEFAULT, EQ_TYPES: EQ_TYPES, soundfontZones: soundfontZones, soundfontKit: soundfontKit, pickZones: pickZones, noteName: noteName
   };
+  // The MODX (modx.js), once switched on from its page: loaded from beside this file on every band page
+  try {
+    if (!global.BandModx && global.document && global.localStorage && global.localStorage.getItem("modx.on") === "1"){
+      var me = global.document.currentScript && global.document.currentScript.src;
+      if (me){ var sc = global.document.createElement("script"); sc.src = me.replace(/sounds\.js.*$/, "modx.js?v=1"); global.document.head.appendChild(sc); }
+    }
+  } catch (e) {}
 })(typeof window !== "undefined" ? window : globalThis);
